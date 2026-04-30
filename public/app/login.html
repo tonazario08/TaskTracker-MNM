@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskTracker - Đăng nhập</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f6f3f3;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #1c1b1c;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: #ffffff;
+      border: 1px solid #c5c6ca;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      padding: 40px 36px;
+    }
+
+    .logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .logo .t { color: #212529; }
+    .logo .r { color: #75777b; }
+
+    .subtitle {
+      text-align: center;
+      font-size: 22px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #1c1b1c;
+    }
+
+    .desc {
+      text-align: center;
+      font-size: 14px;
+      color: #44474a;
+      margin-bottom: 32px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #44474a;
+      margin-bottom: 5px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 9px 13px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: #1c1b1c;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    input:focus {
+      border-color: #212529;
+      box-shadow: 0 0 0 3px rgba(33,37,41,0.08);
+    }
+
+    .password-wrap { position: relative; }
+    .toggle-pw {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #75777b;
+      line-height: 1;
+      padding: 0;
+    }
+    .toggle-pw:hover { color: #1c1b1c; }
+
+    .forgot {
+      display: block;
+      text-align: right;
+      font-size: 12px;
+      color: #5c5f60;
+      text-decoration: none;
+      margin-top: 6px;
+    }
+    .forgot:hover { text-decoration: underline; color: #1c1b1c; }
+
+    .btn-submit {
+      width: 100%;
+      padding: 10px;
+      background: #212529;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.15s;
+    }
+    .btn-submit:hover { opacity: 0.85; }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .error-msg {
+      background: #ffdad6;
+      color: #93000a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 18px;
+      display: none;
+    }
+    .error-msg.show { display: block; }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #c5c6ca;
+    }
+    .divider span { font-size: 12px; color: #75777b; white-space: nowrap; }
+
+    .footer-link {
+      text-align: center;
+      font-size: 14px;
+      color: #44474a;
+    }
+    .footer-link a {
+      color: #212529;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .footer-link a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo"><span class="t">TaskT</span><span class="r">racker</span></div>
+  <h1 class="subtitle">Chào mừng trở lại</h1>
+  <p class="desc">Đăng nhập vào không gian làm việc của bạn</p>
+
+  <div class="error-msg" id="error-msg"></div>
+
+  <form id="login-form" novalidate>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="ten@congty.com" required autocomplete="email"/>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mật khẩu</label>
+      <div class="password-wrap">
+        <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password"/>
+        <button type="button" class="toggle-pw" id="toggle-pw" aria-label="Hiện/ẩn mật khẩu">👁</button>
+      </div>
+      <a class="forgot" href="#">Quên mật khẩu?</a>
+    </div>
+
+    <button type="submit" class="btn-submit" id="submit-btn">Đăng nhập</button>
+  </form>
+
+  <div class="divider"><span>hoặc</span></div>
+
+  <p class="footer-link">Chưa có tài khoản? <a href="/app/register.html">Đăng ký ngay</a></p>
+</div>
+
+<script>
+  // Nếu đã đăng nhập thì chuyển thẳng vào app
+  fetch('/api/auth/me').then(r => {
+    if (r.ok) window.location.replace('/app/');
+  });
+
+  // Toggle hiện/ẩn mật khẩu
+  document.getElementById('toggle-pw').addEventListener('click', () => {
+    const inp = document.getElementById('password');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  });
+
+  // Submit
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById('error-msg');
+    const btn   = document.getElementById('submit-btn');
+    errEl.classList.remove('show');
+    btn.disabled = true;
+    btn.textContent = 'Đang đăng nhập…';
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          email:    document.getElementById('email').value.trim(),
+          password: document.getElementById('password').value,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        errEl.textContent = data.error || 'Đăng nhập thất bại';
+        errEl.classList.add('show');
+        return;
+      }
+      window.location.replace('/app/');
+    } catch {
+      errEl.textContent = 'Không thể kết nối tới máy chủ';
+      errEl.classList.add('show');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Đăng nhập';
+    }
+  });
+</script>
+</body>
+</html>

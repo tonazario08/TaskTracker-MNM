@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#454748",
+                        "outline": "#75777b",
+                        "surface-container": "#f0eded",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c5c7c8",
+                        "inverse-on-surface": "#f3f0f0",
+                        "inverse-surface": "#313030",
+                        "tertiary": "#150e09",
+                        "secondary-fixed": "#e1e3e4",
+                        "tertiary-fixed": "#efe0d6",
+                        "surface": "#fcf8f8",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5b5f63",
+                        "background": "#fcf8f8",
+                        "on-tertiary-container": "#968981",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#c3c7cc",
+                        "secondary": "#5c5f60",
+                        "outline-variant": "#c5c6ca",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#181c20",
+                        "on-tertiary-fixed": "#221a14",
+                        "on-background": "#1c1b1c",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#0c1014",
+                        "tertiary-fixed-dim": "#d2c4bb",
+                        "primary-container": "#212529",
+                        "surface-bright": "#fcf8f8",
+                        "on-surface": "#1c1b1c",
+                        "surface-container-highest": "#e5e2e2",
+                        "on-tertiary-fixed-variant": "#4f453e",
+                        "on-surface-variant": "#44474a",
+                        "surface-container-high": "#ebe7e7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#191c1d",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dcd9d9",
+                        "secondary-container": "#e1e3e4",
+                        "on-primary-container": "#888c91",
+                        "tertiary-container": "#2b231d",
+                        "on-primary-fixed-variant": "#43474c",
+                        "surface-container-low": "#f6f3f3",
+                        "surface-variant": "#e5e2e2",
+                        "primary-fixed-dim": "#c3c7cc",
+                        "on-secondary-container": "#626566",
+                        "primary-fixed": "#e0e3e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "container-max": "1200px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "badge": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "logo": ["Poppins"],
+                        "h2": ["Poppins"],
+                        "h1": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "h3": ["Poppins"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "badge": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "logo": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "h2": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "h1": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h3": ["18px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-[240px] border-r border-outline-variant bg-surface-container-lowest text-on-surface font-sans font-medium text-sm flex flex-col p-4 space-y-6 z-50">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-logo text-logo flex-shrink-0">
+                T
+            </div>
+<div>
+<h1 class="font-logo text-logo text-on-surface tracking-tight">TaskTracker</h1>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Main Workspace</p>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary rounded-lg py-2 px-4 font-body-md text-body-md font-medium hover:bg-primary transition-colors flex items-center justify-center space-x-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+<span>Create Task</span>
+</button>
+<div class="flex-1 flex flex-col space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">inbox</span>
+<span>Inbox</span>
+</a>
+<!-- Active State Navigation based on intent "Dashboard" usually maps to a general overview, but we'll highlight My Tasks as the primary action area if Dashboard isn't listed, or Inbox. Let's make "Inbox" active as it acts as a default dashboard view for tasks often. Actually, the prompt says "Dashboard for TaskTracker". "Inbox" is closest. -->
+<a class="flex items-center space-x-3 px-3 py-2 bg-surface-variant text-on-surface rounded-lg scale-98 active:scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Dashboard</span> <!-- Semantic match added for specific user request, replacing Inbox logically for this screen -->
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">check_circle</span>
+<span>My Tasks</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Team</span>
+</a>
+</div>
+<div class="mt-auto">
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-[60px] border-b border-outline-variant bg-surface-container-lowest text-on-surface font-sans text-sm antialiased shadow-sm flex items-center justify-between px-6 ml-[240px] w-[calc(100%-240px)] z-40 transition-all duration-200 ease-in-out">
+<div class="flex items-center space-x-4 flex-1">
+<div class="flex items-center text-on-surface-variant">
+<span class="hover:text-on-surface cursor-pointer">Workspace</span>
+<span class="material-symbols-outlined mx-2 text-xs">chevron_right</span>
+<span class="font-medium text-on-surface">Dashboard</span>
+</div>
+<div class="relative max-w-md w-full ml-8">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface pl-10 pr-4 py-1.5 rounded-lg border border-outline-variant focus:border-primary-container focus:ring-0 text-sm placeholder-on-surface-variant transition-colors" placeholder="Search tasks, projects, or people..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-variant p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="professional headshot of a young man smiling lightly, wearing a dark shirt against a soft blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB20ilT5gMVCEQBucx5voXVWdshloGaIrm_D9qDct_JmzbAB21K60cL5DnUBYGcDVuz9sGwCh1Ph_P9NCSknfUevtZckvQgkgYGP0lXQC_E0r1sRj8Gb7YAQ95Ss3P5ptTsODCwq_ypu1PmOryrwIg6IaBFBKuNa8ijFYz7W68JojI1O4jdRnjqm9QAuO6xsWILRIhHdsd395uzOac4G_7Y4jRUC7CigtY6hv1ZLedXBybKbeTAT68ztOWtFnI8Okci7PJ0qIK70g"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[240px] pt-[60px] p-lg">
+<div class="max-w-[1200px] mx-auto">
+<!-- Section 1: Welcome & Stats -->
+<div class="mb-lg">
+<h1 class="font-h1 text-h1 text-on-surface mb-2">Good morning, Alex</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6">Here's a quick overview of your day.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Tasks Completed</span>
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</div>
+<div class="flex items-end space-x-2">
+<span class="font-h1 text-h1 text-on-surface leading-none">12</span>
+<span class="font-body-md text-body-md text-secondary-container bg-surface-variant px-1.5 py-0.5 rounded text-xs">+3 this week</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Upcoming Deadlines</span>
+<span class="material-symbols-outlined text-outline">schedule</span>
+</div>
+<div class="flex items-end space-x-2">
+<span class="font-h1 text-h1 text-on-surface leading-none">4</span>
+<span class="font-body-md text-body-md text-error bg-error-container px-1.5 py-0.5 rounded text-xs">2 due today</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)]">
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Active Projects</span>
+<span class="material-symbols-outlined text-outline">layers</span>
+</div>
+<div class="flex items-end space-x-2">
+<span class="font-h1 text-h1 text-on-surface leading-none">7</span>
+<span class="font-body-md text-body-md text-on-surface-variant bg-surface-variant px-1.5 py-0.5 rounded text-xs">On track</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Section 2: My Tasks (Takes up 2 cols on lg) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] flex flex-col">
+<div class="p-md border-b border-outline-variant flex items-center justify-between">
+<h2 class="font-h3 text-h3 text-on-surface">My Tasks</h2>
+<button class="text-on-surface-variant hover:text-on-surface text-sm font-medium">View All</button>
+</div>
+<div class="flex-1 p-2">
+<!-- Task Item -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg transition-colors group">
+<div class="flex items-center space-x-3">
+<button class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center text-transparent hover:border-primary-container hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Review Q3 Marketing Deck</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Brand Refresh</p>
+</div>
+</div>
+<span class="font-badge text-badge bg-[#ffebee] text-[#c62828] border border-[#ffcdd2] px-2 py-1 rounded">Urgent</span>
+</div>
+<!-- Task Item -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg transition-colors group">
+<div class="flex items-center space-x-3">
+<button class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center text-transparent hover:border-primary-container hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Draft API Documentation</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Developer Portal</p>
+</div>
+</div>
+<span class="font-badge text-badge bg-[#fff3e0] text-[#ef6c00] border border-[#ffe0b2] px-2 py-1 rounded">High</span>
+</div>
+<!-- Task Item -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg transition-colors group">
+<div class="flex items-center space-x-3">
+<button class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center text-transparent hover:border-primary-container hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Weekly Team Sync Sync-up</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Internal</p>
+</div>
+</div>
+<span class="font-badge text-badge bg-[#e3f2fd] text-[#1565c0] border border-[#bbdefb] px-2 py-1 rounded">Medium</span>
+</div>
+<!-- Task Item -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg transition-colors group">
+<div class="flex items-center space-x-3">
+<button class="w-5 h-5 rounded border border-outline-variant flex items-center justify-center text-transparent hover:border-primary-container hover:text-primary-container transition-colors">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Update User Profiles UI</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">WebApp v2.0</p>
+</div>
+</div>
+<span class="font-badge text-badge bg-[#f5f5f5] text-[#616161] border border-[#e0e0e0] px-2 py-1 rounded">Low</span>
+</div>
+</div>
+</div>
+<!-- Right Column Stack -->
+<div class="flex flex-col space-y-lg">
+<!-- Section 3: Project Health -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] p-md">
+<h2 class="font-h3 text-h3 text-on-surface mb-4">Project Health</h2>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium text-on-surface">WebApp v2.0</span>
+<span class="text-on-surface-variant">75%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium text-on-surface">Brand Refresh</span>
+<span class="text-on-surface-variant">40%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-sm mb-1">
+<span class="font-medium text-on-surface">Q4 Planning</span>
+<span class="text-on-surface-variant">90%</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-1.5">
+<div class="bg-primary-container h-1.5 rounded-full" style="width: 90%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 4: Recent Activity -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] p-md flex-1">
+<h2 class="font-h3 text-h3 text-on-surface mb-4">Recent Activity</h2>
+<div class="space-y-4 relative before:absolute before:inset-0 before:ml-4 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-outline-variant before:to-transparent hidden"></div> <!-- Decorative line concept -->
+<div class="relative pl-4 border-l border-outline-variant ml-2 space-y-4">
+<div class="relative">
+<span class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-primary-container border-2 border-surface-container-lowest"></span>
+<p class="font-body-md text-body-md text-on-surface text-sm">Sarah commented on <span class="font-medium">API Docs</span></p>
+<p class="text-xs text-on-surface-variant mt-0.5">2 hours ago</p>
+</div>
+<div class="relative">
+<span class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-outline-variant border-2 border-surface-container-lowest"></span>
+<p class="font-body-md text-body-md text-on-surface text-sm">You completed <span class="font-medium">Design System Audit</span></p>
+<p class="text-xs text-on-surface-variant mt-0.5">Yesterday</p>
+</div>
+<div class="relative">
+<span class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-outline-variant border-2 border-surface-container-lowest"></span>
+<p class="font-body-md text-body-md text-on-surface text-sm">Mike assigned you to <span class="font-medium">Q3 Marketing Deck</span></p>
+<p class="text-xs text-on-surface-variant mt-0.5">Yesterday</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

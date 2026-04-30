@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "on-tertiary-fixed": "#221a14",
+                            "surface-variant": "#e5e2e2",
+                            "surface-container-low": "#f6f3f3",
+                            "primary-fixed-dim": "#c3c7cc",
+                            "outline-variant": "#c5c6ca",
+                            "secondary-fixed-dim": "#c5c7c8",
+                            "on-primary-container": "#888c91",
+                            "tertiary-fixed-dim": "#d2c4bb",
+                            "primary": "#0c1014",
+                            "secondary": "#5c5f60",
+                            "surface-container-highest": "#e5e2e2",
+                            "primary-fixed": "#e0e3e8",
+                            "outline": "#75777b",
+                            "on-surface": "#1c1b1c",
+                            "inverse-primary": "#c3c7cc",
+                            "secondary-container": "#e1e3e4",
+                            "on-primary": "#ffffff",
+                            "tertiary-fixed": "#efe0d6",
+                            "surface": "#fcf8f8",
+                            "tertiary": "#150e09",
+                            "on-primary-fixed": "#181c20",
+                            "on-secondary-fixed-variant": "#454748",
+                            "error-container": "#ffdad6",
+                            "surface-container-lowest": "#ffffff",
+                            "surface-container": "#f0eded",
+                            "on-primary-fixed-variant": "#43474c",
+                            "on-background": "#1c1b1c",
+                            "inverse-surface": "#313030",
+                            "on-tertiary-container": "#968981",
+                            "on-secondary-container": "#626566",
+                            "on-secondary": "#ffffff",
+                            "secondary-fixed": "#e1e3e4",
+                            "surface-container-high": "#ebe7e7",
+                            "on-tertiary-fixed-variant": "#4f453e",
+                            "tertiary-container": "#2b231d",
+                            "on-error-container": "#93000a",
+                            "on-surface-variant": "#44474a",
+                            "primary-container": "#212529",
+                            "on-secondary-fixed": "#191c1d",
+                            "error": "#ba1a1a",
+                            "inverse-on-surface": "#f3f0f0",
+                            "on-error": "#ffffff",
+                            "surface-bright": "#fcf8f8",
+                            "on-tertiary": "#ffffff",
+                            "surface-tint": "#5b5f63",
+                            "background": "#fcf8f8",
+                            "surface-dim": "#dcd9d9"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "xs": "4px",
+                            "gutter": "24px",
+                            "container-max": "1200px",
+                            "md": "16px",
+                            "base": "8px",
+                            "lg": "24px",
+                            "xl": "32px",
+                            "sm": "8px"
+                    },
+                    "fontFamily": {
+                            "logo": ["Poppins"],
+                            "body-md": ["Inter"],
+                            "label-caps": ["Inter"],
+                            "h3": ["Poppins"],
+                            "badge": ["Inter"],
+                            "h2": ["Poppins"],
+                            "h1": ["Poppins"],
+                            "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                            "logo": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                            "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                            "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                            "h3": ["18px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                            "badge": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                            "h2": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                            "h1": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                            "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-low min-h-screen flex items-center justify-center p-md font-body-md text-on-surface">
+<main class="w-full max-w-[400px] bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-lg md:p-xl">
+<!-- Logo Header -->
+<div class="text-center mb-xl">
+<h1 class="font-logo text-logo flex justify-center">
+<span class="text-primary-container">TaskT</span><span class="text-outline">racker</span>
+</h1>
+</div>
+<!-- Greeting -->
+<div class="text-center mb-lg">
+<h2 class="font-h2 text-h2 text-on-surface mb-xs">Welcome back</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Sign in to your workspace</p>
+</div>
+<!-- Third-party Sign In -->
+<button class="w-full flex items-center justify-center gap-sm py-sm px-md border border-outline-variant rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors duration-200 mb-lg" type="button">
+<svg class="w-5 h-5" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+<span class="font-body-md text-body-md text-on-surface font-medium">Continue with Google</span>
+</button>
+<!-- Divider -->
+<div class="flex items-center gap-md mb-lg">
+<div class="flex-1 h-px bg-outline-variant"></div>
+<span class="font-body-md text-body-md text-outline px-sm">or continue with email</span>
+<div class="flex-1 h-px bg-outline-variant"></div>
+</div>
+<!-- Form -->
+<form action="#" class="space-y-md" method="POST">
+<!-- Email Input -->
+<div>
+<label class="block font-body-md text-body-md text-on-surface-variant mb-xs" for="email">Email</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-shadow" id="email" name="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+<!-- Password Input -->
+<div>
+<div class="flex justify-between items-center mb-xs">
+<label class="block font-body-md text-body-md text-on-surface-variant" for="password">Password</label>
+<a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors duration-200 underline decoration-surface-dim hover:decoration-secondary underline-offset-4" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-shadow" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button aria-label="Toggle password visibility" class="absolute right-md top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</button>
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-primary-container text-on-primary rounded-lg py-sm px-md font-body-md text-body-md font-medium hover:bg-inverse-surface transition-colors duration-200 mt-md" type="submit">
+                Sign in
+            </button>
+</form>
+<!-- Footer Link -->
+<div class="mt-lg text-center">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                Don't have an account? 
+                <a class="text-secondary hover:text-primary font-medium transition-colors duration-200 underline decoration-surface-dim hover:decoration-secondary underline-offset-4" href="#">Sign up</a>
+</p>
+</div>
+</main>
+</body></html>

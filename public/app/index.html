@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskTracker - Quản lý công việc</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f6f3f3;
+      --surface: #ffffff;
+      --surface-low: #f6f3f3;
+      --border: #e9ecef;
+      --border-focus: #212529;
+      --text-primary: #1c1b1c;
+      --text-secondary: #44474a;
+      --text-muted: #75777b;
+      --accent: #212529;
+      --accent-text: #ffffff;
+      --radius-btn: 8px;
+      --radius-card: 12px;
+      --shadow-card: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-modal: 0 8px 16px rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---- HEADER ---- */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      height: 60px;
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Poppins', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .logo .logo-t { color: #212529; }
+    .logo .logo-r { color: #75777b; }
+
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-left: 8px;
+    }
+
+    /* ---- MAIN LAYOUT ---- */
+    .layout {
+      display: flex;
+      flex: 1;
+    }
+
+    /* ---- SIDEBAR ---- */
+    aside {
+      width: 240px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      padding: 16px 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 8px 20px 4px;
+    }
+
+    .project-list { list-style: none; }
+    .project-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background 0.15s;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .project-item:hover { background: var(--surface-low); }
+    .project-item.active { background: #f0eded; color: var(--text-primary); font-weight: 500; }
+    .project-item .dot {
+      width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+      background: #c5c6ca;
+    }
+    .project-item.active .dot { background: var(--accent); }
+
+    /* ---- MAIN CONTENT ---- */
+    main {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    /* ---- ADD TASK FORM ---- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .card-title {
+      font-family: 'Poppins', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    form#task-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    form#task-form .full { grid-column: 1 / -1; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    input[type="text"], input[type="date"], select {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid #dee2e6;
+      border-radius: var(--radius-btn);
+      padding: 8px 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      color: var(--text-primary);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(33,37,41,0.1);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: var(--radius-btn);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, opacity 0.15s;
+    }
+    .btn-primary { background: var(--accent); color: var(--accent-text); }
+    .btn-primary:hover { opacity: 0.85; }
+
+    /* ---- TASK LIST ---- */
+    #task-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .task-card {
+      background: var(--surface);
+      border: 1px solid #f1f3f5;
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow-card);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      transition: box-shadow 0.15s, transform 0.15s;
+    }
+    .task-card:hover { box-shadow: var(--shadow-modal); transform: translateY(-1px); }
+
+    .task-title {
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    /* Priority badges */
+    .badge-high    { background: #fff0f0; color: #c0392b; border: 1px solid #f5c6c6; }
+    .badge-medium  { background: #fff8e1; color: #b07800; border: 1px solid #ffe082; }
+    .badge-low     { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+
+    /* Status badges */
+    .badge-todo     { background: #f1f3f5; color: #495057; }
+    .badge-progress { background: #e3f2fd; color: #1565c0; }
+    .badge-review   { background: #f3e5f5; color: #6a1b9a; }
+    .badge-done     { background: #e8f5e9; color: #2e7d32; }
+
+    .task-assignee {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .task-due {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-align: right;
+      align-self: end;
+    }
+
+    /* Loading / empty state */
+    .state-msg {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Status indicator */
+    #status-bar {
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      background: #212529;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    #status-bar.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo"><span class="logo-t">TaskT</span><span class="logo-r">racker</span></div>
+  <h1>Quản lý</h1>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:12px;">
+    <span id="user-name" style="font-size:14px;color:#44474a;"></span>
+    <button id="logout-btn" style="
+      background:none;border:1px solid #dee2e6;border-radius:8px;
+      padding:6px 14px;font-size:13px;font-family:'Inter',sans-serif;
+      cursor:pointer;color:#44474a;transition:background 0.15s;
+    " onmouseover="this.style.background='#f0eded'" onmouseout="this.style.background='none'">
+      Đăng xuất
+    </button>
+  </div>
+</header>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-label">Dự án</div>
+    <ul class="project-list" id="project-list">
+      <li class="state-msg" style="padding:12px 20px;text-align:left;">Đang tải…</li>
+    </ul>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <div class="page-header">
+      <h2 class="page-title" id="current-project-name">Tất cả công việc</h2>
+    </div>
+
+    <!-- ADD TASK FORM -->
+    <div class="card">
+      <div class="card-title">Thêm công việc mới</div>
+      <form id="task-form" data-task-form>
+        <div class="full">
+          <label for="task-title">Tên công việc</label>
+          <input type="text" id="task-title" name="title" placeholder="Nhập tên công việc…" required/>
+        </div>
+        <div>
+          <label for="task-project">Dự án</label>
+          <select id="task-project" name="projectId" required>
+            <option value="">— Chọn dự án —</option>
+          </select>
+        </div>
+        <div>
+          <label for="task-priority">Độ ưu tiên</label>
+          <select id="task-priority" name="priority" required>
+            <option value="Low">Thấp</option>
+            <option value="Medium" selected>Trung bình</option>
+            <option value="High">Cao</option>
+          </select>
+        </div>
+        <div>
+          <label for="task-assignee">Người thực hiện</label>
+          <input type="text" id="task-assignee" name="assignee" placeholder="Tên người thực hiện…"/>
+        </div>
+        <div>
+          <label for="task-due">Ngày hết hạn</label>
+          <input type="date" id="task-due" name="dueDate"/>
+        </div>
+        <div class="full" style="display:flex;justify-content:flex-end;margin-top:4px;">
+          <button class="btn btn-primary" type="submit">+ Thêm công việc</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- TASK LIST -->
+    <div id="task-list">
+      <div class="state-msg">Đang tải công việc…</div>
+    </div>
+  </main>
+</div>
+
+<!-- STATUS BAR -->
+<div id="status-bar"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
