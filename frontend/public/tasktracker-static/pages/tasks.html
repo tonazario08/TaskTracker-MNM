@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskTracker Công Việc</title>
+  <script src="../js/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body data-page="tasks" data-base=".." class="bg-background text-on-background font-body-md antialiased">
+  <div class="app-shell">
+    <div data-shell="overlay"></div>
+    <aside data-shell="sidebar"></aside>
+    <div class="app-main">
+      <header data-shell="topbar"></header>
+      <main class="app-content">
+        <div class="mx-auto max-w-[1200px] space-y-6" data-tabs data-tabs-default="list">
+          <section class="rounded-[28px] border border-outline-variant bg-surface-container-lowest p-6 shadow-card">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Thực thi</p>
+                <h1 class="mt-2 font-h1 text-h1 text-on-surface">Công việc</h1>
+                <p class="mt-2 text-body-lg text-on-surface-variant">Chế độ danh sách được ghép từ các màn hình danh sách việc, chi tiết việc và panel việc.</p>
+              </div>
+              <div class="app-tabs-nav">
+                <button class="app-tab-button" type="button" data-tab-button="list">Dạng danh sách</button>
+                <button class="app-tab-button" type="button" data-tab-button="board">Tóm tắt dạng bảng</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="rounded-[28px] border border-outline-variant bg-surface-container-lowest p-6 shadow-card" data-tab-panel="list">
+            <div class="flex flex-wrap gap-3">
+              <button type="button" class="rounded-full border border-outline-variant bg-background px-4 py-2 text-sm font-medium text-on-surface">Dự án: Tất cả</button>
+              <button type="button" class="rounded-full border border-outline-variant bg-background px-4 py-2 text-sm font-medium text-on-surface">Người phụ trách: Nhóm</button>
+              <button type="button" class="rounded-full border border-outline-variant bg-background px-4 py-2 text-sm font-medium text-on-surface">Ưu tiên: Hỗn hợp</button>
+              <button type="button" class="rounded-full border border-outline-variant bg-background px-4 py-2 text-sm font-medium text-on-surface">Trạng thái: Đang hoạt động</button>
+            </div>
+            <div class="mt-6 overflow-hidden rounded-[24px] border border-outline-variant">
+              <table class="min-w-full border-collapse bg-background text-left text-sm">
+                <thead class="bg-surface-container-low text-on-surface-variant">
+                  <tr>
+                    <th class="px-4 py-4 font-semibold">Công việc</th>
+                    <th class="px-4 py-4 font-semibold">Dự án</th>
+                    <th class="px-4 py-4 font-semibold">Người phụ trách</th>
+                    <th class="px-4 py-4 font-semibold">Hạn chót</th>
+                    <th class="px-4 py-4 font-semibold">Ưu tiên</th>
+                    <th class="px-4 py-4 font-semibold">Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-outline-variant">
+                  <tr class="hover:bg-surface-container-low">
+                    <td class="px-4 py-4">
+                      <button type="button" data-modal-open="task-detail-modal" class="text-left font-medium text-on-surface hover:text-primary">Chốt ngân sách marketing Q4</button>
+                      <p class="mt-1 text-xs text-on-surface-variant">Hoàn thành 3 trên 5 đầu việc con</p>
+                    </td>
+                    <td class="px-4 py-4 text-on-surface-variant">Chiến dịch marketing</td>
+                    <td class="px-4 py-4">
+                      <button type="button" data-modal-open="member-inline-modal" class="inline-flex items-center gap-2 rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface">
+                        <span class="app-avatar !h-6 !w-6 !text-[10px]">AL</span>
+                        Alex Lee
+                      </button>
+                    </td>
+                    <td class="px-4 py-4 text-error">Hôm nay</td>
+                    <td class="px-4 py-4"><span class="rounded-full bg-error-container px-3 py-1 text-xs font-semibold text-on-error-container">Cao</span></td>
+                    <td class="px-4 py-4"><span class="rounded-full bg-[#e0e7ff] px-3 py-1 text-xs font-semibold text-[#3730a3]">Đang duyệt</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-low">
+                    <td class="px-4 py-4">
+                      <span class="font-medium text-on-surface">Kiểm tra thành phần design system</span>
+                      <p class="mt-1 text-xs text-on-surface-variant">Hoàn thành 12 trên 45 đầu việc con</p>
+                    </td>
+                    <td class="px-4 py-4 text-on-surface-variant">Thiết kế lại website</td>
+                    <td class="px-4 py-4 text-on-surface-variant">Tôi</td>
+                    <td class="px-4 py-4 text-on-surface-variant">20/12</td>
+                    <td class="px-4 py-4"><span class="rounded-full bg-[#fef3c7] px-3 py-1 text-xs font-semibold text-[#92400e]">Trung bình</span></td>
+                    <td class="px-4 py-4"><span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface">Cần làm</span></td>
+                  </tr>
+                  <tr class="hover:bg-surface-container-low">
+                    <td class="px-4 py-4">
+                      <span class="font-medium text-on-surface">Bàn giao QA cho onboarding</span>
+                      <p class="mt-1 text-xs text-on-surface-variant">Đang chờ bản build từ đội mobile</p>
+                    </td>
+                    <td class="px-4 py-4 text-on-surface-variant">Ra mắt di động</td>
+                    <td class="px-4 py-4 text-on-surface-variant">Sarah J.</td>
+                    <td class="px-4 py-4 text-on-surface-variant">Ngày mai</td>
+                    <td class="px-4 py-4"><span class="rounded-full bg-[#fef2f2] px-3 py-1 text-xs font-semibold text-[#b91c1c]">Khẩn cấp</span></td>
+                    <td class="px-4 py-4"><span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface">Bị chặn</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="rounded-[28px] border border-outline-variant bg-surface-container-lowest p-6 shadow-card" data-tab-panel="board">
+            <div class="grid gap-4 lg:grid-cols-3">
+              <article class="rounded-[24px] border border-outline-variant bg-background p-4">
+                <div class="flex items-center justify-between">
+                  <h2 class="font-h3 text-h3 text-on-surface">Cần làm</h2>
+                  <span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface-variant">8</span>
+                </div>
+                <div class="mt-4 rounded-2xl border border-outline-variant bg-surface-container-low p-4">
+                  <p class="font-medium text-on-surface">Kiểm tra thành phần design system</p>
+                  <p class="mt-1 text-sm text-on-surface-variant">Thiết kế lại website</p>
+                </div>
+              </article>
+              <article class="rounded-[24px] border border-outline-variant bg-background p-4">
+                <div class="flex items-center justify-between">
+                  <h2 class="font-h3 text-h3 text-on-surface">Đang làm</h2>
+                  <span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface-variant">11</span>
+                </div>
+                <div class="mt-4 rounded-2xl border border-outline-variant bg-surface-container-low p-4">
+                  <p class="font-medium text-on-surface">Chốt ngân sách marketing Q4</p>
+                  <p class="mt-1 text-sm text-on-surface-variant">Chiến dịch marketing</p>
+                </div>
+              </article>
+              <article class="rounded-[24px] border border-outline-variant bg-background p-4">
+                <div class="flex items-center justify-between">
+                  <h2 class="font-h3 text-h3 text-on-surface">Đang duyệt</h2>
+                  <span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface-variant">4</span>
+                </div>
+                <div class="mt-4 rounded-2xl border border-outline-variant bg-surface-container-low p-4">
+                  <p class="font-medium text-on-surface">Bàn giao QA cho onboarding</p>
+                  <p class="mt-1 text-sm text-on-surface-variant">Ra mắt di động</p>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer data-shell="footer"></footer>
+    </div>
+    <nav data-shell="bottomnav"></nav>
+    <div data-shell="modal-root"></div>
+  </div>
+
+  <div class="app-modal" id="task-detail-modal" aria-hidden="true">
+    <div class="app-modal__dialog app-modal__dialog--wide">
+      <div class="app-modal__header">
+        <div>
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Chi tiết công việc</p>
+          <h2 class="app-modal__title">Chốt ngân sách marketing Q4</h2>
+        </div>
+        <button class="app-modal__close" type="button" data-modal-close aria-label="Đóng">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="app-modal__body">
+        <div class="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
+          <div class="space-y-4">
+            <p class="text-sm leading-6 text-on-surface-variant">Tổng hợp chi phí giữa paid social và lifecycle, sau đó xác nhận lại giả định CAC với bộ phận tài chính trước buổi duyệt của lãnh đạo.</p>
+            <div class="rounded-3xl border border-outline-variant bg-background p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Cập nhật gần đây</p>
+              <div class="mt-4 space-y-3 text-sm text-on-surface">
+                <p>Alex đã cập nhật giả định cho paid search.</p>
+                <p>Sarah đã yêu cầu phản hồi cuối từ tài chính.</p>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-4 rounded-3xl border border-outline-variant bg-background p-5">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-on-surface-variant">Người phụ trách</span>
+              <span class="font-medium text-on-surface">Alex Lee</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-on-surface-variant">Ưu tiên</span>
+              <span class="rounded-full bg-error-container px-3 py-1 text-xs font-semibold text-on-error-container">Cao</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-on-surface-variant">Trạng thái</span>
+              <span class="rounded-full bg-[#e0e7ff] px-3 py-1 text-xs font-semibold text-[#3730a3]">Đang duyệt</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-modal" id="member-inline-modal" aria-hidden="true">
+    <div class="app-modal__dialog">
+      <div class="app-modal__header">
+        <h2 class="app-modal__title">Người phụ trách</h2>
+        <button class="app-modal__close" type="button" data-modal-close aria-label="Đóng">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="app-modal__body">
+        <div class="flex items-center gap-4">
+          <div class="app-avatar !h-16 !w-16 !text-lg">AL</div>
+          <div>
+            <h3 class="font-h3 text-h3 text-on-surface">Alex Lee</h3>
+            <p class="mt-1 text-sm text-on-surface-variant">Trưởng nhóm sản phẩm · Hệ thống tăng trưởng</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

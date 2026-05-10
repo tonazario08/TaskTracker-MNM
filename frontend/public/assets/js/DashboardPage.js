@@ -1,0 +1,92 @@
+tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#454748",
+                        "outline": "#75777b",
+                        "surface-container": "#f0eded",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#c5c7c8",
+                        "inverse-on-surface": "#f3f0f0",
+                        "inverse-surface": "#313030",
+                        "tertiary": "#150e09",
+                        "secondary-fixed": "#e1e3e4",
+                        "tertiary-fixed": "#efe0d6",
+                        "surface": "#fcf8f8",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#5b5f63",
+                        "background": "#fcf8f8",
+                        "on-tertiary-container": "#968981",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#c3c7cc",
+                        "secondary": "#5c5f60",
+                        "outline-variant": "#c5c6ca",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#181c20",
+                        "on-tertiary-fixed": "#221a14",
+                        "on-background": "#1c1b1c",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#0c1014",
+                        "tertiary-fixed-dim": "#d2c4bb",
+                        "primary-container": "#212529",
+                        "surface-bright": "#fcf8f8",
+                        "on-surface": "#1c1b1c",
+                        "surface-container-highest": "#e5e2e2",
+                        "on-tertiary-fixed-variant": "#4f453e",
+                        "on-surface-variant": "#44474a",
+                        "surface-container-high": "#ebe7e7",
+                        "surface-container-lowest": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#191c1d",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dcd9d9",
+                        "secondary-container": "#e1e3e4",
+                        "on-primary-container": "#888c91",
+                        "tertiary-container": "#2b231d",
+                        "on-primary-fixed-variant": "#43474c",
+                        "surface-container-low": "#f6f3f3",
+                        "surface-variant": "#e5e2e2",
+                        "primary-fixed-dim": "#c3c7cc",
+                        "on-secondary-container": "#626566",
+                        "primary-fixed": "#e0e3e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "container-max": "1200px",
+                        "base": "8px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "32px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "badge": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "logo": ["Poppins"],
+                        "h2": ["Poppins"],
+                        "h1": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "h3": ["Poppins"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "badge": ["12px", { "lineHeight": "1", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "logo": ["24px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "h2": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "h1": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "h3": ["18px", { "lineHeight": "1.4", "fontWeight": "500" }],
+                        "label-caps": ["12px", { "lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }

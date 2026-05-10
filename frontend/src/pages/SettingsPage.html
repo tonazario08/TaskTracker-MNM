@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="../../public/assets/css/SettingsPage.css"/>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen">
+<nav class="fixed left-0 top-0 h-full flex flex-col p-4 w-64 border-r border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 font-sans text-sm antialiased tracking-tight text-gray-900 dark:text-gray-100 z-20">
+<div class="mb-8">
+<span class="text-xl font-bold tracking-tighter text-gray-900 dark:text-gray-50 font-logo text-logo">TaskMaster</span>
+<div class="text-secondary mt-1">Settings</div>
+</div>
+<ul class="flex flex-col space-y-2 flex-grow">
+<li>
+<a class="flex items-center space-x-3 p-3 rounded-lg scale-95 active:scale-100 transition-transform bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white font-semibold border-r-2 border-gray-900 dark:border-gray-50" href="./SettingsPage.html">
+<span class="material-symbols-outlined">person</span>
+<span>Profile</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 p-3 rounded-lg scale-95 active:scale-100 transition-transform text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">domain</span>
+<span>Workspace</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 p-3 rounded-lg scale-95 active:scale-100 transition-transform text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span>Notifications</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 p-3 rounded-lg scale-95 active:scale-100 transition-transform text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">extension</span>
+<span>Integrations</span>
+</a>
+</li>
+<li>
+<a class="flex items-center space-x-3 p-3 rounded-lg scale-95 active:scale-100 transition-transform text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-900 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Billing</span>
+</a>
+</li>
+</ul>
+<div class="mt-auto">
+<img alt="User profile" class="w-10 h-10 rounded-full" data-alt="Close-up portrait of a smiling professional man with short dark hair wearing a light blue shirt against a neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZG32Rrv3aRMJmkOZk1n53u8ueZGAYKsMhb4sqbCuRfylYMrsYBhvWTaYs1Q8P-VgDOs4fhs7-f7mNjPzq4F9ag0xWhFrU1iiPKimK7mquoZfzFFB6P3cqZs_x_K1ZavpkjQN_MbXynxpuGG8kIcyXlkQI1bH5PzJiD9G4T1LDgzsYJd94S-gFCCqcHu8mTu3qEZvgZfe7lY1rD2V9U0OENEypI7HQK6ECoRQtAPjuUurY72z0zdxS_SXwJbVg5scwcBoof1tFbA"/>
+</div>
+</nav>
+<header class="fixed top-0 right-0 left-64 z-10 flex items-center justify-between px-8 h-14 w-full border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md text-sm font-medium text-gray-900 dark:text-gray-100">
+<div>
+<span class="text-gray-900 dark:text-white border-b-2 border-gray-900 pb-4 font-h3 text-h3">Settings</span>
+</div>
+<div class="flex items-center space-x-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border border-outline-variant rounded-lg text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container w-64" id="settings-search" placeholder="Search settings..." type="text"/>
+</div>
+<button class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white opacity-80 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white opacity-80 hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="User avatar" class="w-8 h-8 rounded-full" data-alt="Close-up portrait of a smiling professional man with short dark hair wearing a light blue shirt against a neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYlJwcBIGHkD0esiH3MgiXcC4rMEbixCAy84reYACdejo4NK8-dJ4KR0hFbNAiTOgGYP-x2AOm7TxD5-UQo_qMxJMInYkn8YRC2XHbIz16sgbszyk1zpsvrQZ200VPB1XL4oeqNxwY5zDlhLLC1Pb_EwKEUZIW2DeFFRdWqPNqKJ2r_df7-BRcUQJ9Ve7bKc54wabbHeS9-0Ttj47t-6d6atgMnH_Qz1Fi-R7fyY9PEzeDlrXX9SEyclUgink3Ydxt0uZ9_pHKLg"/>
+</div>
+</header>
+<main class="ml-64 mt-14 p-lg max-w-container-max mx-auto flex">
+<div class="flex-grow max-w-3xl">
+<h1 class="font-h1 text-h1 text-on-surface mb-lg">Profile Settings</h1>
+<section class="bg-surface-container-lowest p-lg rounded-xl border border-secondary-fixed mb-lg">
+<div class="flex items-start space-x-lg mb-8">
+<div class="relative group cursor-pointer">
+<img alt="Profile Avatar" class="w-24 h-24 rounded-full object-cover" data-alt="Close-up portrait of a smiling professional man with short dark hair wearing a light blue shirt against a neutral background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBsOy5VBPX4r6UfdaIweHSdN67xdKwl0p2WNHxrwdb-CtO9O3lL-ifWN82YGe3sb9--Mehn_HlaWwe8UdMlE0aMPXx-9ldq9Ac2m3-jejBAH-PHdhxfgDEV_qTRon48IxDgD_IcWkk7LrANHUbVsJFuyykr36phBeXAdCVeCdRsIEXdBC906o0AIngDr9hlwx8j9NhSm94RCFpwh3jDJBpbt41NcvARS0D-BJ-N48C0SiMrIvMvoX9G3Hae4KLB8jFWqxD1RR5Ew"/>
+<div class="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-white">photo_camera</span>
+</div>
+</div>
+<div class="flex-grow space-y-4">
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Full Name</label>
+<input class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" type="text" id="full-name" value="John Doe"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Display Name</label>
+<input class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" type="text" id="display-name" value="johndoe"/>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Email Address</label>
+<input class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" type="email" id="email" value="john@example.com"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Bio</label>
+<textarea id="bio" class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" rows="3">Product Designer focused on minimalism.</textarea>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-surface-container-lowest p-lg rounded-xl border border-secondary-fixed mb-lg">
+<h3 class="font-h3 text-h3 text-on-surface mb-md">Change Password</h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Current Password</label>
+<input id="current-password" class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" type="password"/>
+</div>
+<div class="grid grid-cols-2 gap-md">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">New Password</label>
+<input id="new-password" class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" type="password"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Confirm New Password</label>
+<input id="confirm-password" class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors" type="password"/>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-surface-container-lowest p-lg rounded-xl border border-secondary-fixed mb-lg">
+<h3 class="font-h3 text-h3 text-on-surface mb-md">Preferences</h3>
+<div class="grid grid-cols-3 gap-md">
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Language</label>
+<select id="language" class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors">
+<option value="vi-VN">Vietnamese</option>
+<option value="en-US">English (US)</option>
+<option value="fr-FR">French</option>
+</select>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Timezone</label>
+<select id="timezone" class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors">
+<option value="Asia/Ho_Chi_Minh">Asia/Ho_Chi_Minh</option>
+<option value="UTC">UTC</option>
+<option value="America/New_York">America/New_York</option>
+</select>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Date Format</label>
+<select id="date-format" class="w-full bg-surface-container-lowest border border-secondary-fixed rounded-lg px-4 py-2 text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-colors">
+<option>MM/DD/YYYY</option>
+<option>DD/MM/YYYY</option>
+<option>YYYY-MM-DD</option>
+</select>
+</div>
+</div>
+</section>
+<div class="flex justify-end mt-lg">
+<button id="save-settings-btn" class="bg-primary-container text-on-primary font-body-md py-2 px-6 rounded-lg hover:opacity-90 transition-opacity">Save Changes</button>
+</div>
+</div>
+</main>
+  <script type="module" src="../../public/assets/js/SettingsPage.js"></script>
+</body></html>

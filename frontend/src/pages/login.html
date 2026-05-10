@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Đăng nhập</title>
+<meta name="description" content="Đăng nhập vào TaskTracker để quản lý công việc và dự án của bạn."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                "colors": {
+                    "on-tertiary-fixed": "#221a14",
+                    "surface-variant": "#e5e2e2",
+                    "surface-container-low": "#f6f3f3",
+                    "primary-fixed-dim": "#c3c7cc",
+                    "outline-variant": "#c5c6ca",
+                    "secondary-fixed-dim": "#c5c7c8",
+                    "on-primary-container": "#888c91",
+                    "tertiary-fixed-dim": "#d2c4bb",
+                    "primary": "#0c1014",
+                    "secondary": "#5c5f60",
+                    "surface-container-highest": "#e5e2e2",
+                    "primary-fixed": "#e0e3e8",
+                    "outline": "#75777b",
+                    "on-surface": "#1c1b1c",
+                    "inverse-primary": "#c3c7cc",
+                    "secondary-container": "#e1e3e4",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed": "#efe0d6",
+                    "surface": "#fcf8f8",
+                    "tertiary": "#150e09",
+                    "on-primary-fixed": "#181c20",
+                    "on-secondary-fixed-variant": "#454748",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container": "#f0eded",
+                    "on-primary-fixed-variant": "#43474c",
+                    "on-background": "#1c1b1c",
+                    "inverse-surface": "#313030",
+                    "on-tertiary-container": "#968981",
+                    "on-secondary-container": "#626566",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed": "#e1e3e4",
+                    "surface-container-high": "#ebe7e7",
+                    "on-tertiary-fixed-variant": "#4f453e",
+                    "tertiary-container": "#2b231d",
+                    "on-error-container": "#93000a",
+                    "on-surface-variant": "#44474a",
+                    "primary-container": "#212529",
+                    "on-secondary-fixed": "#191c1d",
+                    "error": "#ba1a1a",
+                    "inverse-on-surface": "#f3f0f0",
+                    "on-error": "#ffffff",
+                    "surface-bright": "#fcf8f8",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#5b5f63",
+                    "background": "#fcf8f8",
+                    "surface-dim": "#dcd9d9"
+                },
+                "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                },
+                "spacing": {
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "container-max": "1200px",
+                    "md": "16px",
+                    "base": "8px",
+                    "lg": "24px",
+                    "xl": "32px",
+                    "sm": "8px"
+                },
+                "fontFamily": {
+                    "logo": ["Poppins"],
+                    "body-md": ["Inter"],
+                    "label-caps": ["Inter"],
+                    "h3": ["Poppins"],
+                    "badge": ["Inter"],
+                    "h2": ["Poppins"],
+                    "h1": ["Poppins"],
+                    "body-lg": ["Inter"]
+                },
+                "fontSize": {
+                    "logo": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "h3": ["18px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                    "badge": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+                    "h2": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "h1": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                }
+            }
+        }
+    }
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    #error-msg { display: none; }
+    #error-msg.show { display: block; }
+</style>
+</head>
+<body class="bg-surface-container-low min-h-screen flex items-center justify-center p-md font-body-md text-on-surface">
+<main class="w-full max-w-[400px] bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-lg md:p-xl">
+<!-- Logo Header -->
+<div class="text-center mb-xl">
+  <h1 class="font-logo text-logo flex justify-center">
+    <span class="text-primary-container">TaskT</span><span class="text-outline">racker</span>
+  </h1>
+</div>
+<!-- Greeting -->
+<div class="text-center mb-lg">
+  <h2 class="font-h2 text-h2 text-on-surface mb-xs">Chào mừng trở lại</h2>
+  <p class="font-body-md text-body-md text-on-surface-variant">Đăng nhập vào workspace của bạn</p>
+</div>
+<!-- Error message -->
+<div id="error-msg" class="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-md text-body-md text-center"></div>
+<!-- Divider -->
+<div class="flex items-center gap-md mb-lg">
+  <div class="flex-1 h-px bg-outline-variant"></div>
+  <span class="font-body-md text-body-md text-outline px-sm">đăng nhập với email</span>
+  <div class="flex-1 h-px bg-outline-variant"></div>
+</div>
+<!-- Form -->
+<form id="login-form" class="space-y-md" method="POST">
+  <!-- Email Input -->
+  <div>
+    <label class="block font-body-md text-body-md text-on-surface-variant mb-xs" for="email">Email</label>
+    <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-shadow" id="email" name="email" placeholder="ten@congty.com" required="" type="email"/>
+  </div>
+  <!-- Password Input -->
+  <div>
+    <div class="flex justify-between items-center mb-xs">
+      <label class="block font-body-md text-body-md text-on-surface-variant" for="password">Mật khẩu</label>
+      <a class="font-body-md text-body-md text-secondary hover:text-primary transition-colors duration-200 underline decoration-surface-dim hover:decoration-secondary underline-offset-4" href="#">Quên mật khẩu?</a>
+    </div>
+    <div class="relative">
+      <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-sm font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-shadow" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+      <button aria-label="Hiện/ẩn mật khẩu" class="absolute right-md top-1/2 -translate-y-1/2 text-outline hover:text-on-surface transition-colors" id="toggle-password" type="button">
+        <span class="material-symbols-outlined text-[20px]" id="password-icon">visibility</span>
+      </button>
+    </div>
+  </div>
+  <!-- Submit Button -->
+  <button class="w-full bg-primary-container text-on-primary rounded-lg py-sm px-md font-body-md text-body-md font-medium hover:bg-inverse-surface transition-colors duration-200 mt-md" id="submit-btn" type="submit">
+    Đăng nhập
+  </button>
+</form>
+<!-- Footer Link -->
+<div class="mt-lg text-center">
+  <p class="font-body-md text-body-md text-on-surface-variant">
+    Chưa có tài khoản?
+    <a class="text-secondary hover:text-primary font-medium transition-colors duration-200 underline decoration-surface-dim hover:decoration-secondary underline-offset-4" href="/src/pages/register.html">Đăng ký</a>
+  </p>
+</div>
+</main>
+<script>
+  // Toggle password visibility
+  const toggleBtn = document.getElementById('toggle-password');
+  const passwordInput = document.getElementById('password');
+  const passwordIcon = document.getElementById('password-icon');
+  toggleBtn.addEventListener('click', () => {
+    const isVisible = passwordInput.type === 'text';
+    passwordInput.type = isVisible ? 'password' : 'text';
+    passwordIcon.textContent = isVisible ? 'visibility' : 'visibility_off';
+  });
+
+  // Form submit
+  const loginForm = document.getElementById('login-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorMsg = document.getElementById('error-msg');
+
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Đang đăng nhập…';
+    errorMsg.classList.remove('show');
+
+    const data = {
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('password').value,
+    };
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        window.location.replace('/src/pages/dashboard.html');
+      } else {
+        const json = await res.json().catch(() => ({}));
+        errorMsg.textContent = json.error || 'Email hoặc mật khẩu không đúng.';
+        errorMsg.classList.add('show');
+      }
+    } catch (err) {
+      errorMsg.textContent = 'Không thể kết nối tới máy chủ.';
+      errorMsg.classList.add('show');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Đăng nhập';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskTracker Không Gian Làm Việc Tĩnh</title>
+  <meta name="description" content="Bảng điều khiển tĩnh thống nhất được ghép từ các màn hình TaskTracker." />
+  <script src="./js/tailwind.config.js"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body data-page="dashboard" data-base="." class="bg-background text-on-background font-body-md antialiased">
+  <div class="app-shell">
+    <div data-shell="overlay"></div>
+    <aside data-shell="sidebar"></aside>
+    <div class="app-main">
+      <header data-shell="topbar"></header>
+      <main class="app-content">
+        <div class="mx-auto max-w-[1200px] space-y-6">
+          <section class="grid gap-6 lg:grid-cols-[1.35fr_0.95fr]">
+            <div class="rounded-[28px] border border-outline-variant bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.95),_rgba(240,237,237,0.92),_rgba(229,226,226,0.85))] p-6 shadow-card md:p-8">
+              <div class="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p class="mb-2 inline-flex items-center gap-2 rounded-full bg-surface-container-lowest px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface-variant">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    Nhịp tuần này
+                  </p>
+                  <h1 class="max-w-2xl font-h1 text-h1 text-on-surface">Một không gian làm việc cho tổng quan, dự án, công việc, báo cáo và cài đặt.</h1>
+                  <p class="mt-4 max-w-xl text-body-lg text-on-surface-variant">Bản dựng tĩnh này hợp nhất ngôn ngữ thiết kế từ các file màn hình gốc thành một bộ giao diện có thể điều hướng liền mạch.</p>
+                </div>
+                <div class="rounded-[24px] border border-white/70 bg-white/80 p-4 shadow-card">
+                  <p class="text-xs font-semibold uppercase tracking-[0.18em] text-on-surface-variant">Hôm nay</p>
+                  <p class="mt-2 font-h2 text-h2 text-on-surface">28 công việc đang hoạt động</p>
+                  <p class="mt-1 text-sm text-on-surface-variant">7 việc cần chú ý, 5 việc đến hạn trong 24 giờ tới</p>
+                </div>
+              </div>
+              <div class="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <article class="rounded-3xl border border-outline-variant bg-surface-container-lowest p-5 shadow-card">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-on-surface-variant">Tỷ lệ hoàn thành</span>
+                    <span class="material-symbols-outlined text-on-surface-variant">task_alt</span>
+                  </div>
+                  <p class="mt-4 font-h2 text-h2 text-on-surface">84%</p>
+                  <p class="mt-1 text-xs text-emerald-700">+9% so với sprint trước</p>
+                </article>
+                <article class="rounded-3xl border border-outline-variant bg-surface-container-lowest p-5 shadow-card">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-on-surface-variant">Dự án đang mở</span>
+                    <span class="material-symbols-outlined text-on-surface-variant">folder_open</span>
+                  </div>
+                  <p class="mt-4 font-h2 text-h2 text-on-surface">12</p>
+                  <p class="mt-1 text-xs text-on-surface-variant">3 luồng ra mắt trong tháng này</p>
+                </article>
+                <article class="rounded-3xl border border-error/30 bg-[linear-gradient(135deg,_rgba(255,218,214,0.65),_rgba(255,255,255,0.96))] p-5 shadow-card">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-on-surface-variant">Cần chú ý</span>
+                    <span class="material-symbols-outlined text-error">warning</span>
+                  </div>
+                  <p class="mt-4 font-h2 text-h2 text-on-surface">7</p>
+                  <p class="mt-1 text-xs text-error">Duyệt ngân sách, onboarding, QA di động</p>
+                </article>
+                <article class="rounded-3xl border border-outline-variant bg-surface-container-lowest p-5 shadow-card">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm text-on-surface-variant">Báo cáo chờ xuất</span>
+                    <span class="material-symbols-outlined text-on-surface-variant">analytics</span>
+                  </div>
+                  <p class="mt-4 font-h2 text-h2 text-on-surface">4</p>
+                  <p class="mt-1 text-xs text-on-surface-variant">Lên lịch xuất vào thứ Hai</p>
+                </article>
+              </div>
+            </div>
+
+            <div class="rounded-[28px] border border-outline-variant bg-surface-container-lowest p-6 shadow-card">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Khu vực trọng tâm</p>
+                  <h2 class="mt-2 font-h2 text-h2 text-on-surface">Sắp đến hạn</h2>
+                </div>
+                <a href="./pages/tasks.html" class="rounded-full border border-outline-variant px-4 py-2 text-sm font-medium text-on-surface hover:bg-surface-container-low">Xem công việc</a>
+              </div>
+              <div class="mt-6 space-y-4">
+                <button type="button" data-modal-open="detail-modal" class="w-full rounded-3xl border border-outline-variant bg-background p-4 text-left hover:-translate-y-0.5 hover:shadow-card">
+                  <div class="flex items-center justify-between gap-4">
+                    <div>
+                      <p class="font-medium text-on-surface">Chốt phê duyệt ngân sách Q4</p>
+                      <p class="mt-1 text-sm text-on-surface-variant">Chiến dịch marketing · Duyệt tài chính</p>
+                    </div>
+                    <span class="rounded-full bg-error-container px-3 py-1 text-xs font-semibold text-on-error-container">Hôm nay</span>
+                  </div>
+                </button>
+                <div class="w-full rounded-3xl border border-outline-variant bg-background p-4">
+                  <div class="flex items-center justify-between gap-4">
+                    <div>
+                      <p class="font-medium text-on-surface">Bàn giao QA cho onboarding di động</p>
+                      <p class="mt-1 text-sm text-on-surface-variant">Ra mắt di động · Sản phẩm + QA</p>
+                    </div>
+                    <span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface-variant">Ngày mai</span>
+                  </div>
+                </div>
+                <div class="w-full rounded-3xl border border-outline-variant bg-background p-4">
+                  <div class="flex items-center justify-between gap-4">
+                    <div>
+                      <p class="font-medium text-on-surface">Phê duyệt bảng giá đã chỉnh sửa</p>
+                      <p class="mt-1 text-sm text-on-surface-variant">Thiết kế lại website · Kinh doanh</p>
+                    </div>
+                    <span class="rounded-full bg-surface-container px-3 py-1 text-xs font-semibold text-on-surface-variant">Trong 2 ngày</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+            <div class="rounded-[28px] border border-outline-variant bg-surface-container-lowest p-6 shadow-card" data-tabs data-tabs-default="team">
+              <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Tiến độ thực thi</p>
+                  <h2 class="mt-2 font-h2 text-h2 text-on-surface">Dòng hoạt động</h2>
+                </div>
+                <div class="app-tabs-nav">
+                  <button class="app-tab-button" type="button" data-tab-button="team">Nhóm</button>
+                  <button class="app-tab-button" type="button" data-tab-button="projects">Dự án</button>
+                </div>
+              </div>
+              <div class="mt-6" data-tab-panel="team">
+                <div class="space-y-4">
+                  <div class="flex gap-4 rounded-3xl border border-outline-variant bg-background p-4">
+                    <div class="grid h-11 w-11 place-items-center rounded-2xl bg-surface-container text-sm font-semibold">SJ</div>
+                    <div>
+                      <p class="font-medium text-on-surface">Sarah đã chuyển QA onboarding sang trạng thái <span class="text-primary">Đang duyệt</span></p>
+                      <p class="mt-1 text-sm text-on-surface-variant">12 phút trước · Ra mắt di động</p>
+                    </div>
+                  </div>
+                  <div class="flex gap-4 rounded-3xl border border-outline-variant bg-background p-4">
+                    <div class="grid h-11 w-11 place-items-center rounded-2xl bg-surface-container text-sm font-semibold">AL</div>
+                    <div>
+                      <p class="font-medium text-on-surface">Bạn đã yêu cầu duyệt nội dung cho trang bảng giá.</p>
+                      <p class="mt-1 text-sm text-on-surface-variant">41 phút trước · Thiết kế lại website</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6" data-tab-panel="projects">
+                <div class="space-y-4">
+                  <div class="rounded-3xl border border-outline-variant bg-background p-4">
+                    <div class="flex items-center justify-between">
+                      <p class="font-medium text-on-surface">Thiết kế lại website</p>
+                      <span class="text-sm text-on-surface-variant">72%</span>
+                    </div>
+                    <div class="mt-3 h-2 rounded-full bg-surface-container">
+                      <div class="h-full w-[72%] rounded-full bg-primary-container"></div>
+                    </div>
+                  </div>
+                  <div class="rounded-3xl border border-outline-variant bg-background p-4">
+                    <div class="flex items-center justify-between">
+                      <p class="font-medium text-on-surface">Chiến dịch marketing Q4</p>
+                      <span class="text-sm text-on-surface-variant">58%</span>
+                    </div>
+                    <div class="mt-3 h-2 rounded-full bg-surface-container">
+                      <div class="h-full w-[58%] rounded-full bg-primary-container"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rounded-[28px] border border-outline-variant bg-surface-container-lowest p-6 shadow-card">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Lối tắt nhanh</p>
+                  <h2 class="mt-2 font-h2 text-h2 text-on-surface">Điều hướng nhanh</h2>
+                </div>
+                <span class="material-symbols-outlined text-on-surface-variant">north_east</span>
+              </div>
+              <div class="mt-6 grid gap-4">
+                <a href="./pages/projects.html" class="rounded-3xl border border-outline-variant bg-background p-4 no-underline hover:-translate-y-0.5 hover:shadow-card">
+                  <p class="font-medium text-on-surface">Trung tâm dự án</p>
+                  <p class="mt-1 text-sm text-on-surface-variant">Chế độ lưới, hồ sơ thành viên và phân nhóm dự án.</p>
+                </a>
+                <a href="./pages/tasks.html" class="rounded-3xl border border-outline-variant bg-background p-4 no-underline hover:-translate-y-0.5 hover:shadow-card">
+                  <p class="font-medium text-on-surface">Trung tâm công việc</p>
+                  <p class="mt-1 text-sm text-on-surface-variant">Danh sách, bảng, bộ lọc và modal chi tiết.</p>
+                </a>
+                <a href="./pages/reports.html" class="rounded-3xl border border-outline-variant bg-background p-4 no-underline hover:-translate-y-0.5 hover:shadow-card">
+                  <p class="font-medium text-on-surface">Báo cáo hiệu suất</p>
+                  <p class="mt-1 text-sm text-on-surface-variant">Thẻ phân tích, biểu đồ xu hướng và thao tác xuất báo cáo.</p>
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+      <footer data-shell="footer"></footer>
+    </div>
+    <nav data-shell="bottomnav"></nav>
+    <div data-shell="modal-root"></div>
+  </div>
+
+  <div class="app-modal" id="detail-modal" aria-hidden="true">
+    <div class="app-modal__dialog app-modal__dialog--wide">
+      <div class="app-modal__header">
+        <div>
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Chi tiết công việc</p>
+          <h2 class="app-modal__title">Chốt phê duyệt ngân sách Q4</h2>
+        </div>
+        <button class="app-modal__close" type="button" data-modal-close aria-label="Đóng">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="app-modal__body">
+        <div class="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
+          <div class="space-y-4">
+            <p class="text-sm leading-6 text-on-surface-variant">Tổng hợp ngân sách cuối từ paid social, đối chiếu với giả định tài chính và chuẩn bị bản tóm tắt cho buổi duyệt lãnh đạo vào thứ Hai.</p>
+            <div class="rounded-3xl border border-outline-variant bg-surface-container-low p-4">
+              <p class="text-xs font-semibold uppercase tracking-[0.16em] text-on-surface-variant">Danh sách kiểm tra</p>
+              <ul class="mt-3 space-y-3 text-sm text-on-surface">
+                <li class="flex items-center gap-3"><span class="material-symbols-outlined text-emerald-600">check_circle</span> Chốt phân bổ ngân sách media</li>
+                <li class="flex items-center gap-3"><span class="material-symbols-outlined text-emerald-600">check_circle</span> Xác nhận lại mục tiêu CAC</li>
+                <li class="flex items-center gap-3"><span class="material-symbols-outlined text-on-surface-variant">radio_button_unchecked</span> Gửi bản tóm tắt cho tài chính</li>
+              </ul>
+            </div>
+          </div>
+          <div class="space-y-4 rounded-3xl border border-outline-variant bg-background p-5">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-on-surface-variant">Người phụ trách</span>
+              <button type="button" data-modal-open="member-modal" class="inline-flex items-center gap-2 rounded-full bg-surface-container px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-variant">
+                <span class="app-avatar !h-7 !w-7">SJ</span>
+                Sarah Jenkins
+              </button>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-on-surface-variant">Trạng thái</span>
+              <span class="rounded-full bg-[#e0e7ff] px-3 py-1 text-xs font-semibold text-[#3730a3]">Đang duyệt</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-on-surface-variant">Hạn chót</span>
+              <span class="rounded-full bg-error-container px-3 py-1 text-xs font-semibold text-on-error-container">Hôm nay · 4:00 PM</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app-modal__footer">
+        <button class="app-button app-button--ghost" type="button" data-modal-close>Đóng</button>
+        <a class="app-button app-button--primary" href="./pages/tasks.html">Mở trong trang công việc</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-modal" id="member-modal" aria-hidden="true">
+    <div class="app-modal__dialog">
+      <div class="app-modal__header">
+        <h2 class="app-modal__title">Hồ sơ thành viên</h2>
+        <button class="app-modal__close" type="button" data-modal-close aria-label="Đóng">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="app-modal__body">
+        <div class="flex items-start gap-4">
+          <div class="app-avatar !h-16 !w-16 !text-lg">SJ</div>
+          <div>
+            <h3 class="font-h3 text-h3 text-on-surface">Sarah Jenkins</h3>
+            <p class="mt-1 text-sm text-on-surface-variant">Quản lý chương trình · Vận hành marketing</p>
+            <p class="mt-4 text-sm leading-6 text-on-surface-variant">Phụ trách mức sẵn sàng ra mắt liên phòng ban, duyệt ngân sách hằng tuần và báo cáo cho các bên liên quan.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/components.js"></script>
+  <script src="./js/app.js"></script>
+</body>
+</html>

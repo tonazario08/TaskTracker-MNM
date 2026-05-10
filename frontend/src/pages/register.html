@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Đăng ký</title>
+<meta name="description" content="Tạo tài khoản TaskTracker để bắt đầu quản lý công việc hiệu quả hơn."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+            "on-tertiary-fixed": "#221a14",
+            "surface-variant": "#e5e2e2",
+            "surface-container-low": "#f6f3f3",
+            "primary-fixed-dim": "#c3c7cc",
+            "outline-variant": "#c5c6ca",
+            "secondary-fixed-dim": "#c5c7c8",
+            "on-primary-container": "#888c91",
+            "tertiary-fixed-dim": "#d2c4bb",
+            "primary": "#0c1014",
+            "secondary": "#5c5f60",
+            "surface-container-highest": "#e5e2e2",
+            "primary-fixed": "#e0e3e8",
+            "outline": "#75777b",
+            "on-surface": "#1c1b1c",
+            "inverse-primary": "#c3c7cc",
+            "secondary-container": "#e1e3e4",
+            "on-primary": "#ffffff",
+            "tertiary-fixed": "#efe0d6",
+            "surface": "#fcf8f8",
+            "tertiary": "#150e09",
+            "on-primary-fixed": "#181c20",
+            "on-secondary-fixed-variant": "#454748",
+            "error-container": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#f0eded",
+            "on-primary-fixed-variant": "#43474c",
+            "on-background": "#1c1b1c",
+            "inverse-surface": "#313030",
+            "on-tertiary-container": "#968981",
+            "on-secondary-container": "#626566",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#e1e3e4",
+            "surface-container-high": "#ebe7e7",
+            "on-tertiary-fixed-variant": "#4f453e",
+            "tertiary-container": "#2b231d",
+            "on-error-container": "#93000a",
+            "on-surface-variant": "#44474a",
+            "primary-container": "#212529",
+            "on-secondary-fixed": "#191c1d",
+            "error": "#ba1a1a",
+            "inverse-on-surface": "#f3f0f0",
+            "on-error": "#ffffff",
+            "surface-bright": "#fcf8f8",
+            "on-tertiary": "#ffffff",
+            "surface-tint": "#5b5f63",
+            "background": "#fcf8f8",
+            "surface-dim": "#dcd9d9"
+        },
+        "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+        },
+        "spacing": {
+            "xs": "4px",
+            "gutter": "24px",
+            "container-max": "1200px",
+            "md": "16px",
+            "base": "8px",
+            "lg": "24px",
+            "xl": "32px",
+            "sm": "8px"
+        },
+        "fontFamily": {
+            "logo": ["Poppins"],
+            "body-md": ["Inter"],
+            "label-caps": ["Inter"],
+            "h3": ["Poppins"],
+            "badge": ["Inter"],
+            "h2": ["Poppins"],
+            "h1": ["Poppins"],
+            "body-lg": ["Inter"]
+        },
+        "fontSize": {
+            "logo": ["24px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+            "body-md": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "label-caps": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+            "h3": ["18px", {"lineHeight": "1.4", "fontWeight": "500"}],
+            "badge": ["12px", {"lineHeight": "1", "fontWeight": "500"}],
+            "h2": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+            "h1": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+        }
+      }
+    }
+  }
+</script>
+<style>
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    #strength-bar-1, #strength-bar-2, #strength-bar-3, #strength-bar-4 {
+        transition: background-color 0.3s ease;
+    }
+    #error-msg { display: none; }
+    #error-msg.show { display: block; }
+</style>
+</head>
+<body class="bg-surface-container-low min-h-screen flex flex-col items-center justify-center p-md text-on-surface antialiased">
+<div class="w-full max-w-[400px] bg-surface-container-lowest rounded-xl shadow-[0px_2px_4px_rgba(0,0,0,0.05)] border border-outline-variant p-lg flex flex-col">
+<!-- Header -->
+<div class="text-center mb-lg">
+  <div class="font-logo text-logo text-primary mb-md">TaskTracker</div>
+  <h1 class="font-h2 text-h2 text-on-surface mb-xs">Tạo tài khoản</h1>
+  <p class="font-body-md text-body-md text-on-surface-variant">Bắt đầu quản lý công việc hiệu quả hơn</p>
+</div>
+<!-- Error message -->
+<div id="error-msg" class="mb-md p-sm bg-error-container text-on-error-container rounded-lg font-body-md text-body-md text-center"></div>
+<!-- Form -->
+<form id="register-form" class="flex flex-col gap-md">
+  <!-- Full Name -->
+  <div class="flex flex-col gap-xs">
+    <label class="font-badge text-badge text-on-surface-variant" for="fullName">Họ và tên</label>
+    <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-[10px] text-body-md font-body-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" id="fullName" name="name" placeholder="Nguyễn Văn A" required type="text"/>
+  </div>
+  <!-- Email -->
+  <div class="flex flex-col gap-xs">
+    <label class="font-badge text-badge text-on-surface-variant" for="email">Email</label>
+    <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-[10px] text-body-md font-body-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" id="email" name="email" placeholder="ten@congty.com" required type="email"/>
+  </div>
+  <!-- Password -->
+  <div class="flex flex-col gap-xs">
+    <label class="font-badge text-badge text-on-surface-variant" for="password">Mật khẩu</label>
+    <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-[10px] text-body-md font-body-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" id="password" name="password" placeholder="••••••••" required type="password"/>
+    <!-- Password Strength Bar -->
+    <div class="flex gap-xs mt-sm">
+      <div class="h-1 rounded-full w-full bg-surface-variant" id="strength-bar-1"></div>
+      <div class="h-1 rounded-full w-full bg-surface-variant" id="strength-bar-2"></div>
+      <div class="h-1 rounded-full w-full bg-surface-variant" id="strength-bar-3"></div>
+      <div class="h-1 rounded-full w-full bg-surface-variant" id="strength-bar-4"></div>
+    </div>
+    <span class="font-badge text-badge text-on-surface-variant mt-xs" id="strength-label">Nhập mật khẩu</span>
+  </div>
+  <!-- Confirm Password -->
+  <div class="flex flex-col gap-xs">
+    <label class="font-badge text-badge text-on-surface-variant" for="confirmPassword">Xác nhận mật khẩu</label>
+    <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-md py-[10px] text-body-md font-body-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary transition-colors" id="confirmPassword" placeholder="••••••••" type="password"/>
+  </div>
+  <!-- Terms Checkbox -->
+  <div class="flex items-start gap-sm mt-xs">
+    <input class="mt-[2px] w-4 h-4 rounded-[4px] border-outline-variant text-primary focus:ring-primary focus:ring-offset-0 bg-surface-container-lowest" id="terms" type="checkbox" required/>
+    <label class="font-body-md text-body-md text-on-surface-variant" for="terms">
+      Tôi đồng ý với <a class="text-primary hover:underline" href="#">Điều khoản sử dụng</a>
+    </label>
+  </div>
+  <!-- Submit Button -->
+  <button class="w-full mt-sm bg-primary-container text-on-primary font-label-caps text-label-caps uppercase rounded-lg py-[12px] flex items-center justify-center hover:opacity-90 transition-opacity" id="submit-btn" type="submit">
+    Tạo tài khoản
+  </button>
+</form>
+<!-- Footer Link -->
+<div class="mt-lg text-center font-body-md text-body-md text-on-surface-variant">
+  Đã có tài khoản? <a class="text-secondary font-medium hover:text-primary transition-colors" href="/src/pages/login.html">Đăng nhập</a>
+</div>
+</div>
+<script>
+  // Password strength checker
+  const passwordInput = document.getElementById('password');
+  const bars = [
+    document.getElementById('strength-bar-1'),
+    document.getElementById('strength-bar-2'),
+    document.getElementById('strength-bar-3'),
+    document.getElementById('strength-bar-4'),
+  ];
+  const strengthLabel = document.getElementById('strength-label');
+
+  function checkStrength(pwd) {
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+    return score;
+  }
+
+  const colors = ['bg-error', 'bg-[#ef6c00]', 'bg-[#f9a825]', 'bg-[#2e7d32]'];
+  const labels = ['Yếu', 'Trung bình', 'Khá', 'Mạnh'];
+
+  passwordInput.addEventListener('input', () => {
+    const val = passwordInput.value;
+    if (!val) {
+      bars.forEach(b => { b.className = 'h-1 rounded-full w-full bg-surface-variant'; });
+      strengthLabel.textContent = 'Nhập mật khẩu';
+      return;
+    }
+    const score = checkStrength(val);
+    bars.forEach((b, i) => {
+      b.className = i < score
+        ? `h-1 rounded-full w-full ${colors[score - 1]}`
+        : 'h-1 rounded-full w-full bg-surface-variant';
+    });
+    strengthLabel.textContent = labels[score - 1] || 'Yếu';
+  });
+
+  // Form submit
+  const registerForm = document.getElementById('register-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorMsg = document.getElementById('error-msg');
+
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const pwd = document.getElementById('password').value;
+    const confirmPwd = document.getElementById('confirmPassword').value;
+
+    if (pwd !== confirmPwd) {
+      errorMsg.textContent = 'Mật khẩu xác nhận không khớp.';
+      errorMsg.classList.add('show');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Đang tạo tài khoản…';
+    errorMsg.classList.remove('show');
+
+    const data = {
+      name: document.getElementById('fullName').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      password: pwd,
+    };
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        window.location.replace('/src/pages/login.html');
+      } else {
+        const json = await res.json().catch(() => ({}));
+        errorMsg.textContent = json.error || 'Đăng ký thất bại. Vui lòng thử lại.';
+        errorMsg.classList.add('show');
+      }
+    } catch (err) {
+      errorMsg.textContent = 'Không thể kết nối tới máy chủ.';
+      errorMsg.classList.add('show');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'TẠO TÀI KHOẢN';
+    }
+  });
+</script>
+</body>
+</html>

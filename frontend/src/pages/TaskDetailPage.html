@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Task Detail View - TaskTracker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="../../public/assets/css/TaskDetailPage.css"/>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex items-center justify-center p-md">
+<div id="task-detail-backdrop" class="fixed inset-0 bg-on-background/20 backdrop-blur-sm z-40 flex items-center justify-center p-md">
+<div class="bg-surface-container-lowest w-full max-w-[1000px] max-h-[921px] rounded-[16px] modal-shadow flex flex-col z-50 overflow-hidden border border-surface-variant">
+<div class="flex items-center justify-between p-lg border-b border-surface-variant bg-surface-container-lowest sticky top-0 z-10">
+<div class="flex items-center gap-md">
+<span id="task-status-badge" class="bg-secondary-container text-on-secondary-container font-badge text-badge px-sm py-[6px] rounded-DEFAULT">In Progress</span>
+<h1 id="task-title" class="font-h2 text-h2 text-on-background m-0">Update Marketing Assets</h1>
+</div>
+<div class="flex items-center gap-md">
+<button id="mark-done-btn" class="bg-primary-container text-on-primary font-body-md text-body-md px-md py-sm rounded-lg hover:bg-primary transition-colors flex items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">check</span>
+                        Done
+                    </button>
+<button class="p-sm rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+<button id="close-task-detail" class="p-sm rounded-full hover:bg-surface-container transition-colors text-on-surface-variant ml-sm">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto flex flex-col lg:flex-row">
+<div class="flex-1 p-lg border-r border-surface-variant">
+<div class="mb-xl">
+<h3 class="font-h3 text-h3 text-on-background flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-outline">description</span>
+                            Description
+                        </h3>
+<div id="task-description" class="font-body-md text-body-md text-on-surface-variant space-y-md ml-[32px]">
+<p>We need to update the core marketing assets for the upcoming Q3 launch.</p>
+</div>
+</div>
+<div class="mb-xl">
+<div class="flex items-center justify-between mb-md">
+<h3 class="font-h3 text-h3 text-on-background flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline">checklist</span>
+                            Subtasks
+                        </h3>
+<button id="open-subtask-modal-btn" class="text-primary-container font-body-md text-body-md font-medium hover:underline flex items-center gap-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>Add Subtask
+</button>
+</div>
+<div id="subtasks-list" class="space-y-sm ml-[32px]">
+<div class="text-on-surface-variant text-sm">No subtasks yet.</div>
+</div>
+</div>
+<div>
+<h3 class="font-h3 text-h3 text-on-background flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-outline">attachment</span>
+                            Attachments
+                        </h3>
+<div id="attachments-list" class="ml-[32px] grid grid-cols-2 gap-md">
+<div class="text-on-surface-variant text-sm">No attachments connected.</div>
+</div>
+</div>
+</div>
+<div class="w-full lg:w-[320px] p-lg bg-surface flex flex-col gap-lg">
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-sm">Assignee</div>
+<div class="flex items-center gap-sm p-sm -ml-sm hover:bg-surface-container rounded-lg transition-colors">
+<div class="w-[32px] h-[32px] rounded-full bg-surface-container-high flex items-center justify-center text-xs font-semibold text-on-surface-variant" id="assignee-avatar">NA</div>
+<span id="task-assignee" class="font-body-md text-body-md text-on-background font-medium">Unassigned</span>
+</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-sm">Due Date</div>
+<div class="flex items-center gap-sm p-sm -ml-sm hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined text-outline">calendar_today</span>
+<span id="task-due-date" class="font-body-md text-body-md text-on-background">No due date</span>
+</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-sm">Project</div>
+<div class="flex items-center gap-sm p-sm -ml-sm hover:bg-surface-container rounded-lg transition-colors">
+<div class="w-[24px] h-[24px] rounded-[4px] bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-primary">rocket_launch</span>
+</div>
+<span id="task-project" class="font-body-md text-body-md text-on-background">No project</span>
+</div>
+</div>
+<div>
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase mb-sm">Priority</div>
+<div id="task-priority-badge" class="inline-flex items-center gap-xs px-sm py-[4px] bg-surface-container-high text-on-surface font-badge text-badge rounded-[4px] border border-outline-variant">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+<span id="task-priority">Medium</span>
+</div>
+</div>
+<div>
+<div class="flex items-center justify-between mb-sm">
+<div class="font-label-caps text-label-caps text-on-surface-variant uppercase">Labels</div>
+<button id="open-label-modal-btn" class="text-primary-container font-body-md text-body-md font-medium hover:underline flex items-center gap-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>Add Label
+</button>
+</div>
+<div id="task-labels" class="flex flex-wrap gap-xs">
+<span class="px-sm py-[4px] bg-surface-container-high text-on-surface font-badge text-badge rounded-[4px] border border-outline-variant">No labels</span>
+</div>
+</div>
+</div>
+</div>
+<div class="p-lg border-t border-surface-variant bg-surface-container-lowest">
+<div id="comments-list" class="space-y-md mb-md"></div>
+<div class="flex gap-md items-start mt-lg">
+<div class="w-[32px] h-[32px] rounded-full bg-surface-container-high flex items-center justify-center font-badge text-badge text-on-surface-variant shrink-0 mt-xs">ME</div>
+<div class="flex-1 relative">
+<textarea id="comment-input" class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg p-sm font-body-md text-body-md text-on-background placeholder:text-outline focus:border-primary-container focus:ring-0 resize-none transition-colors" placeholder="Write a comment or update status..." rows="2"></textarea>
+<div class="absolute bottom-sm right-sm flex gap-xs">
+<button class="p-xs text-outline hover:text-on-background transition-colors rounded hover:bg-surface-container" type="button">
+<span class="material-symbols-outlined text-[20px]">format_bold</span>
+</button>
+<button class="p-xs text-outline hover:text-on-background transition-colors rounded hover:bg-surface-container" type="button">
+<span class="material-symbols-outlined text-[20px]">attach_file</span>
+</button>
+<button id="comment-submit" class="ml-sm px-md py-xs bg-primary-container text-on-primary font-badge text-badge rounded-DEFAULT hover:bg-primary transition-colors" type="button">
+                                Comment
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="subtask-modal" class="fixed inset-0 bg-black/40 z-[60] hidden items-center justify-center p-md">
+  <div class="w-full max-w-lg bg-surface-container-lowest rounded-xl border border-surface-variant p-lg">
+    <div class="flex items-center justify-between mb-md">
+      <h3 class="font-h3 text-h3">Add Subtask</h3>
+      <button id="close-subtask-modal-btn" type="button" class="p-xs rounded hover:bg-surface-container">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="subtask-form" class="space-y-md">
+      <div>
+        <label class="block text-sm text-on-surface-variant mb-xs">Title</label>
+        <input id="subtask-title" type="text" required class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg px-md py-sm" />
+      </div>
+      <div>
+        <label class="block text-sm text-on-surface-variant mb-xs">Priority</label>
+        <select id="subtask-priority" class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg px-md py-sm">
+          <option>Low</option><option selected>Medium</option><option>High</option><option>Urgent</option>
+        </select>
+      </div>
+      <div class="flex justify-end gap-sm">
+        <button type="button" id="cancel-subtask-btn" class="px-md py-sm rounded-lg border border-surface-variant">Cancel</button>
+        <button type="submit" class="px-md py-sm rounded-lg bg-primary-container text-on-primary">Create</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="label-modal" class="fixed inset-0 bg-black/40 z-[60] hidden items-center justify-center p-md">
+  <div class="w-full max-w-lg bg-surface-container-lowest rounded-xl border border-surface-variant p-lg">
+    <div class="flex items-center justify-between mb-md">
+      <h3 class="font-h3 text-h3">Add Label</h3>
+      <button id="close-label-modal-btn" type="button" class="p-xs rounded hover:bg-surface-container">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="label-form" class="space-y-md">
+      <div>
+        <label class="block text-sm text-on-surface-variant mb-xs">Label Name</label>
+        <input id="label-name" type="text" required class="w-full bg-surface-container-lowest border border-surface-variant rounded-lg px-md py-sm" />
+      </div>
+      <div>
+        <label class="block text-sm text-on-surface-variant mb-xs">Color</label>
+        <input id="label-color" type="color" value="#6B7280" class="w-14 h-10 p-0 border border-surface-variant rounded" />
+      </div>
+      <div class="flex justify-end gap-sm">
+        <button type="button" id="cancel-label-btn" class="px-md py-sm rounded-lg border border-surface-variant">Cancel</button>
+        <button type="submit" class="px-md py-sm rounded-lg bg-primary-container text-on-primary">Add</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script type="module" src="../../public/assets/js/TaskDetailPage.js"></script>
+</body></html>

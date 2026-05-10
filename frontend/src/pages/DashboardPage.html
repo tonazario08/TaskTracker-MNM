@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+
+  <link rel="stylesheet" href="../../public/assets/css/DashboardPage.css" />
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-[240px] border-r border-outline-variant bg-surface-container-lowest text-on-surface font-sans font-medium text-sm flex flex-col p-4 space-y-6 z-50 panel-animated">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-logo text-logo flex-shrink-0">
+                T
+            </div>
+<div>
+<h1 class="font-logo text-logo text-on-surface tracking-tight">TaskTracker</h1>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Main Workspace</p>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary rounded-lg py-2 px-4 font-body-md text-body-md font-medium hover:bg-primary flex items-center justify-center space-x-2">
+<span class="material-symbols-outlined" style="font-size: 18px;">add</span>
+<span>Create Task</span>
+</button>
+<div class="flex-1 flex flex-col space-y-1">
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="#">
+<span class="material-symbols-outlined">inbox</span>
+<span>Inbox</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 bg-surface-variant text-on-surface rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="#">
+<span class="material-symbols-outlined">check_circle</span>
+<span>My Tasks</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="#">
+<span class="material-symbols-outlined">layers</span>
+<span>Projects</span>
+</a>
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="#">
+<span class="material-symbols-outlined">group</span>
+<span>Team</span>
+</a>
+</div>
+<div class="mt-auto">
+<a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-[60px] border-b border-outline-variant bg-surface-container-lowest text-on-surface font-sans text-sm antialiased shadow-sm flex items-center justify-between px-6 ml-[240px] w-[calc(100%-240px)] z-40 transition-all duration-200 ease-in-out">
+<div class="flex items-center space-x-4 flex-1">
+<div class="flex items-center text-on-surface-variant">
+<span class="hover:text-on-surface cursor-pointer hover-target">Workspace</span>
+<span class="material-symbols-outlined mx-2 text-xs">chevron_right</span>
+<span class="font-medium text-on-surface">Dashboard</span>
+</div>
+<div class="relative max-w-md w-full ml-8">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface pl-10 pr-4 py-1.5 rounded-lg border border-outline-variant focus:border-primary-container focus:ring-0 text-sm placeholder-on-surface-variant hover-target" placeholder="Search tasks, projects, or people..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-variant p-2 rounded-full relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant hover-target cursor-pointer">
+<img alt="User avatar" class="w-full h-full object-cover" data-alt="professional headshot of a young man smiling lightly, wearing a dark shirt against a soft blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB20ilT5gMVCEQBucx5voXVWdshloGaIrm_D9qDct_JmzbAB21K60cL5DnUBYGcDVuz9sGwCh1Ph_P9NCSknfUevtZckvQgkgYGP0lXQC_E0r1sRj8Gb7YAQ95Ss3P5ptTsODCwq_ypu1PmOryrwIg6IaBFBKuNa8ijFYz7W68JojI1O4jdRnjqm9QAuO6xsWILRIhHdsd395uzOac4G_7Y4jRUC7CigtY6hv1ZLedXBybKbeTAT68ztOWtFnI8Okci7PJ0qIK70g"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-[240px] pt-[60px] p-lg">
+<div class="max-w-[1200px] mx-auto">
+<!-- Section 1: Welcome & Stats -->
+<div class="mb-lg">
+<h1 class="font-h1 text-h1 text-on-surface mb-2">Good morning, Alex 👋</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-6">Here's what's happening today</p>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover-target hover:shadow-md cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Total Tasks</span>
+<span class="material-symbols-outlined text-outline">list</span>
+</div>
+<div class="flex items-end space-x-2">
+<span class="font-h1 text-h1 text-on-surface leading-none">124</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover-target hover:shadow-md cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Completed</span>
+<span class="material-symbols-outlined text-outline">check_circle</span>
+</div>
+<div class="flex items-end space-x-2">
+<span class="font-h1 text-h1 text-on-surface leading-none">89</span>
+<span class="font-body-md text-body-md text-secondary-container bg-surface-variant px-1.5 py-0.5 rounded text-xs">72% this week</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="bg-surface-container-lowest border border-error border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)] relative overflow-hidden hover-target hover:shadow-md cursor-pointer">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="flex items-center justify-between mb-2 pl-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Overdue</span>
+<span class="material-symbols-outlined text-error">error</span>
+</div>
+<div class="flex items-end space-x-2 pl-2">
+<span class="font-h1 text-h1 text-on-surface leading-none">7</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-md shadow-[0_2px_4px_rgba(0,0,0,0.02)] hover-target hover:shadow-md cursor-pointer">
+<div class="flex items-center justify-between mb-2">
+<span class="font-body-md text-body-md text-on-surface-variant">Due Today</span>
+<span class="material-symbols-outlined text-outline">calendar_today</span>
+</div>
+<div class="flex items-end space-x-2">
+<span class="font-h1 text-h1 text-on-surface leading-none">12</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 2: Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-lg mb-lg">
+<!-- Bar Chart (60%) -->
+<div class="lg:col-span-3 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] p-md flex flex-col hover-target hover:shadow-md">
+<h2 class="font-h3 text-h3 text-on-surface mb-6">Tasks Completed This Week</h2>
+<div class="flex-1 flex items-end justify-between space-x-2 pt-4 relative">
+<!-- Y-axis marks -->
+<div class="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-xs text-on-surface-variant pr-2 text-right w-6">
+<span>20</span>
+<span>15</span>
+<span>10</span>
+<span>5</span>
+<span>0</span>
+</div>
+<!-- Chart Area -->
+<div class="flex-1 flex items-end justify-between pl-8 h-48 border-l border-b border-outline-variant pb-1">
+<!-- Monday -->
+<div class="flex flex-col items-center flex-1 hover-target group">
+<div class="w-8 bg-[#212529] rounded-t-sm group-hover:bg-primary-container transition-colors" style="height: 40%"></div>
+<span class="text-xs text-on-surface-variant mt-2 group-hover:text-on-surface transition-colors">M</span>
+</div>
+<!-- Tuesday -->
+<div class="flex flex-col items-center flex-1 hover-target group">
+<div class="w-8 bg-[#212529] rounded-t-sm group-hover:bg-primary-container transition-colors" style="height: 65%"></div>
+<span class="text-xs text-on-surface-variant mt-2 group-hover:text-on-surface transition-colors">T</span>
+</div>
+<!-- Wednesday -->
+<div class="flex flex-col items-center flex-1 hover-target group">
+<div class="w-8 bg-[#212529] rounded-t-sm group-hover:bg-primary-container transition-colors" style="height: 85%"></div>
+<span class="text-xs text-on-surface-variant mt-2 group-hover:text-on-surface transition-colors">W</span>
+</div>
+<!-- Thursday (Current day) -->
+<div class="flex flex-col items-center flex-1 hover-target group">
+<div class="w-8 bg-primary rounded-t-sm relative group-hover:bg-primary-container transition-colors" style="height: 50%">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-surface-variant text-xs px-1.5 py-0.5 rounded">10</div>
+</div>
+<span class="text-xs font-medium text-on-surface mt-2">T</span>
+</div>
+<!-- Friday -->
+<div class="flex flex-col items-center flex-1 hover-target group">
+<div class="w-8 bg-[#212529] rounded-t-sm group-hover:bg-primary-container transition-colors" style="height: 30%"></div>
+<span class="text-xs text-on-surface-variant mt-2 group-hover:text-on-surface transition-colors">F</span>
+</div>
+<!-- Saturday -->
+<div class="flex flex-col items-center flex-1 hover-target group">
+<div class="w-8 bg-[#ADB5BD] rounded-t-sm group-hover:bg-outline transition-colors" style="height: 10%"></div>
+<span class="text-xs text-on-surface-variant mt-2 group-hover:text-on-surface transition-colors">S</span>
+</div>
+<!-- Sunday -->
+<div class="flex flex-col items-center flex-1 hover-target group">
+<div class="w-8 bg-[#ADB5BD] rounded-t-sm group-hover:bg-outline transition-colors" style="height: 5%"></div>
+<span class="text-xs text-on-surface-variant mt-2 group-hover:text-on-surface transition-colors">S</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Donut Chart (40%) -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] p-md flex flex-col items-center hover-target hover:shadow-md">
+<h2 class="font-h3 text-h3 text-on-surface w-full mb-6">Task Breakdown</h2>
+<div class="relative w-40 h-40 mb-6 hover-target cursor-pointer">
+<!-- SVG Donut Chart Placeholder -->
+<svg class="w-full h-full transform hover:scale-105 transition-transform duration-150" viewbox="0 0 36 36">
+<!-- Background circle -->
+<circle class="stroke-surface-variant" cx="18" cy="18" fill="transparent" r="15.91549430918954" stroke-width="3"></circle>
+<!-- To Do (gray) -->
+<circle class="stroke-[#9CA3AF] progress-animated" cx="18" cy="18" fill="transparent" r="15.91549430918954" stroke-dasharray="25 75" stroke-dashoffset="25" stroke-width="4"></circle>
+<!-- In Progress (blue) -->
+<circle class="stroke-[#3B82F6] progress-animated" cx="18" cy="18" fill="transparent" r="15.91549430918954" stroke-dasharray="35 65" stroke-dashoffset="100" stroke-width="4"></circle>
+<!-- In Review (yellow) -->
+<circle class="stroke-[#FBBF24] progress-animated" cx="18" cy="18" fill="transparent" r="15.91549430918954" stroke-dasharray="15 85" stroke-dashoffset="65" stroke-width="4"></circle>
+<!-- Done (green) -->
+<circle class="stroke-[#10B981] progress-animated" cx="18" cy="18" fill="transparent" r="15.91549430918954" stroke-dasharray="25 75" stroke-dashoffset="50" stroke-width="4"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-h2 text-h2 text-on-surface">124</span>
+<span class="text-xs text-on-surface-variant">Total Tasks</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="grid grid-cols-2 gap-x-4 gap-y-2 w-full max-w-[200px]">
+<div class="flex items-center space-x-2 text-sm hover-target cursor-pointer group">
+<span class="w-3 h-3 rounded-full bg-[#9CA3AF] group-hover:scale-110 transition-transform"></span>
+<span class="text-on-surface-variant group-hover:text-on-surface">To Do</span>
+</div>
+<div class="flex items-center space-x-2 text-sm hover-target cursor-pointer group">
+<span class="w-3 h-3 rounded-full bg-[#3B82F6] group-hover:scale-110 transition-transform"></span>
+<span class="text-on-surface-variant group-hover:text-on-surface">In Progress</span>
+</div>
+<div class="flex items-center space-x-2 text-sm hover-target cursor-pointer group">
+<span class="w-3 h-3 rounded-full bg-[#FBBF24] group-hover:scale-110 transition-transform"></span>
+<span class="text-on-surface-variant group-hover:text-on-surface">In Review</span>
+</div>
+<div class="flex items-center space-x-2 text-sm hover-target cursor-pointer group">
+<span class="w-3 h-3 rounded-full bg-[#10B981] group-hover:scale-110 transition-transform"></span>
+<span class="text-on-surface-variant group-hover:text-on-surface">Done</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Lists -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Due Soon -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] flex flex-col">
+<div class="p-md border-b border-outline-variant flex items-center justify-between">
+<h2 class="font-h3 text-h3 text-on-surface">Due Soon</h2>
+<button class="text-primary hover:underline text-sm font-medium">View all</button>
+</div>
+<div class="flex-1 p-2">
+<!-- List Item 1 -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg cursor-pointer hover-target">
+<div class="flex items-center space-x-3">
+<div class="w-2.5 h-2.5 rounded-full bg-error mt-1 self-start"></div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Finalize Q3 Marketing Deck</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Brand Refresh</p>
+</div>
+</div>
+<span class="font-badge text-badge text-error bg-error-container px-2 py-1 rounded">Today, 2:00 PM</span>
+</div>
+<!-- List Item 2 -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg cursor-pointer hover-target">
+<div class="flex items-center space-x-3">
+<div class="w-2.5 h-2.5 rounded-full bg-[#ef6c00] mt-1 self-start"></div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Review API Documentation</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Developer Portal</p>
+</div>
+</div>
+<span class="font-badge text-badge text-[#ef6c00] bg-[#fff3e0] px-2 py-1 rounded">Tomorrow</span>
+</div>
+<!-- List Item 3 -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg cursor-pointer hover-target">
+<div class="flex items-center space-x-3">
+<div class="w-2.5 h-2.5 rounded-full bg-[#1565c0] mt-1 self-start"></div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Prepare Team Sync Notes</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Internal</p>
+</div>
+</div>
+<span class="font-badge text-badge text-on-surface-variant bg-surface-variant px-2 py-1 rounded">Tomorrow</span>
+</div>
+<!-- List Item 4 -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg cursor-pointer hover-target">
+<div class="flex items-center space-x-3">
+<div class="w-2.5 h-2.5 rounded-full bg-[#ef6c00] mt-1 self-start"></div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Approve Design System Assets</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">WebApp v2.0</p>
+</div>
+</div>
+<span class="font-badge text-badge text-on-surface-variant bg-surface-variant px-2 py-1 rounded">In 2 days</span>
+</div>
+<!-- List Item 5 -->
+<div class="flex items-center justify-between p-sm hover:bg-surface-variant rounded-lg cursor-pointer hover-target">
+<div class="flex items-center space-x-3">
+<div class="w-2.5 h-2.5 rounded-full bg-[#1565c0] mt-1 self-start"></div>
+<div>
+<p class="font-body-md text-body-md text-on-surface font-medium">Update Client Proposal</p>
+<p class="font-body-md text-body-md text-on-surface-variant text-xs">Acme Corp</p>
+</div>
+</div>
+<span class="font-badge text-badge text-on-surface-variant bg-surface-variant px-2 py-1 rounded">In 2 days</span>
+</div>
+</div>
+</div>
+<!-- Recent Activity -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl shadow-[0_2px_4px_rgba(0,0,0,0.02)] flex flex-col">
+<div class="p-md border-b border-outline-variant">
+<h2 class="font-h3 text-h3 text-on-surface">Recent Activity</h2>
+</div>
+<div class="p-md flex-1">
+<div class="space-y-5">
+<!-- Feed Item 1 -->
+<div class="flex items-start space-x-3 hover-target group cursor-pointer">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant group-hover:ring-2 ring-primary-container transition-all">
+<img alt="Sarah" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUUfeE3DVSNihXF7aluIbI2QDIc34-3tjlaKL9iKVy10eCSVy836W_42sEpxm4GaGSN4h9RLb90Yqgma2kzzdFavoCjsXjXTqKRgtCBhsYs8T8Th4_2nihltiKsqumr50Gy1NpuHYLHD55wGh_0S8CjcC4CpOob7ALXPXQjiRisiEWvuqktLOoIKVMX2WyXP_Q5bCrGsvN8MFFXuJf850Ylq4dV4gkQyAdxOAR_DVXAExlpJY36OawqU88J6a4W4-e9CMuewoxyQ"/>
+</div>
+<div class="flex-1">
+<p class="text-sm text-on-surface"><strong>Sarah</strong> commented on <strong>API Docs</strong></p>
+<p class="text-xs text-on-surface-variant mt-0.5">10 mins ago</p>
+</div>
+</div>
+<!-- Feed Item 2 -->
+<div class="flex items-start space-x-3 hover-target group cursor-pointer">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant flex items-center justify-center text-sm font-medium group-hover:ring-2 ring-primary-container transition-all">
+A
+</div>
+<div class="flex-1">
+<p class="text-sm text-on-surface"><strong>You</strong> completed <strong>Design System Audit</strong></p>
+<p class="text-xs text-on-surface-variant mt-0.5">2 hours ago</p>
+</div>
+</div>
+<!-- Feed Item 3 -->
+<div class="flex items-start space-x-3 hover-target group cursor-pointer">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant group-hover:ring-2 ring-primary-container transition-all">
+<img alt="Mike" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAvQUioWq77tGMo7hyLuDxpkgN45V2E_-tvgHFTawGT5Zz30t49Bw7EfKQmja4syo6GM30V7qKWkNShHCwVQCMdt_u4YkMEckxsKvOF_uedmFpYH1mKA8OAIURv1D-n417fOw9Fx94ClbfrKReKIb1TGp1VPh-rHYS2sNHnCn97lfWsB9qva0M2JH-h_1c-rvmODROz_N_HzGsCQrLnuUFfJbc4nczzwGxdd6P3I7a53nAvY6hf7mOriyq9Ax0ALA13XpMNHM9aw"/>
+</div>
+<div class="flex-1">
+<p class="text-sm text-on-surface"><strong>Mike</strong> assigned you to <strong>Q3 Marketing Deck</strong></p>
+<p class="text-xs text-on-surface-variant mt-0.5">3 hours ago</p>
+</div>
+</div>
+<!-- Feed Item 4 -->
+<div class="flex items-start space-x-3 hover-target group cursor-pointer">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant group-hover:ring-2 ring-primary-container transition-all">
+<img alt="Jessica" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiMuu4GZPHG3X-x3qEoOlRZO4rVEsrIjRxuXhBQqzmO1ehB4VX-semnugkbdm8NtFOxR5Et7vci-TzMc1ztQikeziXAM7wqJ8yaTmX5KtLLb-24KAwTafHwo3PFyvO42B70n_v4ygLGZ5bV3L-1fe8IAmDV01Ln8amDk6R5rlXgrS-mhPjwCKOlCDHcYx_XuGvfeOUh-EavLEGWhrT5q1FbeZBog9DIbsgaFNYNCkqV-OUOWqajOolR-XfxfTBbLNkRrj9Y9KGYQ"/>
+</div>
+<div class="flex-1">
+<p class="text-sm text-on-surface"><strong>Jessica</strong> created <strong>Update User Profiles UI</strong></p>
+<p class="text-xs text-on-surface-variant mt-0.5">Yesterday</p>
+</div>
+</div>
+<!-- Feed Item 5 -->
+<div class="flex items-start space-x-3 hover-target group cursor-pointer">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant flex items-center justify-center text-sm font-medium group-hover:ring-2 ring-primary-container transition-all">
+A
+</div>
+<div class="flex-1">
+<p class="text-sm text-on-surface"><strong>You</strong> assigned <strong>Weekly Team Sync</strong> to <strong>David</strong></p>
+<p class="text-xs text-on-surface-variant mt-0.5">Yesterday</p>
+</div>
+</div>
+<!-- Feed Item 6 -->
+<div class="flex items-start space-x-3 hover-target group cursor-pointer">
+<div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-surface-variant group-hover:ring-2 ring-primary-container transition-all">
+<img alt="David" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaLNTjLD3QE9vR8JuG2C3aCSrmkzOy9N0rPA2iEVwxhbP6VEQ40haon8nV2rFgO5KcdnDNUDKRPDS9N08Lgfr1_Gl5jtHIbyDeoYgeAyYNI7vMqW5f4BCdm-z__4zu_vyh6ThgwO3gtdTh-Zd11Mw5FDWFsJt7hffKGTsEXh22jHy6l9uP9BthmQJVNxosQPm6wjy3brr9WVwuiaij1yf89rjyVYYnaCAOFWGFzn29s_qZ46IOf1H2txYgPBOkmsTGxKwmMPS-RQ"/>
+</div>
+<div class="flex-1">
+<p class="text-sm text-on-surface"><strong>David</strong> completed <strong>Fix Navigation Bug</strong></p>
+<p class="text-xs text-on-surface-variant mt-0.5">2 days ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+  <script src="../../public/assets/js/DashboardPage.js"></script>
+</body></html>

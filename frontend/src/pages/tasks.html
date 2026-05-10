@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="light" lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Công việc</title>
+<meta name="description" content="Quản lý danh sách công việc của bạn trên TaskTracker."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode:"class",
+    theme:{ extend:{
+      colors:{
+        "on-primary-fixed-variant":"#43474c","on-secondary-container":"#626566",
+        "secondary-fixed":"#e1e3e4","surface-container-low":"#f6f3f3","surface-container-high":"#ebe7e7",
+        "primary-fixed-dim":"#c3c7cc","secondary":"#5c5f60","outline-variant":"#c5c6ca",
+        "on-error-container":"#93000a","surface-tint":"#5b5f63","on-primary-container":"#888c91",
+        "surface-bright":"#fcf8f8","error":"#ba1a1a","primary-fixed":"#e0e3e8",
+        "on-secondary":"#ffffff","secondary-fixed-dim":"#c5c7c8","secondary-container":"#e1e3e4",
+        "surface":"#fcf8f8","primary":"#0c1014","on-primary":"#ffffff","tertiary-fixed-dim":"#d2c4bb",
+        "surface-container":"#f0eded","inverse-on-surface":"#f3f0f0","inverse-primary":"#c3c7cc",
+        "error-container":"#ffdad6","background":"#fcf8f8","on-surface-variant":"#44474a",
+        "surface-container-highest":"#e5e2e2","surface-dim":"#dcd9d9","inverse-surface":"#313030",
+        "surface-container-lowest":"#ffffff","on-surface":"#1c1b1c","on-background":"#1c1b1c",
+        "outline":"#75777b","on-error":"#ffffff","tertiary-container":"#2b231d",
+        "primary-container":"#212529","surface-variant":"#e5e2e2","on-primary-fixed":"#181c20"
+      },
+      borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+      spacing:{"xs":"4px","sm":"8px","gutter":"24px","container-max":"1200px","xl":"32px","lg":"24px","base":"8px","md":"16px"},
+      fontFamily:{"label-caps":["Inter"],"h2":["Poppins"],"body-md":["Inter"],"h3":["Poppins"],"badge":["Inter"],"logo":["Poppins"],"h1":["Poppins"],"body-lg":["Inter"]},
+      fontSize:{
+        "label-caps":["12px",{lineHeight:"1.2",letterSpacing:"0.05em",fontWeight:"600"}],
+        "h2":["24px",{lineHeight:"1.4",fontWeight:"600"}],"body-md":["14px",{lineHeight:"1.5",fontWeight:"400"}],
+        "h3":["18px",{lineHeight:"1.4",fontWeight:"500"}],"badge":["12px",{lineHeight:"1",fontWeight:"500"}],
+        "logo":["24px",{lineHeight:"1.2",letterSpacing:"-0.02em",fontWeight:"800"}],
+        "h1":["32px",{lineHeight:"1.3",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"1.6",fontWeight:"400"}]
+      }
+    }}
+  }
+</script>
+<style>
+  .material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24}
+  [data-weight="fill"]{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+  #task-modal{display:none} #task-modal.show{display:flex}
+</style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-surface-container-lowest text-primary font-sans antialiased text-sm font-medium border-b border-surface-variant flex items-center justify-between px-6 h-16 w-full sticky top-0 z-50">
+  <div class="flex items-center space-x-lg">
+    <a href="./dashboard.html" class="font-logo text-logo text-primary">TaskTracker</a>
+    <nav class="hidden md:flex space-x-lg h-full pt-4">
+      <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer pb-4" href="./dashboard.html">Dashboard</a>
+      <a class="text-primary border-b-2 border-primary pb-4 cursor-pointer" href="./tasks.html">Công việc</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer pb-4" href="./projects.html">Dự án</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors cursor-pointer pb-4" href="./kanban.html">Kanban</a>
+    </nav>
+  </div>
+  <div class="flex items-center space-x-md">
+    <a href="./notifications.html" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-xs rounded-full hover:bg-surface-container-highest">
+      <span class="material-symbols-outlined">notifications</span>
+    </a>
+    <a href="./settings.html" class="text-on-surface-variant hover:text-primary transition-colors flex items-center justify-center p-xs rounded-full hover:bg-surface-container-highest">
+      <span class="material-symbols-outlined">settings</span>
+    </a>
+    <div class="h-8 w-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-sm font-medium cursor-pointer" id="user-avatar">U</div>
+  </div>
+</header>
+
+<div class="flex flex-1 overflow-hidden">
+  <!-- SideNavBar -->
+  <aside class="hidden md:flex flex-col h-full p-4 space-y-2 bg-surface-container-lowest text-primary font-sans text-sm h-[calc(100vh-64px)] w-64 border-r border-surface-variant sticky top-16 shrink-0 z-40 overflow-y-auto">
+    <div class="flex items-center space-x-sm mb-lg px-2 pt-2">
+      <div class="h-10 w-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-bold text-lg">TT</div>
+      <div>
+        <div class="font-h3 text-h3 text-primary truncate w-40">TaskTracker Pro</div>
+        <div class="font-label-caps text-label-caps text-on-surface-variant">Workspace</div>
+      </div>
+    </div>
+    <button class="w-full bg-primary-container text-on-primary hover:opacity-90 rounded-lg py-2 px-4 mb-lg font-medium flex items-center justify-center space-x-2 transition-colors" id="new-task-side-btn">
+      <span class="material-symbols-outlined text-[18px]">add</span><span>Công việc mới</span>
+    </button>
+    <nav class="flex-1 space-y-1">
+      <a class="flex items-center space-x-3 px-3 py-2 bg-surface-container-low text-primary shadow-sm ring-1 ring-surface-variant rounded-lg font-medium" href="./tasks.html">
+        <span class="material-symbols-outlined">check_circle</span><span>Công việc</span>
+      </a>
+      <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-highest/50 rounded-lg transition-colors" href="./dashboard.html">
+        <span class="material-symbols-outlined">dashboard</span><span>Dashboard</span>
+      </a>
+      <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-highest/50 rounded-lg transition-colors" href="./projects.html">
+        <span class="material-symbols-outlined">folder_open</span><span>Dự án</span>
+      </a>
+      <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-highest/50 rounded-lg transition-colors" href="./kanban.html">
+        <span class="material-symbols-outlined">view_kanban</span><span>Kanban</span>
+      </a>
+    </nav>
+    <div class="mt-auto pt-4 border-t border-surface-variant space-y-1">
+      <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-highest/50 rounded-lg transition-colors" href="./settings.html">
+        <span class="material-symbols-outlined">settings</span><span>Cài đặt</span>
+      </a>
+      <button class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-container-highest/50 rounded-lg transition-colors w-full" id="logout-btn">
+        <span class="material-symbols-outlined">logout</span><span>Đăng xuất</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col overflow-hidden bg-background relative">
+    <!-- Top Toolbar -->
+    <div class="px-lg py-lg border-b border-surface-variant bg-surface-container-lowest sticky top-0 z-30 flex items-center justify-between">
+      <div class="flex items-center space-x-md">
+        <h1 class="font-h1 text-h1 text-primary">Công việc</h1>
+        <span class="bg-surface-container-high text-on-surface px-sm py-xs rounded-full font-badge text-badge border border-surface-variant" id="task-count">0</span>
+      </div>
+      <div class="flex items-center space-x-md">
+        <button class="flex items-center space-x-xs px-md py-sm bg-primary-container text-on-primary rounded-lg hover:opacity-90 transition-colors font-body-md text-body-md font-medium" id="new-task-btn">
+          <span class="material-symbols-outlined text-[18px]">add</span><span>Công việc mới</span>
+        </button>
+      </div>
+    </div>
+    <!-- Filter Bar -->
+    <div class="px-lg py-md border-b border-surface-variant bg-surface flex flex-wrap gap-sm z-20">
+      <select id="filter-status" class="px-3 py-1.5 bg-surface-container-lowest border border-surface-variant rounded-full text-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary">
+        <option value="">Trạng thái: Tất cả</option>
+        <option value="To Do">Cần làm</option>
+        <option value="In Progress">Đang làm</option>
+        <option value="In Review">Đang xét duyệt</option>
+        <option value="Done">Hoàn thành</option>
+      </select>
+      <select id="filter-priority" class="px-3 py-1.5 bg-surface-container-lowest border border-surface-variant rounded-full text-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary">
+        <option value="">Ưu tiên: Tất cả</option>
+        <option value="High">Cao</option>
+        <option value="Medium">Trung bình</option>
+        <option value="Low">Thấp</option>
+      </select>
+      <select id="filter-project" class="px-3 py-1.5 bg-surface-container-lowest border border-surface-variant rounded-full text-sm text-on-surface focus:outline-none focus:ring-1 focus:ring-primary">
+        <option value="">Dự án: Tất cả</option>
+      </select>
+    </div>
+    <!-- Table -->
+    <div class="flex-1 overflow-auto bg-surface-container-lowest px-lg py-md">
+      <div class="w-full bg-surface-container-lowest rounded-xl border border-surface-variant overflow-hidden">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-surface-container-low border-b border-surface-variant font-label-caps text-label-caps text-on-surface-variant sticky top-0">
+            <tr>
+              <th class="py-sm px-md font-medium">Công việc</th>
+              <th class="py-sm px-md font-medium">Dự án</th>
+              <th class="py-sm px-md font-medium">Người thực hiện</th>
+              <th class="py-sm px-md font-medium">Ngày hạn</th>
+              <th class="py-sm px-md font-medium">Ưu tiên</th>
+              <th class="py-sm px-md font-medium">Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody class="font-body-md text-body-md divide-y divide-surface-variant" id="task-table-body">
+            <tr><td colspan="6" class="py-8 text-center text-on-surface-variant">Đang tải...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- New Task Modal -->
+<div id="task-modal" class="fixed inset-0 bg-black/40 z-[100] items-center justify-center">
+  <div class="bg-surface-container-lowest rounded-xl shadow-xl w-full max-w-md mx-4 p-lg">
+    <div class="flex items-center justify-between mb-lg">
+      <h2 class="font-h3 text-h3 text-on-surface">Tạo công việc mới</h2>
+      <button class="text-on-surface-variant hover:text-on-surface" id="close-modal-btn">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="task-form" class="space-y-md">
+      <div>
+        <label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Tiêu đề *</label>
+        <input class="w-full border border-outline-variant rounded-lg px-md py-sm focus:outline-none focus:ring-1 focus:ring-primary" id="task-title" name="title" required type="text" placeholder="Nhập tiêu đề công việc..."/>
+      </div>
+      <div>
+        <label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Dự án</label>
+        <select class="w-full border border-outline-variant rounded-lg px-md py-sm focus:outline-none focus:ring-1 focus:ring-primary" id="task-project" name="projectId">
+          <option value="">— Chọn dự án —</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-md">
+        <div>
+          <label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Ưu tiên</label>
+          <select class="w-full border border-outline-variant rounded-lg px-md py-sm focus:outline-none focus:ring-1 focus:ring-primary" name="priority">
+            <option value="Medium">Trung bình</option>
+            <option value="High">Cao</option>
+            <option value="Low">Thấp</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Ngày hạn</label>
+          <input class="w-full border border-outline-variant rounded-lg px-md py-sm focus:outline-none focus:ring-1 focus:ring-primary" name="dueDate" type="date"/>
+        </div>
+      </div>
+      <div>
+        <label class="block font-label-caps text-label-caps text-on-surface-variant mb-xs">Người thực hiện</label>
+        <input class="w-full border border-outline-variant rounded-lg px-md py-sm focus:outline-none focus:ring-1 focus:ring-primary" name="assignee" type="text" placeholder="Tên người thực hiện"/>
+      </div>
+      <div class="flex justify-end gap-md pt-sm">
+        <button type="button" class="px-md py-sm border border-outline-variant rounded-lg font-body-md text-body-md hover:bg-surface-container" id="cancel-modal-btn">Hủy</button>
+        <button type="submit" class="px-md py-sm bg-primary-container text-on-primary rounded-lg font-body-md text-body-md font-medium hover:opacity-90" id="submit-task-btn">Thêm công việc</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+const PRIORITY_VI = {'High':'Cao','Medium':'Trung bình','Low':'Thấp'};
+const STATUS_VI = {'To Do':'Cần làm','In Progress':'Đang làm','In Review':'Đang xét duyệt','Done':'Hoàn thành'};
+const PRIORITY_CLASS = {'High':'bg-[#fee2e2] text-[#991b1b]','Medium':'bg-[#fef3c7] text-[#92400e]','Low':'bg-[#f3f4f6] text-[#374151]'};
+const STATUS_CLASS = {'To Do':'bg-surface-container-highest text-on-surface','In Progress':'bg-surface-container-highest text-on-surface','In Review':'bg-[#e0e7ff] text-[#3730a3]','Done':'bg-[#dcfce7] text-[#166534]'};
+
+let allTasks = [], allProjects = [];
+
+function renderTasks() {
+  const statusFilter = document.getElementById('filter-status').value;
+  const priorityFilter = document.getElementById('filter-priority').value;
+  const projectFilter = document.getElementById('filter-project').value;
+  let tasks = allTasks;
+  if (statusFilter) tasks = tasks.filter(t => t.status === statusFilter);
+  if (priorityFilter) tasks = tasks.filter(t => t.priority === priorityFilter);
+  if (projectFilter) tasks = tasks.filter(t => t.projectId === projectFilter);
+
+  document.getElementById('task-count').textContent = tasks.length;
+  const tbody = document.getElementById('task-table-body');
+  if (tasks.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="py-8 text-center text-on-surface-variant">Không có công việc nào.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = tasks.map(t => {
+    const proj = allProjects.find(p => p.id === t.projectId);
+    const dStr = t.dueDate ? new Date(t.dueDate).toLocaleDateString('vi-VN',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+    const pCls = PRIORITY_CLASS[t.priority] || 'bg-surface-container text-on-surface';
+    const sCls = STATUS_CLASS[t.status] || 'bg-surface-container text-on-surface';
+    return `<tr class="hover:bg-surface-container-low transition-colors">
+      <td class="py-md px-md"><div class="font-medium text-primary">${t.title}</div></td>
+      <td class="py-md px-md text-on-surface-variant">${proj ? proj.name : '—'}</td>
+      <td class="py-md px-md text-on-surface-variant">${t.assignee || '—'}</td>
+      <td class="py-md px-md text-on-surface-variant">${dStr}</td>
+      <td class="py-md px-md"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${pCls}">${PRIORITY_VI[t.priority] || t.priority || '—'}</span></td>
+      <td class="py-md px-md"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${sCls}">${STATUS_VI[t.status] || t.status || '—'}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+(async () => {
+  const meRes = await fetch('/api/auth/me');
+  if (!meRes.ok) { window.location.replace('/src/pages/login.html'); return; }
+  const me = await meRes.json();
+  document.getElementById('user-avatar').textContent = (me.name||me.email)[0].toUpperCase();
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await fetch('/api/auth/logout',{method:'POST'});
+    window.location.replace('/src/pages/login.html');
+  });
+
+  const [tasksRes, projectsRes] = await Promise.all([fetch('/api/tasks'), fetch('/api/projects')]);
+  allTasks = await tasksRes.json();
+  allProjects = await projectsRes.json();
+
+  // Populate project filter & select
+  const filterProj = document.getElementById('filter-project');
+  const taskProj = document.getElementById('task-project');
+  allProjects.forEach(p => {
+    filterProj.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+    taskProj.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+  });
+
+  renderTasks();
+  ['filter-status','filter-priority','filter-project'].forEach(id =>
+    document.getElementById(id).addEventListener('change', renderTasks));
+
+  // Modal
+  const modal = document.getElementById('task-modal');
+  const openModal = () => modal.classList.add('show');
+  const closeModal = () => modal.classList.remove('show');
+  document.getElementById('new-task-btn').addEventListener('click', openModal);
+  document.getElementById('new-task-side-btn').addEventListener('click', openModal);
+  document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+  document.getElementById('cancel-modal-btn').addEventListener('click', closeModal);
+
+  document.getElementById('task-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const btn = document.getElementById('submit-task-btn');
+    btn.disabled = true; btn.textContent = 'Đang thêm…';
+    const data = {
+      title: form.title.value.trim(),
+      projectId: form.projectId.value,
+      priority: form.priority.value,
+      assignee: form.assignee.value.trim(),
+      dueDate: form.dueDate.value,
+    };
+    try {
+      const res = await fetch('/api/tasks',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)});
+      if (res.ok) {
+        const newTask = await res.json();
+        allTasks.push(newTask);
+        renderTasks();
+        form.reset();
+        closeModal();
+      }
+    } finally {
+      btn.disabled = false; btn.textContent = 'Thêm công việc';
+    }
+  });
+})();
+</script>
+</body>
+</html>

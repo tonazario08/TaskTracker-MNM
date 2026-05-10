@@ -1,0 +1,52 @@
+/* Global Interaction Styles & Micro-animations */
+        a, button, .hover-target {
+            transition: all 150ms ease !important;
+        }
+        
+        button:active, .btn:active {
+            transform: scale(0.97) !important;
+            transition: transform 200ms ease !important;
+        }
+
+        /* Modals */
+        @keyframes modalFadeScale {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .modal-animated {
+            animation: modalFadeScale 200ms ease-out forwards;
+        }
+
+        /* Side Panels */
+        @keyframes slideInPanel {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0); }
+        }
+        .panel-animated {
+            animation: slideInPanel 250ms ease-out forwards;
+        }
+
+        /* Progress Bars */
+        @keyframes progressFill {
+            0% { width: 0%; }
+        }
+        .progress-animated {
+            animation: progressFill 1s ease-out forwards;
+        }
+
+        /* Skeleton Loaders */
+        .skeleton-pulsing {
+            background-color: #e5e7eb; /* tailwind gray-200 */
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Checkbox Checkmark */
+        @keyframes drawCheckmark {
+            0% { stroke-dashoffset: 24; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .checkmark-animated {
+            stroke-dasharray: 24;
+            stroke-dashoffset: 24;
+            animation: drawCheckmark 0.3s ease-in-out forwards;
+        }
