@@ -181,7 +181,7 @@
 (async () => {
   // Auth check
   const meRes = await fetch('/api/auth/me');
-  if (!meRes.ok) { window.location.replace('/src/pages/login.html'); return; }
+  if (!meRes.ok) { window.location.replace('/login'); return; }
   const me = await meRes.json();
   document.getElementById('user-name').textContent = me.name || me.email;
   document.getElementById('user-avatar').textContent = (me.name || me.email)[0].toUpperCase();
@@ -189,7 +189,7 @@
   // Logout
   document.getElementById('logout-btn').addEventListener('click', async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
-    window.location.replace('/src/pages/login.html');
+    window.location.replace('/login');
   });
 
   // Load tasks
