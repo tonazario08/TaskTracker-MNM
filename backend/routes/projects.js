@@ -2,8 +2,11 @@ const express = require('express');
 const pool = require('../config/db');
 const { requireAuth } = require('../middleware/requireAuth');
 const { slugify } = require('../lib/slugify');
+const { validateProjectCreatePayload, validateProjectUpdatePayload, badRequest } = require('../lib/validation');
 
 const router = express.Router();
+const editableProjectRoles = new Set(['Owner', 'Admin', 'Manager']);
+const destructiveProjectRoles = new Set(['Owner', 'Admin']);
 
 function mapProject(row) {
   return {
@@ -21,7 +24,31 @@ function mapProject(row) {
   };
 }
 
-router.get('/', requireAuth, async (req, res) => {
+async function getProjectAccess(projectId, userId) {
+  const result = await pool.query(
+    `SELECT p.*,
+            CASE
+              WHEN p.owner_user_id = $2 THEN 'Owner'
+              ELSE pm.role::text
+            END AS access_role
+     FROM projects p
+     LEFT JOIN project_members pm ON pm.project_id = p.id AND pm.user_id = $2 AND pm.left_at IS NULL
+     WHERE p.id = $1
+       AND (p.owner_user_id = $2 OR p.created_by_user_id = $2 OR pm.user_id = $2)
+     LIMIT 1`,
+    [projectId, userId]
+  );
+
+  return result.rows[0] || null;
+}
+
+function assertDateRange(startsOn, dueDate) {
+  if (startsOn && dueDate && dueDate < startsOn) {
+    throw badRequest('Due date must be on or after start date');
+  }
+}
+
+router.get('/', requireAuth, async (req, res, next) => {
   try {
     const result = await pool.query(
       `SELECT DISTINCT p.*
@@ -33,16 +60,20 @@ router.get('/', requireAuth, async (req, res) => {
     );
     res.json(result.rows.map(mapProject));
   } catch (err) {
-    console.error('projects error:', err.message);
-    res.status(500).json({ error: 'Loi may chu' });
+    next(err);
   }
 });
 
-router.post('/', requireAuth, async (req, res) => {
-  const { name, description, color, startsOn, dueDate, status } = req.body;
-  if (!name) return res.status(400).json({ error: 'Ten project khong duoc de trong' });
+router.post('/', requireAuth, async (req, res, next) => {
+  let payload;
+  try {
+    payload = validateProjectCreatePayload(req.body || {});
+    assertDateRange(payload.startsOn, payload.dueDate);
+  } catch (err) {
+    return next(err);
+  }
 
-  const baseId = slugify(name);
+  const baseId = slugify(payload.name);
   const projectId = `${baseId}-${Date.now()}`.slice(0, 100);
 
   try {
@@ -50,7 +81,7 @@ router.post('/', requireAuth, async (req, res) => {
       `INSERT INTO projects (id, name, description, color_hex, starts_on, due_on, status, owner_user_id, created_by_user_id)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8)
        RETURNING *`,
-      [projectId, name, description || null, color || null, startsOn || null, dueDate || null, status || 'Planning', req.user.id]
+      [projectId, payload.name, payload.description, payload.color || null, payload.startsOn || null, payload.dueDate || null, payload.status, req.user.id]
     );
 
     await pool.query(
@@ -62,65 +93,68 @@ router.post('/', requireAuth, async (req, res) => {
 
     res.status(201).json(mapProject(result.rows[0]));
   } catch (err) {
-    console.error('create project error:', err.message);
-    res.status(500).json({ error: 'Loi may chu' });
+    next(err);
   }
 });
 
-router.get('/:id', requireAuth, async (req, res) => {
+router.get('/:id', requireAuth, async (req, res, next) => {
   try {
-    const result = await pool.query(
-      `SELECT DISTINCT p.*
-       FROM projects p
-       LEFT JOIN project_members pm ON pm.project_id = p.id AND pm.left_at IS NULL
-       WHERE p.id = $1 AND (p.owner_user_id = $2 OR p.created_by_user_id = $2 OR pm.user_id = $2)`,
-      [req.params.id, req.user.id]
-    );
-    if (!result.rows[0]) return res.status(404).json({ error: 'Khong tim thay project' });
-    res.json(mapProject(result.rows[0]));
+    const project = await getProjectAccess(req.params.id, req.user.id);
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+    res.json(mapProject(project));
   } catch (err) {
-    console.error('project detail error:', err.message);
-    res.status(500).json({ error: 'Loi may chu' });
+    next(err);
   }
 });
 
-router.patch('/:id', requireAuth, async (req, res) => {
-  const { name, description, color, startsOn, dueDate, status, progress } = req.body;
+router.patch('/:id', requireAuth, async (req, res, next) => {
+  let payload;
   try {
+    payload = validateProjectUpdatePayload(req.body || {});
+    assertDateRange(payload.startsOn, payload.dueDate);
+  } catch (err) {
+    return next(err);
+  }
+
+  try {
+    const project = await getProjectAccess(req.params.id, req.user.id);
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+    if (!editableProjectRoles.has(project.access_role)) {
+      return res.status(403).json({ error: 'You do not have permission to update this project' });
+    }
+
     const result = await pool.query(
       `UPDATE projects
-       SET name = COALESCE($3, name),
-           description = COALESCE($4, description),
-           color_hex = COALESCE($5, color_hex),
-           starts_on = COALESCE($6, starts_on),
-           due_on = COALESCE($7, due_on),
-           status = COALESCE($8, status),
-           progress = COALESCE($9, progress)
-       WHERE id = $1 AND (owner_user_id = $2 OR created_by_user_id = $2 OR EXISTS (
-         SELECT 1 FROM project_members pm WHERE pm.project_id = projects.id AND pm.user_id = $2 AND pm.left_at IS NULL
-       ))
+       SET name = COALESCE($2, name),
+           description = COALESCE($3, description),
+           color_hex = COALESCE($4, color_hex),
+           starts_on = COALESCE($5, starts_on),
+           due_on = COALESCE($6, due_on),
+           status = COALESCE($7, status),
+           progress = COALESCE($8, progress)
+       WHERE id = $1
        RETURNING *`,
-      [req.params.id, req.user.id, name, description, color, startsOn, dueDate, status, progress]
+      [req.params.id, payload.name, payload.description, payload.color, payload.startsOn, payload.dueDate, payload.status, payload.progress]
     );
-    if (!result.rows[0]) return res.status(404).json({ error: 'Khong tim thay project' });
+
     res.json(mapProject(result.rows[0]));
   } catch (err) {
-    console.error('update project error:', err.message);
-    res.status(500).json({ error: 'Loi may chu' });
+    next(err);
   }
 });
 
-router.delete('/:id', requireAuth, async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res, next) => {
   try {
-    const result = await pool.query(
-      'DELETE FROM projects WHERE id = $1 AND (owner_user_id = $2 OR created_by_user_id = $2) RETURNING id',
-      [req.params.id, req.user.id]
-    );
-    if (!result.rows[0]) return res.status(404).json({ error: 'Khong tim thay project' });
-    res.json({ ok: true, id: result.rows[0].id });
+    const project = await getProjectAccess(req.params.id, req.user.id);
+    if (!project) return res.status(404).json({ error: 'Project not found' });
+    if (!destructiveProjectRoles.has(project.access_role)) {
+      return res.status(403).json({ error: 'You do not have permission to delete this project' });
+    }
+
+    await pool.query('DELETE FROM projects WHERE id = $1', [req.params.id]);
+    res.json({ ok: true, id: req.params.id });
   } catch (err) {
-    console.error('delete project error:', err.message);
-    res.status(500).json({ error: 'Loi may chu' });
+    next(err);
   }
 });
 

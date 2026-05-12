@@ -1,10 +1,14 @@
 const { getSessionUser } = require('../lib/sessionStore');
 
-function requireAuth(req, res, next) {
-  const user = getSessionUser(req);
-  if (!user) return res.status(401).json({ error: 'Chua dang nhap' });
-  req.user = user;
-  next();
+async function requireAuth(req, res, next) {
+  try {
+    const user = await getSessionUser(req);
+    if (!user) return res.status(401).json({ error: 'Authentication required' });
+    req.user = user;
+    next();
+  } catch (err) {
+    next(err);
+  }
 }
 
 module.exports = { requireAuth };

@@ -1,16 +1,58 @@
 import { api } from '../../src/services/api.js';
 
-(() => {
+(async () => {
   const bulk = document.getElementById('bulk-actions');
   const closeBtn = document.getElementById('bulk-close');
   const selectAll = document.getElementById('select-all');
   const tbody = document.getElementById('task-table-body');
   const newTaskButtons = Array.from(document.querySelectorAll('button')).filter((btn) => btn.textContent.includes('New Task'));
   const countBadge = document.querySelector('span.bg-surface-container-high');
+  const taskListState = document.getElementById('task-list-state');
+  const taskListSummary = document.getElementById('task-list-summary');
+  const createTaskModal = document.getElementById('create-task-modal');
+  const createTaskForm = document.getElementById('create-task-form');
+  const createTaskClose = document.getElementById('create-task-close');
+  const createTaskCancel = document.getElementById('create-task-cancel');
+  const createTaskMessage = document.getElementById('create-task-message');
+  const createTaskTitle = document.getElementById('create-task-title');
+  const createTaskProject = document.getElementById('create-task-project');
+  const createTaskSubmit = document.getElementById('create-task-submit');
+  const createTaskPriority = document.getElementById('create-task-priority');
+  const createTaskStatus = document.getElementById('create-task-status');
+  let projects = [];
 
   if (!tbody) return;
 
   const rowChecks = () => Array.from(tbody.querySelectorAll('input[type="checkbox"]'));
+
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+
+  function showTaskListState(message, tone = 'info') {
+    if (!taskListState) return;
+    taskListState.textContent = message;
+    taskListState.className = 'mb-md rounded-xl border px-md py-sm text-sm';
+    if (tone === 'error') {
+      taskListState.classList.add('border-[#ef4444]/30', 'bg-[#fef2f2]', 'text-[#991b1b]');
+    } else if (tone === 'success') {
+      taskListState.classList.add('border-[#86efac]', 'bg-[#f0fdf4]', 'text-[#166534]');
+    } else {
+      taskListState.classList.add('border-surface-variant', 'bg-surface-container-low', 'text-on-surface-variant');
+    }
+  }
+
+  function clearTaskListState() {
+    if (!taskListState) return;
+    taskListState.textContent = '';
+    taskListState.className = 'hidden mb-md rounded-xl border px-md py-sm text-sm';
+  }
 
   function priorityClass(priority) {
     if (priority === 'Urgent') return 'bg-[#fef2f2] text-[#b91c1c] border border-[#ef4444]/30';
@@ -25,23 +67,94 @@ import { api } from '../../src/services/api.js';
     return 'bg-surface-container-highest text-on-surface';
   }
 
+  function showCreateTaskMessage(message, tone = 'error') {
+    if (!createTaskMessage) return;
+    createTaskMessage.textContent = message;
+    createTaskMessage.className = 'rounded-lg border px-md py-sm text-sm';
+    if (tone === 'error') {
+      createTaskMessage.classList.add('border-[#ef4444]/30', 'bg-[#fef2f2]', 'text-[#991b1b]');
+    } else {
+      createTaskMessage.classList.add('border-[#86efac]', 'bg-[#f0fdf4]', 'text-[#166534]');
+    }
+  }
+
+  function clearCreateTaskMessage() {
+    if (!createTaskMessage) return;
+    createTaskMessage.textContent = '';
+    createTaskMessage.className = 'hidden rounded-lg border px-md py-sm text-sm';
+  }
+
+  function setCreateTaskBusy(isBusy) {
+    if (createTaskSubmit) createTaskSubmit.disabled = isBusy;
+    if (createTaskTitle) createTaskTitle.disabled = isBusy;
+    if (createTaskProject) createTaskProject.disabled = isBusy || projects.length === 0;
+    if (createTaskPriority) createTaskPriority.disabled = isBusy;
+    if (createTaskStatus) createTaskStatus.disabled = isBusy;
+  }
+
+  function populateProjectOptions() {
+    if (!createTaskProject) return;
+
+    if (!projects.length) {
+      createTaskProject.innerHTML = '<option value="">No projects available</option>';
+      createTaskProject.disabled = true;
+      showCreateTaskMessage('Create a project first before adding tasks.');
+      return;
+    }
+
+    createTaskProject.innerHTML = projects.map((project) => {
+      return '<option value="' + escapeHtml(project.id) + '">' + escapeHtml(project.name) + '</option>';
+    }).join('');
+    createTaskProject.disabled = false;
+  }
+
+  function openCreateTaskModal() {
+    if (!createTaskModal) return;
+    createTaskForm?.reset();
+    populateProjectOptions();
+    clearCreateTaskMessage();
+    if (!projects.length) {
+      showCreateTaskMessage('Create a project first before adding tasks.');
+    } else if (createTaskProject && projects[0]) {
+      createTaskProject.value = projects[0].id;
+    }
+    createTaskModal.classList.remove('hidden');
+    createTaskModal.classList.add('flex');
+    setCreateTaskBusy(false);
+    createTaskTitle?.focus();
+  }
+
+  function closeCreateTaskModal() {
+    if (!createTaskModal) return;
+    createTaskModal.classList.add('hidden');
+    createTaskModal.classList.remove('flex');
+    clearCreateTaskMessage();
+    createTaskForm?.reset();
+  }
+
   function renderTasks(tasks) {
-    tbody.innerHTML = tasks.map((task) => `
-      <tr class="hover:bg-surface-container-low transition-colors group" data-task-id="${task.id}">
+    tbody.innerHTML = tasks.map((task) => '
+      <tr class="hover:bg-surface-container-low transition-colors group" data-task-id="' + encodeURIComponent(task.id) + '">
         <td class="py-md px-md"><input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" type="checkbox"/></td>
         <td class="py-md px-md cursor-pointer task-open">
-          <div class="font-medium text-primary">${task.title || ''}</div>
-          <div class="text-xs text-on-surface-variant mt-1">${task.description || ''}</div>
+          <div class="font-medium text-primary">' + escapeHtml(task.title) + '</div>
+          <div class="text-xs text-on-surface-variant mt-1">' + escapeHtml(task.description || '') + '</div>
         </td>
-        <td class="py-md px-md">${task.projectName || '-'}</td>
-        <td class="py-md px-md">${task.assigneeName || '-'}</td>
-        <td class="py-md px-md text-on-surface-variant">${task.dueDate || '-'}</td>
-        <td class="py-md px-md"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${priorityClass(task.priority)}">${task.priority || 'Medium'}</span></td>
-        <td class="py-md px-md"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${statusClass(task.status)}">${task.status || 'To Do'}</span></td>
+        <td class="py-md px-md">' + escapeHtml(task.projectName || '-') + '</td>
+        <td class="py-md px-md">' + escapeHtml(task.assigneeName || '-') + '</td>
+        <td class="py-md px-md text-on-surface-variant">' + escapeHtml(task.dueDate || '-') + '</td>
+        <td class="py-md px-md"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ' + priorityClass(task.priority) + '">' + escapeHtml(task.priority || 'Medium') + '</span></td>
+        <td class="py-md px-md"><span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ' + statusClass(task.status) + '">' + escapeHtml(task.status || 'To Do') + '</span></td>
       </tr>
-    `).join('');
+    ').join('');
 
     if (countBadge) countBadge.textContent = String(tasks.length);
+    if (taskListSummary) taskListSummary.textContent = tasks.length ? ('Showing ' + tasks.length + ' task' + (tasks.length === 1 ? '' : 's')) : 'No tasks yet';
+    if (!tasks.length) {
+      showTaskListState('No tasks yet. Create your first task to get started.');
+    } else {
+      clearTaskListState();
+    }
     updateBulk();
   }
 
@@ -50,26 +163,29 @@ import { api } from '../../src/services/api.js';
     if (!bulk) return;
     bulk.style.display = selected > 0 ? 'flex' : 'none';
     const label = bulk.querySelector('.font-medium');
-    if (label) label.textContent = `${selected} tasks selected`;
+    if (label) label.textContent = selected + ' tasks selected';
   }
 
   async function loadTasks() {
+    showTaskListState('Loading tasks...');
     try {
       const tasks = await api.tasks();
       renderTasks(tasks);
     } catch (err) {
-      alert(err.message || 'Khong the tai danh sach task');
+      showTaskListState(err.message || 'Unable to load tasks', 'error');
+      if (taskListSummary) taskListSummary.textContent = 'Unable to load tasks';
+      tbody.innerHTML = '';
     }
   }
 
-  async function createTask() {
-    const title = window.prompt('Nhap ten task moi');
-    if (!title) return;
+  async function loadProjects() {
     try {
-      await api.createTask({ title, priority: 'Medium', status: 'To Do' });
-      await loadTasks();
+      projects = await api.projects();
+      populateProjectOptions();
     } catch (err) {
-      alert(err.message || 'Khong the tao task');
+      projects = [];
+      populateProjectOptions();
+      console.warn(err.message || 'Unable to load projects');
     }
   }
 
@@ -92,7 +208,7 @@ import { api } from '../../src/services/api.js';
     if (!row) return;
     if (target.closest('input[type="checkbox"]')) return;
     const id = row.getAttribute('data-task-id');
-    if (id) window.location.href = `./TaskDetailPage.html?id=${encodeURIComponent(id)}`;
+    if (id) window.location.href = './TaskDetailPage.html?id=' + id;
   });
 
   closeBtn?.addEventListener('click', () => {
@@ -101,7 +217,43 @@ import { api } from '../../src/services/api.js';
     updateBulk();
   });
 
-  newTaskButtons.forEach((btn) => btn.addEventListener('click', createTask));
+  newTaskButtons.forEach((btn) => btn.addEventListener('click', openCreateTaskModal));
+  createTaskClose?.addEventListener('click', closeCreateTaskModal);
+  createTaskCancel?.addEventListener('click', closeCreateTaskModal);
+  createTaskModal?.addEventListener('click', (e) => {
+    if (e.target === createTaskModal) closeCreateTaskModal();
+  });
 
-  loadTasks();
+  createTaskForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const title = createTaskTitle?.value?.trim() || '';
+    const projectId = createTaskProject?.value || '';
+    const priority = createTaskPriority?.value || 'Medium';
+    const status = createTaskStatus?.value || 'To Do';
+
+    if (!title) {
+      showCreateTaskMessage('Task title is required.');
+      return;
+    }
+    if (!projectId) {
+      showCreateTaskMessage('Choose a project before creating a task.');
+      return;
+    }
+
+    setCreateTaskBusy(true);
+    clearCreateTaskMessage();
+
+    try {
+      await api.createTask({ title, projectId, priority, status });
+      closeCreateTaskModal();
+      showTaskListState('Task created successfully.', 'success');
+      await loadTasks();
+    } catch (err) {
+      showCreateTaskMessage(err.message || 'Unable to create task');
+      setCreateTaskBusy(false);
+    }
+  });
+
+  await loadProjects();
+  await loadTasks();
 })();

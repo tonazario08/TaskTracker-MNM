@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: tasktracker_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres -d tasktracker_ci"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    defaults:
+      run:
+        working-directory: to-do-webapp
+
+    env:
+      NODE_ENV: test
+      PORT: 8080
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_NAME: tasktracker_ci
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      SESSION_SECRET: ci_session_secret_change_this_value_for_prod_only
+      CORS_ORIGIN: http://127.0.0.1:8080
+      SESSION_TTL_HOURS: 24
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: to-do-webapp/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run database migrations
+        run: npm run migrate
+
+      - name: Run test suite
+        run: npm test

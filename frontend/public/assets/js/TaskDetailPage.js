@@ -20,6 +20,7 @@ import { api } from '../../src/services/api.js';
   const commentsList = document.getElementById('comments-list');
   const commentInput = document.getElementById('comment-input');
   const commentSubmit = document.getElementById('comment-submit');
+  const detailMessage = document.getElementById('task-detail-message');
 
   const openSubtaskModalBtn = document.getElementById('open-subtask-modal-btn');
   const subtaskModal = document.getElementById('subtask-modal');
@@ -39,6 +40,23 @@ import { api } from '../../src/services/api.js';
 
   function showModal(modal) { modal?.classList.remove('hidden'); modal?.classList.add('flex'); }
   function hideModal(modal) { modal?.classList.add('hidden'); modal?.classList.remove('flex'); }
+
+  function showDetailMessage(message, tone = 'error') {
+    if (!detailMessage) return;
+    detailMessage.textContent = message;
+    detailMessage.className = 'mx-lg mt-lg rounded-xl border px-md py-sm text-sm';
+    if (tone === 'error') {
+      detailMessage.classList.add('border-[#ef4444]/30', 'bg-[#fef2f2]', 'text-[#991b1b]');
+    } else {
+      detailMessage.classList.add('border-[#86efac]', 'bg-[#f0fdf4]', 'text-[#166534]');
+    }
+  }
+
+  function clearDetailMessage() {
+    if (!detailMessage) return;
+    detailMessage.textContent = '';
+    detailMessage.className = 'hidden mx-lg mt-lg rounded-xl border px-md py-sm text-sm';
+  }
 
   function priorityClass(priority) {
     if (priority === 'Urgent') return 'bg-[#fef2f2] text-[#b91c1c] border border-[#ef4444]/30';
@@ -75,18 +93,47 @@ import { api } from '../../src/services/api.js';
     if (priorityNode) priorityNode.textContent = task.priority || 'Medium';
     if (priorityBadge) priorityBadge.className = `inline-flex items-center gap-xs px-sm py-[4px] font-badge text-badge rounded-[4px] ${priorityClass(task.priority)}`;
     if (markDone) { markDone.disabled = task.status === 'Done'; markDone.classList.toggle('opacity-70', task.status === 'Done'); }
-    renderSubtasks(task); renderLabels(task); renderComments(task.comments || []);
+    renderSubtasks(task);
+    renderLabels(task);
+    renderComments(task.comments || []);
   }
 
   async function loadTask() {
     if (!taskId) return backToList();
-    try { renderTask(await api.getTask(taskId)); } catch (err) { alert(err.message || 'Khong the tai task'); backToList(); }
+    try {
+      clearDetailMessage();
+      renderTask(await api.getTask(taskId));
+    } catch (err) {
+      showDetailMessage(err.message || 'Unable to load task details.');
+      setTimeout(backToList, 1200);
+    }
   }
 
   closeBtn?.addEventListener('click', backToList);
   backdrop?.addEventListener('click', (e) => { if (e.target === backdrop) backToList(); });
-  markDone?.addEventListener('click', async () => { if (!taskId) return; try { await api.updateTask(taskId, { status: 'Done' }); await loadTask(); } catch (err) { alert(err.message || 'Khong the cap nhat task'); } });
-  commentSubmit?.addEventListener('click', async (e) => { e.preventDefault(); const content = commentInput?.value?.trim(); if (!content || !taskId) return; try { await api.createTaskComment(taskId, { content }); commentInput.value = ''; await loadTask(); } catch (err) { alert(err.message || 'Khong the them comment'); } });
+  markDone?.addEventListener('click', async () => {
+    if (!taskId) return;
+    try {
+      await api.updateTask(taskId, { status: 'Done' });
+      showDetailMessage('Task marked as done.', 'success');
+      await loadTask();
+    } catch (err) {
+      showDetailMessage(err.message || 'Unable to update task.');
+    }
+  });
+  commentSubmit?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const content = commentInput?.value?.trim();
+    if (!content || !taskId) return;
+    try {
+      await api.createTaskComment(taskId, { content });
+      if (commentInput) commentInput.value = '';
+      showDetailMessage('Comment added.', 'success');
+      await loadTask();
+    } catch (err) {
+      showDetailMessage(err.message || 'Unable to add comment.');
+    }
+  });
 
   openSubtaskModalBtn?.addEventListener('click', () => showModal(subtaskModal));
   closeSubtaskModalBtn?.addEventListener('click', () => hideModal(subtaskModal));
@@ -107,9 +154,10 @@ import { api } from '../../src/services/api.js';
       await api.createSubtask(taskId, { title, priority, status: 'To Do' });
       subtaskForm.reset();
       hideModal(subtaskModal);
+      showDetailMessage('Subtask created.', 'success');
       await loadTask();
     } catch (err) {
-      alert(err.message || 'Khong the tao subtask');
+      showDetailMessage(err.message || 'Unable to create subtask.');
     }
   });
 
@@ -122,9 +170,10 @@ import { api } from '../../src/services/api.js';
       await api.addTaskLabel(taskId, { name, color });
       labelForm.reset();
       hideModal(labelModal);
+      showDetailMessage('Label added.', 'success');
       await loadTask();
     } catch (err) {
-      alert(err.message || 'Khong the them label');
+      showDetailMessage(err.message || 'Unable to add label.');
     }
   });
 

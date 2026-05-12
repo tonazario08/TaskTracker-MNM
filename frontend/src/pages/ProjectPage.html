@@ -99,6 +99,7 @@
 <button data-filter="archived" class="project-filter px-4 py-3 font-body-md font-medium text-on-surface-variant hover:text-on-surface border-b-2 border-transparent transition-colors whitespace-nowrap">Archived</button>
 </div>
 <!-- Projects Grid -->
+<div id="project-list-state" class="hidden mb-6 rounded-xl border px-md py-sm text-sm"></div>
 <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 <!-- Card 1 -->
 <div data-status="active" class="project-card bg-surface-container-lowest rounded-xl border border-surface-variant shadow-[0_2px_4px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col group hover:shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition-shadow">
@@ -227,5 +228,57 @@
 </div>
 </main>
 </div>
+<div id="create-project-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-primary/30 px-md">
+  <div class="w-full max-w-lg rounded-2xl border border-surface-variant bg-surface-container-lowest shadow-2xl">
+    <div class="flex items-center justify-between border-b border-surface-variant px-lg py-md">
+      <div>
+        <h2 class="font-h3 text-h3 text-primary">Create Project</h2>
+        <p class="mt-1 text-sm text-on-surface-variant">Add a project with a real form instead of a browser prompt.</p>
+      </div>
+      <button id="create-project-close" class="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-highest hover:text-primary" type="button">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <form id="create-project-form" class="space-y-md px-lg py-lg">
+      <div id="create-project-message" class="hidden rounded-lg border px-md py-sm text-sm"></div>
+      <div>
+        <label class="mb-xs block text-sm font-medium text-on-surface" for="create-project-name">Project name</label>
+        <input id="create-project-name" class="w-full rounded-xl border border-surface-variant bg-surface px-md py-sm text-on-surface focus:border-primary focus:outline-none" maxlength="255" name="name" placeholder="Q1 Product Launch" required type="text"/>
+      </div>
+      <div>
+        <label class="mb-xs block text-sm font-medium text-on-surface" for="create-project-status">Status</label>
+        <select id="create-project-status" class="w-full rounded-xl border border-surface-variant bg-surface px-md py-sm text-on-surface focus:border-primary focus:outline-none" name="status">
+          <option value="Planning" selected>Planning</option>
+          <option value="Active">Active</option>
+          <option value="On Hold">On Hold</option>
+          <option value="Completed">Completed</option>
+          <option value="Archived">Archived</option>
+        </select>
+      </div>
+      <div class="flex items-center justify-end gap-sm border-t border-surface-variant pt-md">
+        <button id="create-project-cancel" class="rounded-xl border border-surface-variant px-md py-sm text-on-surface transition-colors hover:bg-surface-container-highest" type="button">Cancel</button>
+        <button id="create-project-submit" class="rounded-xl bg-primary-container px-md py-sm font-medium text-on-primary transition-colors hover:bg-primary/90" type="submit">Create Project</button>
+      </div>
+    </form>
+  </div>
+</div>
+  
+<div id="delete-project-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-primary/30 px-md">
+  <div class="w-full max-w-md rounded-2xl border border-surface-variant bg-surface-container-lowest shadow-2xl">
+    <div class="border-b border-surface-variant px-lg py-md">
+      <h2 class="font-h3 text-h3 text-primary">Delete Project</h2>
+      <p class="mt-1 text-sm text-on-surface-variant">This action cannot be undone.</p>
+    </div>
+    <div class="space-y-md px-lg py-lg">
+      <div id="delete-project-message" class="hidden rounded-lg border px-md py-sm text-sm"></div>
+      <p class="text-sm text-on-surface">Are you sure you want to delete <span id="delete-project-name" class="font-medium text-primary"></span>?</p>
+      <div class="flex items-center justify-end gap-sm border-t border-surface-variant pt-md">
+        <button id="delete-project-cancel" class="rounded-xl border border-surface-variant px-md py-sm text-on-surface transition-colors hover:bg-surface-container-highest" type="button">Cancel</button>
+        <button id="delete-project-confirm" class="rounded-xl bg-[#b91c1c] px-md py-sm font-medium text-white transition-colors hover:bg-[#991b1b]" type="button">Delete Project</button>
+      </div>
+    </div>
+  </div>
+</div>
   <script type="module" src="../../public/assets/js/ProjectPage.js"></script>
+
 </body></html>

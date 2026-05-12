@@ -1,44 +1,27 @@
-const assert = require('node:assert/strict');
-const { spawn } = require('node:child_process');
 const test = require('node:test');
+const { assert, hasRunnableDbConfig, withServer } = require('./helpers');
 
-async function startServer(port) {
-  const server = spawn(process.execPath, ['index.js'], {
-    cwd: __dirname + '/..',
-    env: { ...process.env, PORT: String(port) },
-    stdio: ['ignore', 'pipe', 'pipe'],
+const canRunDbTests = hasRunnableDbConfig();
+const shellTest = canRunDbTests ? test : test.skip;
+
+shellTest('GET / redirects to /app/', async () => {
+  await withServer(18186, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/`, { redirect: 'manual' });
+
+    assert.equal(response.status, 302);
+    assert.equal(response.headers.get('location'), '/app/');
   });
+});
 
-  await new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('server did not start')), 3000);
-    server.stdout.on('data', (chunk) => {
-      if (chunk.toString().includes(`Server running on port ${port}`)) {
-        clearTimeout(timeout);
-        resolve();
-      }
-    });
-    server.stderr.on('data', (chunk) => {
-      clearTimeout(timeout);
-      reject(new Error(chunk.toString()));
-    });
-  });
-
-  return server;
-}
-
-test('serves the backend-connected TaskTracker app shell', async () => {
-  const port = 18184;
-  const server = await startServer(port);
-
-  try {
-    const response = await fetch(`http://127.0.0.1:${port}/app/`);
+shellTest('GET /app/ includes the primary app links', async () => {
+  await withServer(18187, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/app/`);
     const html = await response.text();
 
     assert.equal(response.status, 200);
-    assert.match(html, /TaskTracker Management/);
-    assert.match(html, /id="task-form"/);
-    assert.match(html, /app.js/);
-  } finally {
-    server.kill();
-  }
+    assert.match(html, /TaskTracker/);
+    assert.match(html, /id="primary-link"/);
+    assert.match(html, /Login/);
+    assert.match(html, /Register/);
+  });
 });

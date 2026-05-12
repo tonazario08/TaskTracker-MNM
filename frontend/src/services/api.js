@@ -1,10 +1,35 @@
-const API_BASE = 'http://localhost:8080/api';
+const API_BASE = '/api';
+
+function readCookie(name) {
+  const parts = String(document.cookie || '').split(';');
+  for (const part of parts) {
+    const trimmed = part.trim();
+    if (!trimmed.startsWith(name + '=')) continue;
+    return decodeURIComponent(trimmed.slice(name.length + 1));
+  }
+  return '';
+}
 
 async function request(path, options = {}) {
+  const headers = { ...(options.headers || {}) };
+  const method = String(options.method || 'GET').toUpperCase();
+  const hasBody = options.body !== undefined && options.body !== null;
+
+  if (hasBody && !headers['Content-Type']) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+    const csrfToken = readCookie('csrf_token');
+    if (csrfToken) {
+      headers['X-CSRF-Token'] = csrfToken;
+    }
+  }
+
   const res = await fetch(`${API_BASE}${path}`, {
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
     ...options,
+    headers,
   });
 
   const data = await res.json().catch(() => ({}));

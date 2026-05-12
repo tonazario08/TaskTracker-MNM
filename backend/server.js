@@ -1,15 +1,22 @@
 const app = require('./app');
 const pool = require('./config/db');
+const { config } = require('./config/env');
+const { ensureSessionTable } = require('./lib/sessionStore');
+const logger = require('./lib/logger');
 
-const PORT = process.env.PORT || 8080;
-
-app.listen(PORT, async () => {
-  console.log(`Server running on port ${PORT}`);
+async function start() {
   try {
     await pool.query('SELECT 1');
-    console.log('Ket noi PostgreSQL thanh cong');
+    await ensureSessionTable();
+    app.listen(config.port, () => {
+      console.log(`Server running on port ${config.port}`);
+      logger.info('server_started', { port: config.port, environment: config.nodeEnv });
+      logger.info('database_connected', { database: config.db.database, host: config.db.host, port: config.db.port });
+    });
   } catch (err) {
-    console.error('Khong the ket noi PostgreSQL:', err.message);
-    console.error('Hay kiem tra file .env va dam bao PostgreSQL dang chay');
+    logger.error('server_start_failed', { error: err.message });
+    process.exit(1);
   }
-});
+}
+
+start();

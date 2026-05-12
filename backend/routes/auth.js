@@ -1,61 +1,88 @@
 const express = require('express');
 const pool = require('../config/db');
-const { hashPassword, createSession, clearSession, getSessionUser } = require('../lib/sessionStore');
+const {
+  hashPassword,
+  verifyPassword,
+  needsRehash,
+  createSession,
+  clearSession,
+  getSessionUser,
+  setSessionCookie,
+} = require('../lib/sessionStore');
+const { validateRegisterPayload, validateLoginPayload } = require('../lib/validation');
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!name || !email || !password) {
-    return res.status(400).json({ error: 'Vui long dien day du thong tin' });
+router.post('/register', async (req, res, next) => {
+  let payload;
+  try {
+    payload = validateRegisterPayload(req.body || {});
+  } catch (err) {
+    return next(err);
   }
 
   try {
     const result = await pool.query(
       'INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING id, name, email',
-      [name, email, hashPassword(password)]
+      [payload.name, payload.email, hashPassword(payload.password)]
     );
     const user = result.rows[0];
-    const token = createSession(user);
-    res.cookie('session', token, { httpOnly: true, sameSite: 'lax' });
+    const token = await createSession(user);
+    setSessionCookie(res, token);
     res.status(201).json(user);
   } catch (err) {
     if (err.code === '23505') {
-      return res.status(409).json({ error: 'Email da duoc su dung' });
+      return res.status(409).json({ error: 'Email is already in use' });
     }
-    console.error('register error:', err.message);
-    res.status(500).json({ error: 'Loi may chu' });
+    return next(err);
   }
 });
 
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+router.post('/login', async (req, res, next) => {
+  let payload;
   try {
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    payload = validateLoginPayload(req.body || {});
+  } catch (err) {
+    return next(err);
+  }
+
+  try {
+    const result = await pool.query('SELECT id, name, email, password_hash, is_active FROM users WHERE LOWER(email) = LOWER($1)', [payload.email]);
     const user = result.rows[0];
-    if (!user || user.password_hash !== hashPassword(password)) {
-      return res.status(401).json({ error: 'Email hoac mat khau khong dung' });
+    if (!user || !user.is_active || !verifyPassword(payload.password, user.password_hash)) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    if (needsRehash(user.password_hash)) {
+      await pool.query('UPDATE users SET password_hash = $2 WHERE id = $1', [user.id, hashPassword(payload.password)]);
     }
 
     const sessionUser = { id: user.id, name: user.name, email: user.email };
-    const token = createSession(sessionUser);
-    res.cookie('session', token, { httpOnly: true, sameSite: 'lax' });
+    const token = await createSession(sessionUser);
+    setSessionCookie(res, token);
     res.json(sessionUser);
   } catch (err) {
-    console.error('login error:', err.message);
-    res.status(500).json({ error: 'Loi may chu' });
+    return next(err);
   }
 });
 
-router.post('/logout', (req, res) => {
-  clearSession(req, res);
-  res.json({ ok: true });
+router.post('/logout', async (req, res, next) => {
+  try {
+    await clearSession(req, res);
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.get('/me', (req, res) => {
-  const user = getSessionUser(req);
-  if (!user) return res.status(401).json({ error: 'Chua dang nhap' });
-  res.json(user);
+router.get('/me', async (req, res, next) => {
+  try {
+    const user = await getSessionUser(req);
+    if (!user) return res.status(401).json({ error: 'Authentication required' });
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
