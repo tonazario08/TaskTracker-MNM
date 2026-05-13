@@ -1,49 +1,47 @@
-const crypto = require('node:crypto');
+const jwt = require('jsonwebtoken');
 
-const sessions = {};
-
-function hashPassword(password) {
-  return crypto.createHash('sha256').update(`${password}:tasktracker_salt`).digest('hex');
-}
-
-function generateToken() {
-  return crypto.randomBytes(32).toString('hex');
-}
-
-function getSessionToken(req) {
-  const raw = req.headers.cookie || '';
-  const match = raw.match(/session=([a-f0-9]+)/);
-  return match ? match[1] : null;
+function createSession(user) {
+  const secret = process.env.JWT_SECRET || 'fallback_secret_key';
+  // Include user info in the token payload
+  const payload = {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    is_verified: user.is_verified,
+    google_id: user.google_id
+  };
+  
+  // Token expires in 7 days
+  return jwt.sign(payload, secret, { expiresIn: '7d' });
 }
 
 function getSessionUser(req) {
-  const token = getSessionToken(req);
-  return token ? sessions[token] || null : null;
-}
+  // Use cookie-parser's req.cookies if available, fallback to manual parsing
+  let token = null;
+  if (req.cookies && req.cookies.session) {
+    token = req.cookies.session;
+  } else if (req.headers.cookie) {
+    const match = req.headers.cookie.match(/session=([^;]+)/);
+    if (match) token = match[1];
+  }
 
-function createSession(user) {
-  const token = generateToken();
-  sessions[token] = user;
-  return token;
-}
+  if (!token) return null;
 
-function updateSessionUser(req, user) {
-  const token = getSessionToken(req);
-  if (token && sessions[token]) {
-    sessions[token] = user;
+  try {
+    const secret = process.env.JWT_SECRET || 'fallback_secret_key';
+    const decoded = jwt.verify(token, secret);
+    return decoded;
+  } catch (err) {
+    return null;
   }
 }
 
 function clearSession(req, res) {
-  const token = getSessionToken(req);
-  if (token) delete sessions[token];
-  res.clearCookie('session');
+  res.clearCookie('session', { path: '/' });
 }
 
 module.exports = {
-  hashPassword,
-  getSessionUser,
   createSession,
-  updateSessionUser,
+  getSessionUser,
   clearSession,
 };

@@ -1,7 +1,11 @@
 const express = require('express');
 const path = require('node:path');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const cors = require('cors');
 require('dotenv').config();
 
+const passport = require('./config/passport');
 const authRoutes = require('./routes/auth');
 const projectRoutes = require('./routes/projects');
 const taskRoutes = require('./routes/tasks');
@@ -12,7 +16,17 @@ const frontendRoot = path.join(__dirname, '..', 'frontend');
 const frontendPublicDir = path.join(frontendRoot, 'public');
 const frontendSrcDir = path.join(frontendRoot, 'src');
 
+// CORS configuration - allow frontend to communicate with backend
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+
 app.use(express.json());
+app.use(cookieParser());
+app.use(session({ secret: process.env.JWT_SECRET || 'secret', resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/app', express.static(frontendPublicDir));
 app.use('/public', express.static(frontendPublicDir));
 app.use('/src', express.static(frontendSrcDir));
