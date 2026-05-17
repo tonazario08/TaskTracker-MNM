@@ -1,34 +1,28 @@
 {
   "name": "to-do-proj",
   "version": "1.0.0",
-  "description": "TaskTracker full-stack task and project management app",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "node --test",
-    "migrate": "node backend/scripts/migrate.js",
-    "migrate:status": "node backend/scripts/migration-status.js",
-    "seed:dev": "node backend/scripts/seed-dev.js"
+    "test": "node --test"
   },
-  "keywords": [
-    "tasktracker",
-    "express",
-    "postgresql",
-    "project-management",
-    "todo"
-  ],
-  "author": "TaskTracker Team",
+  "keywords": [],
+  "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
+    "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "express-rate-limit": "^8.5.1",
-    "helmet": "^8.1.0",
-    "nodemon": "^3.1.14",
+    "express-session": "^1.19.0",
+    "google-auth-library": "^10.6.2",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^8.0.7",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "pg": "^8.20.0"
   }
 }

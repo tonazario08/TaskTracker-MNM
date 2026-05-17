@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Đăng nhập</title>
+<meta name="description" content="Đăng nhập vào TaskTracker để quản lý công việc và dự án của bạn."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: { extend: {
+            "colors": {
+                "outline": "#75777b", "surface-container": "#f0eded", "error": "#ba1a1a",
+                "inverse-on-surface": "#f3f0f0", "inverse-surface": "#313030", "tertiary": "#150e09",
+                "secondary-fixed": "#e1e3e4", "surface": "#fcf8f8", "background": "#fcf8f8",
+                "on-primary": "#ffffff", "inverse-primary": "#c3c7cc", "secondary": "#5c5f60",
+                "outline-variant": "#c5c6ca", "on-primary-fixed": "#181c20", "on-background": "#1c1b1c",
+                "primary": "#0c1014", "primary-container": "#212529", "surface-bright": "#fcf8f8",
+                "on-surface": "#1c1b1c", "surface-container-highest": "#e5e2e2", "on-surface-variant": "#44474a",
+                "surface-container-high": "#ebe7e7", "surface-container-lowest": "#ffffff", "on-error": "#ffffff",
+                "surface-dim": "#dcd9d9", "secondary-container": "#e1e3e4", "on-primary-container": "#888c91",
+                "surface-container-low": "#f6f3f3", "surface-variant": "#e5e2e2", "primary-fixed-dim": "#c3c7cc",
+                "on-secondary-container": "#626566", "primary-fixed": "#e0e3e8", "error-container": "#ffdad6",
+                "on-error-container": "#93000a", "tertiary-container": "#2b231d", "on-tertiary": "#ffffff",
+                "surface-tint": "#5b5f63"
+            },
+            "fontFamily": { "body-md": ["Inter"], "logo": ["Poppins"], "h2": ["Poppins"] }
+        }}
+    }
+</script>
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .hidden { display: none !important; }
+</style>
+</head>
+<body class="bg-surface-container-low min-h-screen flex items-center justify-center p-4 font-body-md text-on-surface">
+
+<main class="w-full max-w-[400px] bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-6 md:p-8 relative">
+  <!-- Toast Notification -->
+  <div id="toast" class="absolute top-4 left-1/2 -translate-x-1/2 bg-error text-on-error px-4 py-2 rounded-md shadow-lg hidden text-sm w-[90%] text-center z-50"></div>
+
+  <div class="text-center mb-8">
+    <h1 class="font-logo text-2xl font-extrabold flex justify-center tracking-tight cursor-pointer" onclick="window.location='/'">
+      <span class="text-primary-container">TaskT</span><span class="text-outline">racker</span>
+    </h1>
+  </div>
+
+  <div class="text-center mb-6">
+    <h2 class="font-h2 text-xl font-semibold mb-1">Chào mừng trở lại</h2>
+    <p class="text-sm text-on-surface-variant">Đăng nhập vào workspace của bạn</p>
+  </div>
+
+  <!-- Standard Google OAuth Button -->
+  <div class="mb-6">
+    <a href="/api/auth/google" class="w-full flex items-center justify-center gap-2 bg-surface-container-lowest border border-outline-variant rounded-lg py-2 px-4 hover:bg-surface-container-low transition-colors text-sm font-medium">
+      <svg class="w-5 h-5" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Đăng nhập bằng Google
+    </a>
+  </div>
+
+  <div class="flex items-center gap-4 mb-6">
+    <div class="flex-1 h-px bg-outline-variant"></div>
+    <span class="text-xs text-outline font-medium uppercase tracking-wider">hoặc đăng nhập bằng email</span>
+    <div class="flex-1 h-px bg-outline-variant"></div>
+  </div>
+
+  <form id="login-form" class="space-y-4">
+    <div>
+      <label class="block text-sm text-on-surface-variant mb-1" for="email">Email</label>
+      <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" id="email" type="email" placeholder="ten@congty.com" required />
+    </div>
+    <div>
+      <div class="flex justify-between items-center mb-1">
+        <label class="block text-sm text-on-surface-variant" for="password">Mật khẩu</label>
+        <a class="text-xs text-secondary hover:text-primary transition-colors underline" href="#">Quên mật khẩu?</a>
+      </div>
+      <div class="relative">
+        <input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" id="password" type="password" placeholder="••••••••" required />
+        <button type="button" id="toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface">
+          <span class="material-symbols-outlined text-lg" id="password-icon">visibility</span>
+        </button>
+      </div>
+    </div>
+    
+    <button id="submit-btn" type="submit" class="w-full bg-primary-container text-on-primary rounded-lg py-2 px-4 text-sm font-medium hover:bg-inverse-surface transition-colors mt-2 flex justify-center items-center h-10">
+      <span id="btn-text">Đăng nhập</span>
+      <svg id="btn-spinner" class="animate-spin h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+    </button>
+  </form>
+
+  <div class="mt-6 text-center text-sm text-on-surface-variant">
+    Chưa có tài khoản? <a class="text-secondary font-medium hover:text-primary transition-colors" href="/register">Đăng ký</a>
+  </div>
+</main>
+
+<script>
+  const showToast = (msg, isError = true) => {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.className = `absolute top-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-md shadow-lg text-sm w-[90%] text-center z-50 animate-fade-in ${isError ? 'bg-error text-on-error' : 'bg-surface-tint text-on-primary'}`;
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('hidden'), 4000);
+  };
+
+  // Check for oauth error in URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('error') === 'oauth_failed') {
+    showToast('Đăng nhập Google thất bại');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+
+  // Toggle Password
+  document.getElementById('toggle-password').addEventListener('click', () => {
+    const input = document.getElementById('password');
+    const icon = document.getElementById('password-icon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.textContent = 'visibility_off';
+    } else {
+      input.type = 'password';
+      icon.textContent = 'visibility';
+    }
+  });
+
+  // Handle Login
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const spinner = document.getElementById('btn-spinner');
+    
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    btn.disabled = true;
+    btnText.classList.add('hidden');
+    spinner.classList.remove('hidden');
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const json = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        window.location.href = '/dashboard';
+      } else {
+        showToast(json.error || 'Đăng nhập thất bại');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      showToast('Không thể kết nối máy chủ');
+    } finally {
+      btn.disabled = false;
+      btnText.classList.remove('hidden');
+      spinner.classList.add('hidden');
+    }
+  });
+</script>
+</body>
+</html>

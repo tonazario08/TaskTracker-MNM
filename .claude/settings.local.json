@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm list *)",
+      "Bash(npm install *)",
+      "Bash(node verify-auth.js)",
+      "Bash(netstat -ano)",
+      "Bash(findstr :3000)",
+      "Bash(findstr :8080)",
+      "Bash(curl -s http://localhost:8080/api/health)",
+      "Bash(node index.js)",
+      "Bash(chmod +x start-all.sh start-backend.sh start-frontend.sh)",
+      "Bash(pkill -f \"node index.js\")",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); const { Pool } = require\\('pg'\\); const pool = new Pool\\({ host: process.env.DB_HOST, port: process.env.DB_PORT, database: process.env.DB_NAME, user: process.env.DB_USER, password: process.env.DB_PASSWORD }\\); pool.query\\('SELECT * FROM users LIMIT 1'\\).then\\(r => { console.log\\('DB OK:', r.rows.length, 'users'\\); pool.end\\(\\); }\\).catch\\(e => { console.error\\('DB ERROR:', e.message\\); pool.end\\(\\); }\\);\")",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); const { Pool } = require\\('pg'\\); const pool = new Pool\\({ host: process.env.DB_HOST, port: process.env.DB_PORT, database: process.env.DB_NAME, user: process.env.DB_USER, password: process.env.DB_PASSWORD }\\); pool.query\\(\\\\\"SELECT column_name, data_type, is_nullable FROM information_schema.columns WHERE table_name = 'users' ORDER BY ordinal_position\\\\\"\\).then\\(r => { console.log\\('Users table columns:'\\); r.rows.forEach\\(c => console.log\\('-', c.column_name, ':', c.data_type, c.is_nullable === 'NO' ? '\\(required\\)' : ''\\)\\); pool.end\\(\\); }\\).catch\\(e => { console.error\\('ERROR:', e.message\\); pool.end\\(\\); }\\);\")",
+      "Bash(curl -s -X POST http://localhost:8080/api/auth/register -H \"Content-Type: application/json\" -d '{\"name\":\"Test User\",\"email\":\"test123@test.com\",\"password\":\"password123\",\"confirm_password\":\"password123\"}')",
+      "Bash(timeout 5 node server.js)",
+      "Bash(curl -s http://localhost:3000/register)",
+      "Bash(curl -s -X POST http://localhost:3000/api/auth/register -H \"Content-Type: application/json\" -d '{\"name\":\"Test User 2\",\"email\":\"test456@test.com\",\"password\":\"password123\",\"confirm_password\":\"password123\"}')"
+    ]
+  }
+}
