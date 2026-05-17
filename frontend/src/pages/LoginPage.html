@@ -5,13 +5,54 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>TaskTracker - Login</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'primary': '#6750A4',
+          'primary-container': '#EADDFF',
+          'on-primary': '#FFFFFF',
+          'secondary': '#625B71',
+          'surface-container-low': '#F7F2FA',
+          'surface-container-lowest': '#FFFFFF',
+          'surface-container': '#F3EDF7',
+          'on-surface': '#1C1B1F',
+          'on-surface-variant': '#49454F',
+          'outline': '#79747E',
+          'outline-variant': '#CAC4D0',
+          'inverse-surface': '#313033',
+          'surface-dim': '#DED8E1'
+        },
+        spacing: {
+          'xs': '4px',
+          'sm': '8px',
+          'md': '16px',
+          'lg': '24px',
+          'xl': '32px'
+        },
+        fontSize: {
+          'logo': ['28px', { lineHeight: '36px', fontWeight: '700' }],
+          'h2': ['24px', { lineHeight: '32px', fontWeight: '600' }],
+          'body-md': ['14px', { lineHeight: '20px', fontWeight: '400' }],
+          'badge': ['12px', { lineHeight: '16px', fontWeight: '500' }]
+        },
+        fontFamily: {
+          'logo': ['Poppins', 'sans-serif'],
+          'h2': ['Poppins', 'sans-serif'],
+          'body-md': ['Inter', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 
 
-  <link rel="stylesheet" href="../../public/assets/css/LoginPage.css"/>
+  <link rel="stylesheet" href="/public/assets/css/LoginPage.css"/>
 </head>
 <body class="bg-surface-container-low min-h-screen flex items-center justify-center p-md font-body-md text-on-surface">
 <main class="w-full max-w-[400px] bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant p-lg md:p-xl">
@@ -71,9 +112,9 @@
 <div class="mt-lg text-center">
 <p class="font-body-md text-body-md text-on-surface-variant">
                 Don't have an account? 
-                <a class="text-secondary hover:text-primary font-medium transition-colors duration-200 underline decoration-surface-dim hover:decoration-secondary underline-offset-4" href="./RegisterPage.html">Sign up</a>
+                <a class="text-secondary hover:text-primary font-medium transition-colors duration-200 underline decoration-surface-dim hover:decoration-secondary underline-offset-4" href="/register">Sign up</a>
 </p>
 </div>
 </main>
-  <script src="../../public/assets/js/LoginPage.js"></script>
+  <script type="module" src="/public/assets/js/LoginPage.js"></script>
 </body></html>

@@ -1,192 +1,309 @@
-# Google OAuth 2.0 Setup Guide
+# Hướng dẫn thiết lập Google OAuth 2.0 / Google OAuth 2.0 Setup Guide
 
-## Step-by-Step Instructions
+## Các bước thực hiện / Step-by-Step Instructions
 
-### 1. Access Google Cloud Console
+### Bước 1: Truy cập Google Cloud Console / Step 1: Access Google Cloud Console
 
-Go to: https://console.cloud.google.com/
+Truy cập: https://console.cloud.google.com/
 
-### 2. Create or Select a Project
+Đăng nhập bằng tài khoản Google của bạn.
 
-- Click on the project dropdown at the top
-- Click **New Project** or select an existing project
-- If creating new: Enter project name (e.g., "TaskTracker")
-- Click **Create**
+---
 
-### 3. Enable Google+ API (if required)
+### Bước 2: Tạo Project mới / Step 2: Create New Project
 
-- Go to **APIs & Services** → **Library**
-- Search for "Google+ API"
-- Click **Enable** (if not already enabled)
+1. Nhấn vào dropdown "Select a project" ở góc trên bên trái
+2. Nhấn **"NEW PROJECT"**
+3. Điền thông tin:
+   - **Project name**: `TaskTracker` (hoặc tên bạn muốn)
+   - **Organization**: Để mặc định (No organization)
+4. Nhấn **"CREATE"**
+5. Đợi vài giây để project được tạo
 
-### 4. Configure OAuth Consent Screen
+---
 
-- Go to **APIs & Services** → **OAuth consent screen**
-- Select **External** (for testing) or **Internal** (for organization)
-- Click **Create**
-- Fill in required fields:
-  - App name: `TaskTracker`
-  - User support email: Your email
-  - Developer contact email: Your email
-- Click **Save and Continue**
-- Skip Scopes (click **Save and Continue**)
-- Add test users if using External (your email)
-- Click **Save and Continue**
+### Bước 3: Kích hoạt Google+ API (Tùy chọn) / Step 3: Enable Google+ API (Optional)
 
-### 5. Create OAuth 2.0 Credentials
+**Lưu ý**: Google+ API đã deprecated. Bạn có thể bỏ qua bước này hoặc enable **Google People API** thay thế.
 
-- Go to **APIs & Services** → **Credentials**
-- Click **+ Create Credentials** → **OAuth 2.0 Client ID**
-- Select **Application type**: **Web application**
-- Enter **Name**: `TaskTracker Web Client`
+1. Trong Google Cloud Console, đảm bảo project "TaskTracker" đang được chọn
+2. Vào menu bên trái: **APIs & Services** → **Library**
+3. Tìm kiếm "Google People API"
+4. Nhấn vào "Google People API"
+5. Nhấn nút **"ENABLE"**
+   
+---
 
-### 6. Configure Authorized URIs
+### Bước 4: Cấu hình OAuth Consent Screen / Step 4: Configure OAuth Consent Screen
 
-**Authorized JavaScript origins:**
+1. Vào **APIs & Services** → **OAuth consent screen**
+2. Chọn **"External"** (cho phép bất kỳ ai có Google account đăng nhập)
+3. Nhấn **"CREATE"**
+
+#### Trang 1: App information
+- **App name**: `TaskTracker`
+- **User support email**: Chọn email của bạn từ dropdown
+- **App logo**: (Tùy chọn, có thể bỏ qua)
+- **Application home page**: `http://localhost:8080`
+- **Application privacy policy link**: Để trống (hoặc điền nếu có)
+- **Application terms of service link**: Để trống (hoặc điền nếu có)
+- **Authorized domains**: **BỎ TRỐNG** (vì đang dùng localhost)
+- **Developer contact information**: Nhập email của bạn
+
+Nhấn **"SAVE AND CONTINUE"**
+
+#### Trang 2: Scopes
+1. Nhấn **"ADD OR REMOVE SCOPES"**
+2. Tìm và chọn các scope sau:
+   - `.../auth/userinfo.email` - View your email address
+   - `.../auth/userinfo.profile` - See your personal info
+   - `openid` - Associate you with your personal info on Google
+3. Nhấn **"UPDATE"**
+4. Nhấn **"SAVE AND CONTINUE"**
+
+#### Trang 3: Test users
+1. Nhấn **"ADD USERS"**
+2. Nhập email của bạn (để test)
+3. Nhấn **"ADD"**
+4. Nhấn **"SAVE AND CONTINUE"**
+
+#### Trang 4: Summary
+- Xem lại thông tin
+- Nhấn **"BACK TO DASHBOARD"**
+
+---
+
+### Bước 5: Tạo OAuth 2.0 Credentials / Step 5: Create OAuth 2.0 Credentials
+
+1. Vào **APIs & Services** → **Credentials**
+2. Nhấn **"+ CREATE CREDENTIALS"** → **"OAuth client ID"**
+3. Chọn **Application type**: **"Web application"**
+4. Điền thông tin:
+   - **Name**: `TaskTracker Web Client`
+
+#### Authorized JavaScript origins:
+Nhấn **"ADD URI"** và nhập:
 ```
-http://localhost:3000
+http://localhost:8080
 ```
 
-**Authorized redirect URIs:**
+#### Authorized redirect URIs:
+Nhấn **"ADD URI"** và nhập:
 ```
 http://localhost:8080/api/auth/google/callback
 ```
 
-⚠️ **CRITICAL:** The redirect URI must EXACTLY match the one in your `.env` file!
+⚠️ **QUAN TRỌNG**: URL phải chính xác 100%, không có dấu `/` ở cuối!
 
-### 7. Get Your Credentials
+5. Nhấn **"CREATE"**
 
-- Click **Create**
-- A modal will appear with your credentials
-- Copy the **Client ID** (looks like: `123456789-abc123.apps.googleusercontent.com`)
-- Copy the **Client Secret** (looks like: `GOCSPX-abc123xyz`)
+---
 
-### 8. Update Your .env File
+### Bước 6: Lấy Credentials / Step 6: Get Your Credentials
 
-Open `TaskTracker-MNM/.env` and update:
+Một popup sẽ hiện ra với:
+- **Your Client ID**: Chuỗi dài kiểu `123456789-abc...xyz.apps.googleusercontent.com`
+- **Your Client Secret**: Chuỗi ngắn hơn kiểu `GOCSPX-...`
+
+**QUAN TRỌNG**: 
+- Copy cả 2 giá trị này
+- Nhấn **"DOWNLOAD JSON"** để backup (tùy chọn)
+- Nhấn **"OK"**
+
+---
+
+### Bước 7: Cấu hình Backend / Step 7: Update .env File
+
+1. Mở file `.env` trong thư mục `to-do-webapp/`
+2. Tìm phần Google OAuth (đang bị comment)
+3. Bỏ comment (`#`) và điền thông tin:
 
 ```env
-GOOGLE_CLIENT_ID=123456789-abc123.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=GOCSPX-abc123xyz
+# Google OAuth
+GOOGLE_CLIENT_ID=paste-your-client-id-here
+GOOGLE_CLIENT_SECRET=paste-your-client-secret-here
 GOOGLE_CALLBACK_URL=http://localhost:8080/api/auth/google/callback
 ```
 
-### 9. Restart Your Backend Server
-
-```bash
-# Stop the server (Ctrl+C)
-# Start it again
-npm start
+**Ví dụ thực tế**:
+```env
+GOOGLE_CLIENT_ID=123456789-abcdefghijklmnop.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=GOCSPX-1234567890abcdefghij
+GOOGLE_CALLBACK_URL=http://localhost:8080/api/auth/google/callback
 ```
 
----
-
-## ✅ Verification Checklist
-
-Before testing, verify:
-
-- [ ] OAuth consent screen is configured
-- [ ] OAuth 2.0 Client ID is created
-- [ ] Authorized JavaScript origins includes: `http://localhost:3000`
-- [ ] Authorized redirect URIs includes: `http://localhost:8080/api/auth/google/callback`
-- [ ] Client ID is copied to `.env` file
-- [ ] Client Secret is copied to `.env` file
-- [ ] Backend server is restarted after updating `.env`
+3. **Lưu file** (Ctrl+S)
 
 ---
 
-## 🧪 Test Google OAuth
+### Bước 8: Khởi động lại Server / Step 8: Restart Backend Server
 
-1. Open: `http://localhost:3000/src/pages/login.html`
-2. Click **Đăng nhập bằng Google**
-3. You should see Google's consent screen
-4. Select your Google account
-5. Grant permissions
-6. You should be redirected to: `http://localhost:3000/src/pages/dashboard.html`
+```bash
+cd to-do-webapp
+npm run dev
+```
 
----
+**Kiểm tra log**:
+- ✅ Thành công: `✓ Google OAuth configured`
+- ❌ Thất bại: `⚠ Google OAuth not configured (missing credentials in .env)`
 
-## 🔧 Common Issues
-
-### Issue: "The OAuth client was not found" (Error 401: invalid_client)
-
-**Causes:**
-- Client ID or Client Secret is incorrect
-- Credentials not saved in `.env` file
-- Backend server not restarted after updating `.env`
-
-**Solutions:**
-1. Double-check Client ID and Secret in Google Cloud Console
-2. Copy them exactly to `.env` (no extra spaces)
-3. Restart backend: `npm start`
-
-### Issue: "redirect_uri_mismatch"
-
-**Causes:**
-- Redirect URI in Google Cloud Console doesn't match the one in code
-- Typo in the redirect URI
-
-**Solutions:**
-1. Go to Google Cloud Console → Credentials
-2. Edit your OAuth 2.0 Client ID
-3. Verify "Authorized redirect URIs" contains EXACTLY:
-   ```
-   http://localhost:8080/api/auth/google/callback
-   ```
-4. Save and wait 5 minutes for changes to propagate
-
-### Issue: "Access blocked: This app's request is invalid"
-
-**Causes:**
-- OAuth consent screen not configured
-- Missing required scopes
-
-**Solutions:**
-1. Complete OAuth consent screen configuration
-2. Add your email as a test user (if using External)
-3. Make sure app is not in "Testing" mode with no test users
-
-### Issue: Google login works but user not created in database
-
-**Causes:**
-- Database migration not run
-- PostgreSQL connection issue
-
-**Solutions:**
-1. Run migration: `node run_migration.js`
-2. Check backend console for database errors
-3. Verify PostgreSQL is running
+Nếu thấy thông báo thất bại, kiểm tra lại:
+- Client ID và Secret có đúng không?
+- Có khoảng trắng thừa không?
+- Đã lưu file `.env` chưa?
 
 ---
 
-## 📝 Production Deployment Notes
+### Bước 9: Test Google Login / Step 9: Test Google Login
 
-When deploying to production:
+1. Mở trình duyệt
+2. Truy cập: `http://localhost:8080/login`
+3. Nhấn nút **"Continue with Google"**
+4. Chọn tài khoản Google của bạn
+5. Cho phép ứng dụng truy cập thông tin cơ bản
+6. Bạn sẽ được redirect về trang TaskTracker và đăng nhập thành công
 
-1. **Update Authorized URIs:**
-   - Add your production domain to Authorized JavaScript origins
-   - Add your production callback URL to Authorized redirect URIs
-   - Example: `https://yourdomain.com/api/auth/google/callback`
+---
 
-2. **Update .env:**
+## ✅ Checklist kiểm tra / Verification Checklist
+
+Trước khi test, đảm bảo:
+
+- [ ] Project đã được tạo trong Google Cloud Console
+- [ ] OAuth consent screen đã được cấu hình đầy đủ
+- [ ] OAuth 2.0 Client ID đã được tạo
+- [ ] Authorized JavaScript origins: `http://localhost:8080`
+- [ ] Authorized redirect URIs: `http://localhost:8080/api/auth/google/callback`
+- [ ] Client ID đã được copy vào `.env`
+- [ ] Client Secret đã được copy vào `.env`
+- [ ] File `.env` đã được lưu
+- [ ] Backend server đã được khởi động lại
+- [ ] Log hiển thị: `✓ Google OAuth configured`
+
+---
+
+## 🔧 Xử lý lỗi thường gặp / Common Issues
+
+### Lỗi 1: "redirect_uri_mismatch"
+
+**Nguyên nhân**:
+- URL callback không khớp với cấu hình trong Google Console
+
+**Giải pháp**:
+1. Vào Google Cloud Console → Credentials
+2. Nhấn vào OAuth 2.0 Client ID của bạn
+3. Kiểm tra "Authorized redirect URIs"
+4. Đảm bảo có chính xác: `http://localhost:8080/api/auth/google/callback`
+5. **Không có dấu `/` ở cuối**
+6. Nhấn **"SAVE"**
+7. Đợi 5 phút để thay đổi có hiệu lực
+
+### Lỗi 2: "Access blocked: This app's request is invalid"
+
+**Nguyên nhân**:
+- OAuth consent screen chưa được cấu hình đúng
+- Thiếu scopes
+
+**Giải pháp**:
+1. Quay lại **OAuth consent screen**
+2. Kiểm tra lại các scopes đã thêm
+3. Đảm bảo có: `userinfo.email`, `userinfo.profile`, `openid`
+4. Nhấn **"SAVE"**
+
+### Lỗi 3: "This app isn't verified"
+
+**Nguyên nhân**:
+- App đang ở chế độ testing
+- Bạn chưa được thêm vào test users
+
+**Giải pháp**:
+- **Cách 1**: Nhấn **"Advanced"** → **"Go to TaskTracker (unsafe)"**
+- **Cách 2**: Thêm email của bạn vào Test users trong OAuth consent screen
+
+### Lỗi 4: "⚠ Google OAuth not configured"
+
+**Nguyên nhân**:
+- Thiếu hoặc sai credentials trong `.env`
+- File `.env` chưa được lưu
+- Server chưa được khởi động lại
+
+**Giải pháp**:
+1. Mở file `.env`
+2. Kiểm tra `GOOGLE_CLIENT_ID` và `GOOGLE_CLIENT_SECRET`
+3. Đảm bảo không có khoảng trắng thừa
+4. Đảm bảo không có dấu ngoặc kép `"` bao quanh giá trị
+5. Lưu file (Ctrl+S)
+6. Khởi động lại server: `npm run dev`
+
+### Lỗi 5: "The OAuth client was not found" (Error 401: invalid_client)
+
+**Nguyên nhân**:
+- Client ID hoặc Client Secret sai
+- Copy thiếu hoặc thừa ký tự
+
+**Giải pháp**:
+1. Vào Google Cloud Console → Credentials
+2. Nhấn vào OAuth 2.0 Client ID
+3. Copy lại Client ID và Client Secret
+4. Paste vào `.env` (cẩn thận không copy thừa khoảng trắng)
+5. Lưu và khởi động lại server
+
+---
+
+## 🔒 Lưu ý bảo mật / Security Notes
+
+### 1. KHÔNG commit file `.env` lên Git
+
+File `.env` chứa thông tin nhạy cảm. Đảm bảo:
+- File `.env` đã có trong `.gitignore`
+- Kiểm tra: `git status` không hiển thị `.env`
+
+### 2. Giữ bí mật Client Secret
+
+- **KHÔNG** share Client Secret với ai
+- **KHÔNG** đăng lên public repository
+- **KHÔNG** commit vào code
+
+### 3. Khi deploy production
+
+Tạo OAuth credentials mới cho production:
+
+1. **Tạo OAuth Client ID mới**:
+   - Authorized JavaScript origins: `https://yourdomain.com`
+   - Authorized redirect URIs: `https://yourdomain.com/api/auth/google/callback`
+
+2. **Cập nhật .env production**:
    ```env
+   GOOGLE_CLIENT_ID=<production-client-id>
+   GOOGLE_CLIENT_SECRET=<production-client-secret>
    GOOGLE_CALLBACK_URL=https://yourdomain.com/api/auth/google/callback
    FRONTEND_URL=https://yourdomain.com
    ```
 
-3. **OAuth Consent Screen:**
-   - Submit for verification if using External
-   - Or switch to Internal if within an organization
-
-4. **Security:**
-   - Use strong JWT_SECRET
-   - Enable HTTPS
-   - Set secure cookie flags in production
+3. **Publish OAuth consent screen**:
+   - Vào OAuth consent screen
+   - Nhấn **"PUBLISH APP"**
+   - Hoặc submit for verification nếu cần
 
 ---
 
-## 📚 Additional Resources
+## 📚 Tài liệu tham khảo / Additional Resources
 
 - [Google OAuth 2.0 Documentation](https://developers.google.com/identity/protocols/oauth2)
 - [Google Cloud Console](https://console.cloud.google.com/)
 - [Passport.js Google OAuth Strategy](http://www.passportjs.org/packages/passport-google-oauth20/)
+- [OAuth 2.0 Scopes for Google APIs](https://developers.google.com/identity/protocols/oauth2/scopes)
+
+---
+
+## 💡 Tips
+
+1. **Bookmark Google Cloud Console**: Bạn sẽ cần quay lại nhiều lần
+2. **Lưu credentials**: Download JSON backup khi tạo credentials
+3. **Test với nhiều tài khoản**: Thêm nhiều test users để test đầy đủ
+4. **Đọc error messages**: Google OAuth error messages rất chi tiết và hữu ích
+5. **Đợi 5 phút**: Sau khi thay đổi settings, đợi 5 phút để có hiệu lực
+
+---
+
+**Chúc bạn thiết lập thành công! 🎉**
