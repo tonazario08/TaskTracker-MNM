@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="light" lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Thông báo</title>
+<meta name="description" content="Xem tất cả thông báo của bạn trên TaskTracker."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+      "colors": {
+        "outline": "#75777b","surface-container": "#f0eded","error": "#ba1a1a",
+        "inverse-on-surface": "#f3f0f0","inverse-surface": "#313030","tertiary": "#150e09",
+        "secondary-fixed": "#e1e3e4","surface": "#fcf8f8","background": "#fcf8f8",
+        "on-primary": "#ffffff","inverse-primary": "#c3c7cc","secondary": "#5c5f60",
+        "outline-variant": "#c5c6ca","on-primary-fixed": "#181c20","on-background": "#1c1b1c",
+        "primary": "#0c1014","primary-container": "#212529","surface-bright": "#fcf8f8",
+        "on-surface": "#1c1b1c","surface-container-highest": "#e5e2e2",
+        "on-surface-variant": "#44474a","surface-container-high": "#ebe7e7",
+        "surface-container-lowest": "#ffffff","on-error": "#ffffff",
+        "surface-dim": "#dcd9d9","secondary-container": "#e1e3e4",
+        "on-primary-container": "#888c91","surface-container-low": "#f6f3f3",
+        "surface-variant": "#e5e2e2","primary-fixed-dim": "#c3c7cc",
+        "on-secondary-container": "#626566","primary-fixed": "#e0e3e8",
+        "error-container": "#ffdad6","on-error-container": "#93000a",
+        "tertiary-container": "#2b231d","on-tertiary": "#ffffff","surface-tint": "#5b5f63"
+      },
+      "borderRadius": {"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+      "spacing": {"md":"16px","container-max":"1200px","base":"8px","lg":"24px","xs":"4px","sm":"8px","xl":"32px","gutter":"24px"},
+      "fontFamily": {"badge":["Inter"],"body-lg":["Inter"],"logo":["Poppins"],"h2":["Poppins"],"h1":["Poppins"],"body-md":["Inter"],"h3":["Poppins"],"label-caps":["Inter"]},
+      "fontSize": {
+        "badge":["12px",{"lineHeight":"1","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"1.6","fontWeight":"400"}],
+        "logo":["24px",{"lineHeight":"1.2","letterSpacing":"-0.02em","fontWeight":"800"}],
+        "h2":["24px",{"lineHeight":"1.4","fontWeight":"600"}],"h1":["32px",{"lineHeight":"1.3","fontWeight":"600"}],
+        "body-md":["14px",{"lineHeight":"1.5","fontWeight":"400"}],"h3":["18px",{"lineHeight":"1.4","fontWeight":"500"}],
+        "label-caps":["12px",{"lineHeight":"1.2","letterSpacing":"0.05em","fontWeight":"600"}]
+      }
+    }}
+  }
+</script>
+<style>
+  a,button,.hover-target{transition:all 150ms ease!important}
+  button:active,.btn:active{transform:scale(0.97)!important}
+  @keyframes slideInPanel{0%{transform:translateX(-100%)}100%{transform:translateX(0)}}
+  .panel-animated{animation:slideInPanel 250ms ease-out forwards}
+  .notification-item{transition:background-color 150ms}
+  .notification-item:hover{background-color:#f6f3f3}
+  .notification-unread{background-color:#e0e3e8}
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-[240px] border-r border-outline-variant bg-surface-container-lowest text-on-surface font-sans font-medium text-sm flex flex-col p-4 space-y-6 z-50 panel-animated">
+  <div class="flex items-center space-x-3 mb-4">
+    <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-logo text-logo flex-shrink-0">T</div>
+    <div>
+      <h1 class="font-logo text-logo text-on-surface tracking-tight">TaskTracker</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant text-xs">Main Workspace</p>
+    </div>
+  </div>
+  <button class="w-full bg-primary-container text-on-primary rounded-lg py-2 px-4 font-body-md text-body-md font-medium hover:bg-primary flex items-center justify-center space-x-2" id="new-task-btn">
+    <span class="material-symbols-outlined" style="font-size:18px;">add</span><span>Tạo công việc</span>
+  </button>
+  <div class="flex-1 flex flex-col space-y-1">
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/dashboard">
+      <span class="material-symbols-outlined">dashboard</span><span>Dashboard</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/tasks">
+      <span class="material-symbols-outlined">check_circle</span><span>Công việc</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/projects">
+      <span class="material-symbols-outlined">layers</span><span>Dự án</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/kanban">
+      <span class="material-symbols-outlined">view_kanban</span><span>Kanban</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 bg-surface-variant text-on-surface rounded-lg" href="/notifications">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">notifications</span><span>Thông báo</span>
+    </a>
+  </div>
+  <div class="mt-auto space-y-1">
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/settings">
+      <span class="material-symbols-outlined">settings</span><span>Cài đặt</span>
+    </a>
+    <button class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg w-full" id="logout-btn">
+      <span class="material-symbols-outlined">logout</span><span>Đăng xuất</span>
+    </button>
+  </div>
+</nav>
+
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-[60px] border-b border-outline-variant bg-surface-container-lowest text-on-surface font-sans text-sm antialiased shadow-sm flex items-center justify-between px-6 ml-[240px] w-[calc(100%-240px)] z-40">
+  <div class="flex items-center space-x-4 flex-1">
+    <div class="flex items-center text-on-surface-variant">
+      <span class="hover:text-on-surface cursor-pointer">Workspace</span>
+      <span class="material-symbols-outlined mx-2 text-xs">chevron_right</span>
+      <span class="font-medium text-on-surface">Thông báo</span>
+    </div>
+  </div>
+  <div class="flex items-center space-x-4">
+    <button class="p-2 hover:bg-surface-variant rounded-lg" id="user-menu-btn">
+      <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-medium text-sm" id="user-avatar">U</div>
+    </button>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="ml-[240px] mt-[60px] p-6 min-h-[calc(100vh-60px)]">
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <h1 class="font-h1 text-h1 text-on-surface mb-1">Thông báo</h1>
+      <p class="text-on-surface-variant text-sm">Theo dõi các hoạt động và cập nhật mới nhất</p>
+    </div>
+    <div class="flex items-center space-x-3">
+      <button class="text-sm text-primary hover:underline" id="mark-all-read">Đánh dấu tất cả đã đọc</button>
+      <button class="text-sm text-error hover:underline" id="clear-all">Xóa tất cả</button>
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="mb-6 flex items-center space-x-2 border-b border-outline-variant">
+    <button class="px-4 py-2 text-sm font-medium border-b-2 border-primary-container text-primary-container" data-filter="all">
+      Tất cả <span class="ml-1 text-xs bg-surface-variant px-2 py-0.5 rounded-full" id="count-all">0</span>
+    </button>
+    <button class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-on-surface-variant hover:text-on-surface" data-filter="unread">
+      Chưa đọc <span class="ml-1 text-xs bg-surface-variant px-2 py-0.5 rounded-full" id="count-unread">0</span>
+    </button>
+    <button class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-on-surface-variant hover:text-on-surface" data-filter="task">
+      Công việc
+    </button>
+    <button class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-on-surface-variant hover:text-on-surface" data-filter="project">
+      Dự án
+    </button>
+    <button class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-on-surface-variant hover:text-on-surface" data-filter="mention">
+      Nhắc đến
+    </button>
+  </div>
+
+  <!-- Notifications List -->
+  <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+    <div id="notifications-container">
+      <!-- Loading state -->
+      <div class="text-center py-12 text-on-surface-variant">
+        <div class="animate-spin w-8 h-8 border-2 border-primary-container border-t-transparent rounded-full mx-auto mb-2"></div>
+        <p>Đang tải thông báo...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div id="empty-state" class="hidden text-center py-12">
+    <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-4">notifications_off</span>
+    <h3 class="font-h3 text-h3 text-on-surface mb-2">Không có thông báo</h3>
+    <p class="text-on-surface-variant">Bạn đã xem hết tất cả thông báo</p>
+  </div>
+</main>
+
+<script>
+let notifications = [];
+let currentFilter = 'all';
+
+// Fetch user
+async function fetchUser() {
+  try {
+    const res = await fetch('/api/auth/me');
+    if (!res.ok) {
+      window.location.href = '/login';
+      return;
+    }
+    const user = await res.json();
+    document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
+  } catch (err) {
+    console.error('Failed to fetch user:', err);
+    window.location.href = '/login';
+  }
+}
+
+// Generate mock notifications (since API might not have notifications endpoint)
+function generateMockNotifications() {
+  const types = ['task', 'project', 'mention', 'system'];
+  const icons = {
+    task: 'check_circle',
+    project: 'layers',
+    mention: 'alternate_email',
+    system: 'info'
+  };
+  
+  const messages = {
+    task: [
+      'Công việc "Thiết kế giao diện" đã được giao cho bạn',
+      'Hạn chót công việc "Review code" sắp đến',
+      'Công việc "Fix bug login" đã hoàn thành',
+      'Bạn được thêm vào công việc "Tối ưu database"'
+    ],
+    project: [
+      'Dự án "Website mới" đã được tạo',
+      'Bạn được thêm vào dự án "Mobile App"',
+      'Dự án "API Backend" đã hoàn thành',
+      'Trạng thái dự án "Dashboard" đã thay đổi'
+    ],
+    mention: [
+      'Bạn được nhắc đến trong bình luận của công việc "Design Review"',
+      'Bạn được tag trong dự án "Marketing Campaign"',
+      'Có người nhắc đến bạn trong task "Meeting Notes"'
+    ],
+    system: [
+      'Hệ thống sẽ bảo trì vào 2h sáng ngày mai',
+      'Phiên bản mới đã được cập nhật',
+      'Backup dữ liệu thành công'
+    ]
+  };
+  
+  const mockData = [];
+  for (let i = 0; i < 15; i++) {
+    const type = types[Math.floor(Math.random() * types.length)];
+    const messageList = messages[type];
+    const message = messageList[Math.floor(Math.random() * messageList.length)];
+    const hoursAgo = Math.floor(Math.random() * 48);
+    const isRead = Math.random() > 0.4;
+    
+    mockData.push({
+      id: i + 1,
+      type: type,
+      icon: icons[type],
+      message: message,
+      time: new Date(Date.now() - hoursAgo * 60 * 60 * 1000),
+      read: isRead,
+      link: type === 'task' ? `/tasks/${Math.floor(Math.random() * 10) + 1}` : 
+            type === 'project' ? `/projects/${Math.floor(Math.random() * 5) + 1}` : null
+    });
+  }
+  
+  return mockData.sort((a, b) => b.time - a.time);
+}
+
+// Load notifications
+function loadNotifications() {
+  notifications = generateMockNotifications();
+  renderNotifications();
+  updateCounts();
+}
+
+// Render notifications
+function renderNotifications() {
+  const container = document.getElementById('notifications-container');
+  const emptyState = document.getElementById('empty-state');
+  
+  let filtered = notifications;
+  if (currentFilter === 'unread') {
+    filtered = notifications.filter(n => !n.read);
+  } else if (currentFilter !== 'all') {
+    filtered = notifications.filter(n => n.type === currentFilter);
+  }
+  
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  
+  emptyState.classList.add('hidden');
+  container.innerHTML = '';
+  
+  filtered.forEach(notif => {
+    const item = createNotificationItem(notif);
+    container.appendChild(item);
+  });
+}
+
+// Create notification item
+function createNotificationItem(notif) {
+  const item = document.createElement('div');
+  item.className = `notification-item border-b border-outline-variant p-4 flex items-start space-x-3 cursor-pointer ${!notif.read ? 'notification-unread' : ''}`;
+  item.onclick = () => handleNotificationClick(notif);
+  
+  const timeAgo = getTimeAgo(notif.time);
+  
+  item.innerHTML = `
+    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center">
+      <span class="material-symbols-outlined text-on-surface-variant">${notif.icon}</span>
+    </div>
+    <div class="flex-1 min-w-0">
+      <p class="text-sm text-on-surface ${!notif.read ? 'font-medium' : ''}">${notif.message}</p>
+      <p class="text-xs text-on-surface-variant mt-1">${timeAgo}</p>
+    </div>
+    <div class="flex-shrink-0 flex items-center space-x-2">
+      ${!notif.read ? '<div class="w-2 h-2 rounded-full bg-primary-container"></div>' : ''}
+      <button class="p-1 hover:bg-surface-variant rounded" onclick="event.stopPropagation(); deleteNotification(${notif.id})" title="Xóa">
+        <span class="material-symbols-outlined text-sm text-on-surface-variant">close</span>
+      </button>
+    </div>
+  `;
+  
+  return item;
+}
+
+// Get time ago
+function getTimeAgo(date) {
+  const seconds = Math.floor((new Date() - date) / 1000);
+  
+  if (seconds < 60) return 'Vừa xong';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)} phút trước`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)} giờ trước`;
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)} ngày trước`;
+  return date.toLocaleDateString('vi-VN');
+}
+
+// Handle notification click
+function handleNotificationClick(notif) {
+  // Mark as read
+  notif.read = true;
+  renderNotifications();
+  updateCounts();
+  
+  // Navigate if has link
+  if (notif.link) {
+    window.location.href = notif.link;
+  }
+}
+
+// Delete notification
+function deleteNotification(id) {
+  notifications = notifications.filter(n => n.id !== id);
+  renderNotifications();
+  updateCounts();
+}
+
+// Update counts
+function updateCounts() {
+  document.getElementById('count-all').textContent = notifications.length;
+  document.getElementById('count-unread').textContent = notifications.filter(n => !n.read).length;
+}
+
+// Filter tabs
+document.querySelectorAll('[data-filter]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-filter]').forEach(b => {
+      b.classList.remove('border-primary-container', 'text-primary-container');
+      b.classList.add('border-transparent', 'text-on-surface-variant');
+    });
+    btn.classList.add('border-primary-container', 'text-primary-container');
+    btn.classList.remove('border-transparent', 'text-on-surface-variant');
+    
+    currentFilter = btn.dataset.filter;
+    renderNotifications();
+  });
+});
+
+// Mark all as read
+document.getElementById('mark-all-read').addEventListener('click', () => {
+  notifications.forEach(n => n.read = true);
+  renderNotifications();
+  updateCounts();
+});
+
+// Clear all
+document.getElementById('clear-all').addEventListener('click', () => {
+  if (confirm('Bạn có chắc muốn xóa tất cả thông báo?')) {
+    notifications = [];
+    renderNotifications();
+    updateCounts();
+  }
+});
+
+// Logout
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/login';
+  } catch (err) {
+    console.error('Logout failed:', err);
+  }
+});
+
+// New task button
+document.getElementById('new-task-btn').addEventListener('click', () => {
+  window.location.href = '/tasks';
+});
+
+// Initialize
+fetchUser();
+loadNotifications();
+</script>
+</body>
+</html>

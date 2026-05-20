@@ -9,6 +9,15 @@ const BACKEND_URL = 'http://localhost:8080';
 // Parse JSON bodies
 app.use(express.json());
 
+// Middleware to redirect .html URLs to clean URLs
+app.use((req, res, next) => {
+    if (req.path.endsWith('.html')) {
+        const cleanPath = req.path.replace(/\.html$/, '');
+        return res.redirect(301, cleanPath);
+    }
+    next();
+});
+
 // Manual proxy for /api routes - Express 5 compatible
 app.use('/api', async (req, res, next) => {
     const apiPath = req.originalUrl; // This includes /api/...
@@ -44,7 +53,10 @@ app.use('/api', async (req, res, next) => {
 // Serve static files from the root of the frontend folder
 app.use(express.static(__dirname, { extensions: ['html'] }));
 
-// Clean Routes Mapping
+// Serve files from src directory
+app.use('/src', express.static(path.join(__dirname, 'src')));
+
+// Page routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'src', 'pages', 'landing.html'));
 });
@@ -61,16 +73,32 @@ app.get('/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, 'src', 'pages', 'dashboard.html'));
 });
 
+app.get('/settings', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'pages', 'SettingsPage.html'));
+});
+
 app.get('/projects', (req, res) => {
     res.sendFile(path.join(__dirname, 'src', 'pages', 'projects.html'));
+});
+
+app.get('/projects/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'pages', 'ProjectPage.html'));
 });
 
 app.get('/tasks', (req, res) => {
     res.sendFile(path.join(__dirname, 'src', 'pages', 'tasks.html'));
 });
 
-app.get('/settings', (req, res) => {
-    res.sendFile(path.join(__dirname, 'src', 'pages', 'SettingsPage.html'));
+app.get('/tasks/:id', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'pages', 'TaskDetailPage.html'));
+});
+
+app.get('/kanban', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'pages', 'kanban.html'));
+});
+
+app.get('/notifications', (req, res) => {
+    res.sendFile(path.join(__dirname, 'src', 'pages', 'dashboard.html')); // fallback to dashboard if no notifications page
 });
 
 // Start the server

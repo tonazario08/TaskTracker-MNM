@@ -29,9 +29,9 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ error: 'Email da duoc su dung' });
     }
 
-    // Insert user as verified since we are skipping email verification per user request
+    // Insert user (email verification skipped per user request)
     await pool.query(
-      'INSERT INTO users (name, email, password_hash, is_verified) VALUES ($1, $2, $3, TRUE)',
+      'INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3)',
       [name, email, hashedPassword]
     );
 
@@ -53,11 +53,6 @@ router.post('/login', async (req, res) => {
 
     const isValid = await bcrypt.compare(password, user.password_hash);
     if (!isValid) return res.status(401).json({ error: 'Email hoac mat khau khong dung' });
-
-    if (!user.is_verified) {
-      // Just in case there are old unverified users
-      return res.status(403).json({ error: 'Tai khoan chua duoc xac nhan email' });
-    }
 
     const token = createSession(user);
     res.cookie('session', token, { httpOnly: true, sameSite: 'lax', maxAge: 7 * 24 * 60 * 60 * 1000, path: '/' });

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html class="light" lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>TaskTracker - Công việc</title>
+<meta name="description" content="Quản lý công việc của bạn trên TaskTracker."/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: { extend: {
+      "colors": {
+        "outline": "#75777b","surface-container": "#f0eded","error": "#ba1a1a",
+        "inverse-on-surface": "#f3f0f0","inverse-surface": "#313030","tertiary": "#150e09",
+        "secondary-fixed": "#e1e3e4","surface": "#fcf8f8","background": "#fcf8f8",
+        "on-primary": "#ffffff","inverse-primary": "#c3c7cc","secondary": "#5c5f60",
+        "outline-variant": "#c5c6ca","on-primary-fixed": "#181c20","on-background": "#1c1b1c",
+        "primary": "#0c1014","primary-container": "#212529","surface-bright": "#fcf8f8",
+        "on-surface": "#1c1b1c","surface-container-highest": "#e5e2e2",
+        "on-surface-variant": "#44474a","surface-container-high": "#ebe7e7",
+        "surface-container-lowest": "#ffffff","on-error": "#ffffff",
+        "surface-dim": "#dcd9d9","secondary-container": "#e1e3e4",
+        "on-primary-container": "#888c91","surface-container-low": "#f6f3f3",
+        "surface-variant": "#e5e2e2","primary-fixed-dim": "#c3c7cc",
+        "on-secondary-container": "#626566","primary-fixed": "#e0e3e8",
+        "error-container": "#ffdad6","on-error-container": "#93000a",
+        "tertiary-container": "#2b231d","on-tertiary": "#ffffff","surface-tint": "#5b5f63"
+      },
+      "borderRadius": {"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},
+      "spacing": {"md":"16px","container-max":"1200px","base":"8px","lg":"24px","xs":"4px","sm":"8px","xl":"32px","gutter":"24px"},
+      "fontFamily": {"badge":["Inter"],"body-lg":["Inter"],"logo":["Poppins"],"h2":["Poppins"],"h1":["Poppins"],"body-md":["Inter"],"h3":["Poppins"],"label-caps":["Inter"]},
+      "fontSize": {
+        "badge":["12px",{"lineHeight":"1","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"1.6","fontWeight":"400"}],
+        "logo":["24px",{"lineHeight":"1.2","letterSpacing":"-0.02em","fontWeight":"800"}],
+        "h2":["24px",{"lineHeight":"1.4","fontWeight":"600"}],"h1":["32px",{"lineHeight":"1.3","fontWeight":"600"}],
+        "body-md":["14px",{"lineHeight":"1.5","fontWeight":"400"}],"h3":["18px",{"lineHeight":"1.4","fontWeight":"500"}],
+        "label-caps":["12px",{"lineHeight":"1.2","letterSpacing":"0.05em","fontWeight":"600"}]
+      }
+    }}
+  }
+</script>
+<style>
+  a,button,.hover-target{transition:all 150ms ease!important}
+  button:active,.btn:active{transform:scale(0.97)!important}
+  @keyframes slideInPanel{0%{transform:translateX(-100%)}100%{transform:translateX(0)}}
+  .panel-animated{animation:slideInPanel 250ms ease-out forwards}
+  .task-row{transition:background-color 150ms}
+  .task-row:hover{background-color:#f6f3f3}
+</style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-screen w-[240px] border-r border-outline-variant bg-surface-container-lowest text-on-surface font-sans font-medium text-sm flex flex-col p-4 space-y-6 z-50 panel-animated">
+  <div class="flex items-center space-x-3 mb-4">
+    <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary font-logo text-logo flex-shrink-0">T</div>
+    <div>
+      <h1 class="font-logo text-logo text-on-surface tracking-tight">TaskTracker</h1>
+      <p class="font-body-md text-body-md text-on-surface-variant text-xs">Main Workspace</p>
+    </div>
+  </div>
+  <button class="w-full bg-primary-container text-on-primary rounded-lg py-2 px-4 font-body-md text-body-md font-medium hover:bg-primary flex items-center justify-center space-x-2" id="new-task-btn">
+    <span class="material-symbols-outlined" style="font-size:18px;">add</span><span>Tạo công việc</span>
+  </button>
+  <div class="flex-1 flex flex-col space-y-1">
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/dashboard">
+      <span class="material-symbols-outlined">dashboard</span><span>Dashboard</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 bg-surface-variant text-on-surface rounded-lg" href="/tasks">
+      <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">check_circle</span><span>Công việc</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/projects">
+      <span class="material-symbols-outlined">layers</span><span>Dự án</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/kanban">
+      <span class="material-symbols-outlined">view_kanban</span><span>Kanban</span>
+    </a>
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/notifications">
+      <span class="material-symbols-outlined">notifications</span><span>Thông báo</span>
+    </a>
+  </div>
+  <div class="mt-auto space-y-1">
+    <a class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg" href="/settings">
+      <span class="material-symbols-outlined">settings</span><span>Cài đặt</span>
+    </a>
+    <button class="flex items-center space-x-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg w-full" id="logout-btn">
+      <span class="material-symbols-outlined">logout</span><span>Đăng xuất</span>
+    </button>
+  </div>
+</nav>
+
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 h-[60px] border-b border-outline-variant bg-surface-container-lowest text-on-surface font-sans text-sm antialiased shadow-sm flex items-center justify-between px-6 ml-[240px] w-[calc(100%-240px)] z-40">
+  <div class="flex items-center space-x-4 flex-1">
+    <div class="flex items-center text-on-surface-variant">
+      <span class="hover:text-on-surface cursor-pointer">Workspace</span>
+      <span class="material-symbols-outlined mx-2 text-xs">chevron_right</span>
+      <span class="font-medium text-on-surface">Công việc</span>
+    </div>
+  </div>
+  <div class="flex items-center space-x-4">
+    <button class="p-2 hover:bg-surface-variant rounded-lg" id="user-menu-btn">
+      <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary flex items-center justify-center font-medium text-sm" id="user-avatar">U</div>
+    </button>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="ml-[240px] mt-[60px] p-6 min-h-[calc(100vh-60px)]">
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <h1 class="font-h1 text-h1 text-on-surface mb-1">Công việc</h1>
+      <p class="text-on-surface-variant text-sm">Quản lý và theo dõi tất cả công việc của bạn</p>
+    </div>
+    <button class="bg-primary-container text-on-primary rounded-lg py-2 px-4 text-sm font-medium hover:bg-primary flex items-center space-x-2" id="create-task-btn">
+      <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+      <span>Tạo công việc</span>
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="mb-6 flex items-center space-x-3 flex-wrap gap-2">
+    <select id="status-filter" class="bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container">
+      <option value="">Tất cả trạng thái</option>
+      <option value="pending">Chờ xử lý</option>
+      <option value="in_progress">Đang thực hiện</option>
+      <option value="review">Đang review</option>
+      <option value="completed">Hoàn thành</option>
+    </select>
+    <select id="priority-filter" class="bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container">
+      <option value="">Tất cả mức độ</option>
+      <option value="low">Thấp</option>
+      <option value="medium">Trung bình</option>
+      <option value="high">Cao</option>
+    </select>
+    <select id="project-filter" class="bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container">
+      <option value="">Tất cả dự án</option>
+    </select>
+    <div class="flex-1"></div>
+    <div class="relative">
+      <input type="text" id="search-input" placeholder="Tìm kiếm công việc..." class="bg-surface-container-lowest border border-outline-variant rounded-lg pl-10 pr-3 py-2 text-sm focus:outline-none focus:border-primary-container w-64">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+    </div>
+  </div>
+
+  <!-- Tasks Table -->
+  <div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden">
+    <table class="w-full">
+      <thead class="bg-surface-variant border-b border-outline-variant">
+        <tr>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">
+            <input type="checkbox" id="select-all" class="rounded border-outline-variant">
+          </th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Công việc</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Dự án</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Trạng thái</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Mức độ</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Hạn chót</th>
+          <th class="text-left px-4 py-3 text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Hành động</th>
+        </tr>
+      </thead>
+      <tbody id="tasks-tbody">
+        <tr>
+          <td colspan="7" class="text-center py-12 text-on-surface-variant">
+            <div class="animate-spin w-8 h-8 border-2 border-primary-container border-t-transparent rounded-full mx-auto mb-2"></div>
+            <p>Đang tải công việc...</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div id="empty-state" class="hidden text-center py-12">
+    <span class="material-symbols-outlined text-6xl text-on-surface-variant mb-4">task_alt</span>
+    <h3 class="font-h3 text-h3 text-on-surface mb-2">Chưa có công việc nào</h3>
+    <p class="text-on-surface-variant mb-4">Tạo công việc đầu tiên để bắt đầu</p>
+    <button class="bg-primary-container text-on-primary rounded-lg py-2 px-4 text-sm font-medium hover:bg-primary" onclick="document.getElementById('create-task-btn').click()">
+      Tạo công việc mới
+    </button>
+  </div>
+</main>
+
+<!-- Create Task Modal -->
+<div id="create-task-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+  <div class="bg-surface-container-lowest rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div class="sticky top-0 bg-surface-container-lowest border-b border-outline-variant px-6 py-4 flex items-center justify-between">
+      <h2 class="font-h2 text-h2 text-on-surface">Tạo công việc mới</h2>
+      <button class="p-2 hover:bg-surface-variant rounded-lg" onclick="closeCreateModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    
+    <form id="create-task-form" class="p-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1" for="task-title">Tên công việc <span class="text-error">*</span></label>
+        <input type="text" id="task-title" required class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Nhập tên công việc...">
+      </div>
+      
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1" for="task-description">Mô tả</label>
+        <textarea id="task-description" rows="3" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container" placeholder="Mô tả chi tiết công việc..."></textarea>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1" for="task-project">Dự án <span class="text-error">*</span></label>
+          <select id="task-project" required class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container">
+            <option value="">Chọn dự án</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1" for="task-status">Trạng thái</label>
+          <select id="task-status" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container">
+            <option value="pending">Chờ xử lý</option>
+            <option value="in_progress">Đang thực hiện</option>
+            <option value="review">Đang review</option>
+            <option value="completed">Hoàn thành</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1" for="task-priority">Mức độ ưu tiên</label>
+          <select id="task-priority" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container">
+            <option value="">Không xác định</option>
+            <option value="low">Thấp</option>
+            <option value="medium">Trung bình</option>
+            <option value="high">Cao</option>
+          </select>
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1" for="task-due-date">Hạn chót</label>
+          <input type="date" id="task-due-date" class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary-container">
+        </div>
+      </div>
+      
+      <div class="flex items-center justify-end space-x-3 pt-4 border-t border-outline-variant">
+        <button type="button" class="px-4 py-2 text-sm font-medium text-on-surface hover:bg-surface-variant rounded-lg" onclick="closeCreateModal()">
+          Hủy
+        </button>
+        <button type="submit" class="bg-primary-container text-on-primary rounded-lg py-2 px-4 text-sm font-medium hover:bg-primary flex items-center space-x-2" id="submit-task-btn">
+          <span id="submit-text">Tạo công việc</span>
+          <svg id="submit-spinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+let tasks = [];
+let projects = [];
+let filteredTasks = [];
+
+// Fetch user
+async function fetchUser() {
+  try {
+    const res = await fetch('/api/auth/me');
+    if (!res.ok) {
+      window.location.href = '/login';
+      return;
+    }
+    const user = await res.json();
+    document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
+  } catch (err) {
+    console.error('Failed to fetch user:', err);
+    window.location.href = '/login';
+  }
+}
+
+// Fetch projects
+async function fetchProjects() {
+  try {
+    const res = await fetch('/api/projects');
+    if (res.ok) {
+      projects = await res.json();
+      const select = document.getElementById('project-filter');
+      const modalSelect = document.getElementById('task-project');
+      
+      projects.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = p.name;
+        select.appendChild(opt);
+        
+        const modalOpt = opt.cloneNode(true);
+        modalSelect.appendChild(modalOpt);
+      });
+    }
+  } catch (err) {
+    console.error('Failed to fetch projects:', err);
+  }
+}
+
+// Fetch tasks
+async function fetchTasks() {
+  try {
+    const res = await fetch('/api/tasks');
+    if (res.ok) {
+      tasks = await res.json();
+      filteredTasks = [...tasks];
+      renderTasks();
+    } else {
+      document.getElementById('tasks-tbody').innerHTML = '<tr><td colspan="7" class="text-center py-12 text-error">Không thể tải danh sách công việc</td></tr>';
+    }
+  } catch (err) {
+    console.error('Failed to fetch tasks:', err);
+    document.getElementById('tasks-tbody').innerHTML = '<tr><td colspan="7" class="text-center py-12 text-error">Lỗi kết nối</td></tr>';
+  }
+}
+
+// Render tasks
+function renderTasks() {
+  const tbody = document.getElementById('tasks-tbody');
+  const emptyState = document.getElementById('empty-state');
+  
+  if (filteredTasks.length === 0) {
+    tbody.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+  
+  emptyState.classList.add('hidden');
+  tbody.innerHTML = '';
+  
+  filteredTasks.forEach(task => {
+    const row = createTaskRow(task);
+    tbody.appendChild(row);
+  });
+}
+
+// Create task row
+function createTaskRow(task) {
+  const row = document.createElement('tr');
+  row.className = 'task-row border-b border-outline-variant';
+  
+  const statusColors = {
+    pending: 'bg-gray-100 text-gray-800',
+    in_progress: 'bg-blue-100 text-blue-800',
+    review: 'bg-yellow-100 text-yellow-800',
+    completed: 'bg-green-100 text-green-800'
+  };
+  
+  const statusLabels = {
+    pending: 'Chờ xử lý',
+    in_progress: 'Đang làm',
+    review: 'Review',
+    completed: 'Hoàn thành'
+  };
+  
+  const priorityColors = {
+    low: 'bg-green-100 text-green-800',
+    medium: 'bg-yellow-100 text-yellow-800',
+    high: 'bg-red-100 text-red-800'
+  };
+  
+  const priorityLabels = {
+    low: 'Thấp',
+    medium: 'Trung bình',
+    high: 'Cao'
+  };
+  
+  const project = projects.find(p => p.id === task.project_id);
+  
+  row.innerHTML = `
+    <td class="px-4 py-3">
+      <input type="checkbox" class="task-checkbox rounded border-outline-variant" data-task-id="${task.id}">
+    </td>
+    <td class="px-4 py-3">
+      <div class="cursor-pointer hover:text-primary" onclick="window.location.href='/tasks/${task.id}'">
+        <div class="font-medium text-sm text-on-surface">${task.title}</div>
+        ${task.description ? `<div class="text-xs text-on-surface-variant line-clamp-1">${task.description}</div>` : ''}
+      </div>
+    </td>
+    <td class="px-4 py-3">
+      <span class="text-sm text-on-surface-variant">${project ? project.name : '-'}</span>
+    </td>
+    <td class="px-4 py-3">
+      <span class="text-xs px-2 py-1 rounded ${statusColors[task.status] || 'bg-gray-100 text-gray-800'}">
+        ${statusLabels[task.status] || task.status}
+      </span>
+    </td>
+    <td class="px-4 py-3">
+      ${task.priority ? `<span class="text-xs px-2 py-1 rounded ${priorityColors[task.priority]}">${priorityLabels[task.priority]}</span>` : '-'}
+    </td>
+    <td class="px-4 py-3">
+      <span class="text-sm text-on-surface-variant">${task.due_date ? new Date(task.due_date).toLocaleDateString('vi-VN') : '-'}</span>
+    </td>
+    <td class="px-4 py-3">
+      <div class="flex items-center space-x-2">
+        <button class="p-1 hover:bg-surface-variant rounded" onclick="editTask(${task.id})" title="Chỉnh sửa">
+          <span class="material-symbols-outlined text-sm">edit</span>
+        </button>
+        <button class="p-1 hover:bg-error-container rounded" onclick="deleteTask(${task.id})" title="Xóa">
+          <span class="material-symbols-outlined text-sm text-error">delete</span>
+        </button>
+      </div>
+    </td>
+  `;
+  
+  return row;
+}
+
+// Filter tasks
+function filterTasks() {
+  const status = document.getElementById('status-filter').value;
+  const priority = document.getElementById('priority-filter').value;
+  const projectId = document.getElementById('project-filter').value;
+  const search = document.getElementById('search-input').value.toLowerCase();
+  
+  filteredTasks = tasks.filter(task => {
+    if (status && task.status !== status) return false;
+    if (priority && task.priority !== priority) return false;
+    if (projectId && task.project_id != projectId) return false;
+    if (search && !task.title.toLowerCase().includes(search) && !(task.description || '').toLowerCase().includes(search)) return false;
+    return true;
+  });
+  
+  renderTasks();
+}
+
+// Edit task
+function editTask(id) {
+  alert('Chức năng chỉnh sửa sẽ được thêm sau. Hiện tại click vào tên task để xem chi tiết.');
+}
+
+// Delete task
+async function deleteTask(id) {
+  if (!confirm('Bạn có chắc muốn xóa công việc này?')) return;
+  
+  try {
+    const res = await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+    if (res.ok) {
+      tasks = tasks.filter(t => t.id !== id);
+      filterTasks();
+    } else {
+      alert('Không thể xóa công việc');
+    }
+  } catch (err) {
+    console.error('Failed to delete task:', err);
+    alert('Lỗi khi xóa công việc');
+  }
+}
+
+// Event listeners
+document.getElementById('status-filter').addEventListener('change', filterTasks);
+document.getElementById('priority-filter').addEventListener('change', filterTasks);
+document.getElementById('project-filter').addEventListener('change', filterTasks);
+document.getElementById('search-input').addEventListener('input', filterTasks);
+
+document.getElementById('create-task-btn').addEventListener('click', () => {
+  document.getElementById('create-task-modal').classList.remove('hidden');
+});
+
+document.getElementById('new-task-btn').addEventListener('click', () => {
+  document.getElementById('create-task-btn').click();
+});
+
+// Close modal
+function closeCreateModal() {
+  document.getElementById('create-task-modal').classList.add('hidden');
+  document.getElementById('create-task-form').reset();
+}
+
+// Close modal when clicking outside
+document.getElementById('create-task-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'create-task-modal') {
+    closeCreateModal();
+  }
+});
+
+// Create task form submit
+document.getElementById('create-task-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const submitBtn = document.getElementById('submit-task-btn');
+  const submitText = document.getElementById('submit-text');
+  const submitSpinner = document.getElementById('submit-spinner');
+  
+  submitBtn.disabled = true;
+  submitText.classList.add('hidden');
+  submitSpinner.classList.remove('hidden');
+  
+  const taskData = {
+    title: document.getElementById('task-title').value.trim(),
+    description: document.getElementById('task-description').value.trim() || null,
+    project_id: parseInt(document.getElementById('task-project').value),
+    status: document.getElementById('task-status').value,
+    priority: document.getElementById('task-priority').value || null,
+    due_date: document.getElementById('task-due-date').value || null
+  };
+  
+  try {
+    const res = await fetch('/api/tasks', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(taskData)
+    });
+    
+    if (res.ok) {
+      const newTask = await res.json();
+      tasks.push(newTask);
+      filterTasks();
+      closeCreateModal();
+      
+      // Show success message
+      alert('Tạo công việc thành công!');
+    } else {
+      const error = await res.json();
+      alert(error.error || 'Không thể tạo công việc');
+    }
+  } catch (err) {
+    console.error('Failed to create task:', err);
+    alert('Lỗi khi tạo công việc');
+  } finally {
+    submitBtn.disabled = false;
+    submitText.classList.remove('hidden');
+    submitSpinner.classList.add('hidden');
+  }
+});
+
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  try {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    window.location.href = '/login';
+  } catch (err) {
+    console.error('Logout failed:', err);
+  }
+});
+
+// Select all checkbox
+document.getElementById('select-all').addEventListener('change', (e) => {
+  document.querySelectorAll('.task-checkbox').forEach(cb => {
+    cb.checked = e.target.checked;
+  });
+});
+
+// Initialize
+fetchUser();
+fetchProjects();
+fetchTasks();
+</script>
+</body>
+</html>
