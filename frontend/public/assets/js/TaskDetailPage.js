@@ -34,7 +34,7 @@ import { api } from '../../src/services/api.js';
   const cancelLabelBtn = document.getElementById('cancel-label-btn');
   const labelForm = document.getElementById('label-form');
 
-  function backToList() { window.location.href = './TaskListPage.html'; }
+  function backToList() { window.location.href = '/tasks'; }
   function formatDate(value) { if (!value) return 'No due date'; const d = new Date(value); return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString(); }
   function escapeHtml(value) { return String(value || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
 

@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskTracker</title>
+  <meta name="description" content="Bảng điều khiển năng suất kết nối công việc, dự án, đội nhóm và không gian làm việc." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
+  <link rel="stylesheet" href="/assets/css/app-dashboard.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="/dashboard" aria-label="Bảng điều khiển TaskTracker">
+        <span class="brand-mark">T</span>
+        <span><strong>TaskTracker</strong><small>Không gian chính</small></span>
+      </a>
+      <button class="primary-action" data-new-task><span class="material-symbols-outlined">add</span>Tạo công việc</button>
+      <nav class="nav-list" id="primary-nav" aria-label="Điều hướng chính"></nav>
+      <nav class="nav-list nav-secondary" id="secondary-nav" aria-label="Điều hướng phụ"></nav>
+    </aside>
+    <section class="main-panel">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="menu-toggle" aria-label="Mở điều hướng"><span class="material-symbols-outlined">menu</span></button>
+        <div class="breadcrumb"><a href="/workspace">Không gian</a><span class="material-symbols-outlined">chevron_right</span><strong id="breadcrumb-current">Tổng quan</strong></div>
+        <form class="global-search" action="/search" method="get">
+          <span class="material-symbols-outlined">search</span>
+          <input name="q" id="global-search" type="search" placeholder="Tìm công việc, dự án, thành viên..." autocomplete="off" />
+        </form>
+        <button class="theme-toggle" id="theme-toggle-topbar" type="button" aria-label="Bật chế độ tối" title="Chế độ tối"><span class="material-symbols-outlined theme-icon theme-icon-light">light_mode</span><span class="material-symbols-outlined theme-icon theme-icon-dark">dark_mode</span></button>
+        <a class="icon-button" href="/notifications" aria-label="Thông báo"><span class="material-symbols-outlined">notifications</span><span class="dot"></span></a>
+        <a class="avatar" href="/profile" aria-label="Hồ sơ người dùng">QU</a>
+      </header>
+      <main class="content" id="app-content" tabindex="-1"></main>
+      <footer class="footer">Không gian làm việc năng suất TaskTracker</footer>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js" defer></script>
+  <script src="/assets/js/app-dashboard.js" defer></script>
+</body>
+</html>

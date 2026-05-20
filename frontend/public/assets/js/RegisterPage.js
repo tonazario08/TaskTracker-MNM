@@ -42,7 +42,7 @@ import { api } from '../../src/services/api.js';
 
     try {
       await api.register({ name: fullName, email, password: pwd });
-      window.location.href = './TaskListPage.html';
+      window.location.href = '/tasks';
     } catch (_err) {
       alert('Dang ky that bai. Vui long thu lai.');
     }

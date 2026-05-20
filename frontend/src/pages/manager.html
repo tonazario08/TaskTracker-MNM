@@ -1,0 +1,353 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskTracker - Trang quản lí</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f8faf9;--panel:#fff;--ink:#18201d;--muted:#66736d;--line:#dfe7e2;--brand:#0f766e;--danger:#b42318;--blue:#2563eb;--soft:#e9f7f3;--soft-blue:#e8efff;--shadow:0 18px 60px rgba(15,23,42,.09)}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.hidden{display:none!important}
+    .login-screen{min-height:100vh;display:grid;place-items:center;padding:24px}.login-card{width:min(440px,100%);padding:32px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:var(--shadow)}.brand{display:flex;align-items:center;gap:12px;margin-bottom:26px}.mark{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--blue));color:#fff;font-weight:800}.brand strong{font-size:25px}.login-card h1{margin:0 0 8px}.subtle{color:var(--muted);line-height:1.6}.field{margin-top:16px}.field label{display:block;font-size:13px;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:7px}.field input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:0}.field input:focus,.toolbar input:focus,.toolbar select:focus,.role-select:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(15,118,110,.12)}.btn{min-height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:10px 14px;font-weight:800;display:inline-flex;align-items:center;gap:8px}.btn.primary{background:var(--brand);border-color:var(--brand);color:white}.btn.danger{color:var(--danger)}.btn.ghost{background:var(--soft);color:var(--brand);border-color:#ccebe3}.login-card .btn{width:100%;justify-content:center;margin-top:20px}.msg{display:none;margin-top:14px;padding:10px;border-radius:10px;background:#fff1f0;color:var(--danger);border:1px solid #ffd8d5}.msg.show{display:block}
+    .shell{min-height:100vh;display:grid;grid-template-columns:280px 1fr}.sidebar{background:#fff;border-right:1px solid var(--line);padding:22px;position:sticky;top:0;height:100vh}.nav{display:grid;gap:8px;margin-top:24px}.nav a{padding:11px 12px;border-radius:10px;color:var(--muted);font-weight:700;display:flex;align-items:center;gap:10px}.nav a.active,.nav a:hover{background:var(--soft);color:var(--brand)}.main{padding:28px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}.topbar h1{margin:0;font-size:34px}.grid{display:grid;gap:16px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.two{grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr)}.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 2px 4px rgba(15,23,42,.02)}.stat{display:flex;justify-content:space-between;gap:12px}.stat b{display:block;font-size:34px;margin-top:8px}.pill{display:inline-flex;align-items:center;border-radius:999px;background:var(--soft);color:var(--brand);padding:5px 10px;font-size:12px;font-weight:800}.pill.admin{background:var(--soft-blue);color:#1d4ed8}.pill.user{background:var(--soft);color:var(--brand)}.list{display:grid;gap:14px}.row{display:flex;justify-content:space-between;gap:18px;border:1px solid var(--line);border-radius:12px;padding:16px;align-items:flex-start}.meta{color:var(--muted);font-size:13px;line-height:1.5}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}.toolbar input,.toolbar select{min-height:42px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:220px;background:#fff;outline:0}.empty{padding:30px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px;background:#fff}.status{display:grid;gap:10px}.manager-page{display:none}.manager-page.active{display:block}.ok{color:var(--brand)}.warn{color:#b45309}.user-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end}.user-actions .btn{min-height:40px}.role-select{min-height:40px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:#fff;min-width:120px;outline:0}.inline-note{font-size:12px;color:var(--muted)}
+    @media(max-width:980px){.shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto}.stats,.two{grid-template-columns:1fr}.main{padding:18px}.topbar{align-items:flex-start;flex-direction:column}.row{flex-direction:column}.user-actions{justify-content:flex-start}}
+  </style>
+</head>
+<body>
+  <section id="login-screen" class="login-screen">
+    <form class="login-card" id="manager-login">
+      <div class="brand"><span class="mark">M</span><div><strong>TaskTracker Manager</strong><div class="subtle">Khu vực quản lí nội bộ</div></div></div>
+      <h1>Đăng nhập quản lí</h1>
+      <p class="subtle">Dùng tài khoản có quyền quản lí hoặc admin để xem tổng quan hệ thống và quản lí người dùng.</p>
+      <div class="field"><label for="username">Tài khoản / Email</label><input id="username" autocomplete="username" required /></div>
+      <div class="field"><label for="password">Mật khẩu</label><input id="password" type="password" autocomplete="current-password" required /></div>
+      <button class="btn primary" type="submit"><span class="material-symbols-outlined">login</span>Đăng nhập</button>
+      <p class="msg" id="login-message">Sai tài khoản, mật khẩu hoặc bạn chưa có quyền vào trang quản lí.</p>
+    </form>
+  </section>
+
+  <section id="manager-app" class="shell hidden">
+    <aside class="sidebar">
+      <div class="brand"><span class="mark">M</span><div><strong>Manager</strong><div class="subtle" id="manager-identity">đang tải...</div></div></div>
+      <nav class="nav">
+        <a class="active" href="#overview"><span class="material-symbols-outlined">dashboard</span>Tổng quan</a>
+        <a href="#users"><span class="material-symbols-outlined">group</span>Người dùng</a>
+        <a href="#data"><span class="material-symbols-outlined">database</span>Dữ liệu</a>
+        <a href="#system"><span class="material-symbols-outlined">monitor_heart</span>Hệ thống</a>
+      </nav>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><h1>Trang quản lí</h1><p class="subtle">Xem tài khoản đã tạo, phân quyền user/admin và xóa tài khoản ngay trên hệ thống.</p></div>
+        <div class="toolbar"><button class="btn" id="refresh-btn"><span class="material-symbols-outlined">refresh</span>Làm mới</button><button class="btn danger" id="logout-btn"><span class="material-symbols-outlined">logout</span>Đăng xuất</button></div>
+      </header>
+
+      <section class="manager-page active" id="page-overview">
+        <div id="overview" class="grid stats"></div>
+        <section class="grid two">
+          <article class="card"><h2>Người dùng mới nhất</h2><div class="list" id="recent-list"></div></article>
+          <article class="card"><h2>Tình trạng quyền</h2><div class="list" id="alert-list"></div></article>
+        </section>
+      </section>
+
+      <section class="manager-page" id="page-users">
+        <article class="card">
+          <h2>Quản lí người dùng</h2>
+          <p class="subtle">Phân quyền tài khoản giữa <strong>user</strong> và <strong>admin</strong>. Tài khoản có quyền <strong>admin</strong> sẽ đăng nhập được vào trang manager này. Bạn cũng có thể xóa người dùng trực tiếp tại đây.</p>
+          <div class="toolbar">
+            <input id="user-filter" placeholder="Tìm theo email, tên hoặc role" />
+            <button class="btn" id="export-users"><span class="material-symbols-outlined">download</span>Xuất danh sách</button>
+          </div>
+          <div class="list" id="user-list"></div>
+        </article>
+      </section>
+
+      <section class="manager-page" id="page-data">
+        <section class="grid stats" id="data-stats"></section>
+        <article class="card"><h2>Quản lí dữ liệu</h2><div class="toolbar"><button class="btn" id="export-data"><span class="material-symbols-outlined">download</span>Xuất Excel</button></div><div class="list" id="data-list"></div></article>
+      </section>
+
+      <section class="manager-page" id="page-system">
+        <section class="grid two"><article class="card"><h2>Tình trạng hệ thống</h2><div class="status" id="system-status"></div></article><article class="card"><h2>Công cụ hệ thống</h2><div class="list"><button class="btn" id="check-health"><span class="material-symbols-outlined">monitor_heart</span>Kiểm tra backend</button><button class="btn" id="copy-routes"><span class="material-symbols-outlined">content_copy</span>Sao chép route quan trọng</button></div></article></section>
+      </section>
+    </main>
+  </section>
+
+  <script>
+    const loginScreen = document.getElementById('login-screen');
+    const managerApp = document.getElementById('manager-app');
+    const loginForm = document.getElementById('manager-login');
+    const loginMessage = document.getElementById('login-message');
+    let currentManager = null;
+    let managedUsers = [];
+
+    async function getSessionUser() {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (!res.ok) return null;
+        return await res.json();
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function canAccessManager(user) {
+      const role = String(user?.role || '').toLowerCase();
+      return ['manager', 'admin'].includes(role);
+    }
+
+    function showApp() {
+      loginScreen.classList.add('hidden');
+      managerApp.classList.remove('hidden');
+      document.getElementById('manager-identity').textContent = currentManager?.email || currentManager?.name || 'manager';
+      renderManager();
+    }
+
+    function showLogin() {
+      loginScreen.classList.remove('hidden');
+      managerApp.classList.add('hidden');
+    }
+
+    function stat(label, value, icon) {
+      return `<article class="card stat"><div><span class="meta">${label}</span><b>${value}</b></div><span class="material-symbols-outlined">${icon}</span></article>`;
+    }
+
+    function escapeCell(value) {
+      return String(value ?? '').replace(/[&<>\"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[char]));
+    }
+
+    function tableSheet(title, rows) {
+      const body = rows.length ? rows : [{ 'Thông tin': 'Không có dữ liệu' }];
+      const headers = Object.keys(body[0]);
+      return `<h2>${escapeCell(title)}</h2><table border="1"><thead><tr>${headers.map(h => `<th>${escapeCell(h)}</th>`).join('')}</tr></thead><tbody>${body.map(row => `<tr>${headers.map(h => `<td>${escapeCell(row[h])}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+    }
+
+    function downloadExcel(filename, sheets) {
+      const html = `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body>${sheets.map(sheet => tableSheet(sheet.name, sheet.rows)).join('<br>')}</body></html>`;
+      const blob = new Blob(['\ufeff' + html], { type: 'application/vnd.ms-excel;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function userRows(users) {
+      return users.map(u => ({
+        'ID': u.id,
+        'Tên': u.name || '',
+        'Email': u.email || '',
+        'Quyền': u.role || 'user',
+        'Công việc': u.tasks.length,
+        'Dự án': u.projects.length,
+        'Đội nhóm': u.team.length,
+        'Đăng nhập gần nhất': u.lastLogin || ''
+      }));
+    }
+
+    function taskRows(tasks) {
+      return tasks.map(t => ({ 'Tên công việc': t.title || '', 'Dự án': t.project || '', 'Trạng thái': t.status || '', 'Ưu tiên': t.priority || '', 'Ngày hạn': t.date || t.due || '' }));
+    }
+
+    function projectRows(projects) {
+      return projects.map(p => ({ 'Tên dự án': p.name || '', 'Trạng thái': p.status || '', 'Tiến độ': p.progress ?? '' }));
+    }
+
+    async function loadManagedUsers() {
+      const res = await fetch('/api/app-data/manager/all');
+      if (!res.ok) throw new Error('Không tải được danh sách người dùng');
+      const rows = await res.json();
+      managedUsers = rows.map(row => ({
+        id: row.id,
+        name: row.name,
+        email: row.email,
+        role: row.role || 'user',
+        lastLogin: row.last_login_at ? new Date(row.last_login_at).toLocaleString('vi-VN') : 'Chưa đăng nhập',
+        tasks: row.data.tasks || [],
+        projects: row.data.projects || [],
+        team: row.data.team || [],
+        notifications: row.data.notifications || [],
+        workspace: row.data.workspace || {},
+      }));
+    }
+
+    async function updateUserRole(userId, role) {
+      const res = await fetch(`/api/app-data/manager/users/${userId}/role`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Cập nhật quyền thất bại');
+      return data;
+    }
+
+    async function removeUser(userId) {
+      const res = await fetch(`/api/app-data/manager/users/${userId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Xóa người dùng thất bại');
+      return data;
+    }
+
+    function renderOverview() {
+      const users = managedUsers;
+      const admins = users.filter(u => u.role === 'admin').length;
+      const tasks = users.flatMap(u => u.tasks);
+      const projects = users.flatMap(u => u.projects);
+      document.getElementById('overview').innerHTML = [
+        stat('Người dùng', users.length, 'group'),
+        stat('Admin', admins, 'admin_panel_settings'),
+        stat('Công việc', tasks.length, 'task_alt'),
+        stat('Dự án', projects.length, 'folder')
+      ].join('');
+      document.getElementById('recent-list').innerHTML = users.slice(0, 5).map(u => `<div class="row"><div><strong>${u.name || 'Không tên'}</strong><div class="meta">${u.email}</div></div><span class="pill ${u.role === 'admin' ? 'admin' : 'user'}">${u.role}</span></div>`).join('') || '<div class="empty">Chưa có người dùng nào.</div>';
+      document.getElementById('alert-list').innerHTML = `<div class="row"><strong>Tài khoản admin</strong><span class="pill admin">${admins}</span></div><div class="row"><strong>Tài khoản user</strong><span class="pill user">${users.length - admins}</span></div>`;
+    }
+
+    function renderUsers() {
+      const q = (document.getElementById('user-filter').value || '').trim().toLowerCase();
+      const filtered = managedUsers.filter(u => `${u.name || ''} ${u.email || ''} ${u.role || ''}`.toLowerCase().includes(q));
+      document.getElementById('user-list').innerHTML = filtered.map(u => `
+        <div class="row">
+          <div>
+            <strong>${u.name || 'Không tên'}</strong>
+            <div class="meta">${u.email}</div>
+            <div class="meta">${u.tasks.length} công việc · ${u.projects.length} dự án · ${u.team.length} thành viên · ${u.lastLogin}</div>
+            <div class="inline-note">Tài khoản có quyền <strong>admin</strong> sẽ đăng nhập được vào trang manager.</div>
+          </div>
+          <div class="user-actions">
+            <select class="role-select" data-role-id="${u.id}">
+              <option value="user" ${u.role === 'user' ? 'selected' : ''}>user</option>
+              <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>admin</option>
+            </select>
+            <button class="btn ghost" data-save-role="${u.id}"><span class="material-symbols-outlined">save</span>Lưu quyền</button>
+            <button class="btn danger" data-delete-user="${u.id}"><span class="material-symbols-outlined">delete</span>Xóa tài khoản</button>
+          </div>
+        </div>
+      `).join('') || '<div class="empty">Không tìm thấy người dùng phù hợp.</div>';
+
+      document.querySelectorAll('[data-save-role]').forEach(btn => btn.onclick = async () => {
+        const userId = btn.dataset.saveRole;
+        const role = document.querySelector(`[data-role-id="${userId}"]`).value;
+        try {
+          await updateUserRole(userId, role);
+          await renderManager();
+          alert('Đã cập nhật quyền người dùng.');
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+
+      document.querySelectorAll('[data-delete-user]').forEach(btn => btn.onclick = async () => {
+        const userId = btn.dataset.deleteUser;
+        const user = managedUsers.find(x => String(x.id) === String(userId));
+        if (!user) return;
+        if (!confirm(`Xóa tài khoản ${user.email}? Hành động này sẽ xóa luôn dữ liệu gắn với người dùng đó.`)) return;
+        try {
+          await removeUser(userId);
+          await renderManager();
+          alert('Đã xóa tài khoản người dùng.');
+        } catch (err) {
+          alert(err.message);
+        }
+      });
+    }
+
+    function renderData() {
+      const allTasks = managedUsers.flatMap(u => u.tasks);
+      const allProjects = managedUsers.flatMap(u => u.projects);
+      document.getElementById('data-stats').innerHTML = [
+        stat('Tổng task', allTasks.length, 'check_circle'),
+        stat('Tổng dự án', allProjects.length, 'folder'),
+        stat('Người dùng có dữ liệu', managedUsers.filter(u => u.tasks.length || u.projects.length || u.team.length).length, 'database'),
+        stat('Thông báo', managedUsers.flatMap(u => u.notifications).length, 'notifications')
+      ].join('');
+      document.getElementById('data-list').innerHTML = `<div class="row"><strong>Tổng tài khoản</strong><span class="pill">${managedUsers.length}</span></div><div class="row"><strong>Tổng task</strong><span class="pill">${allTasks.length}</span></div><div class="row"><strong>Tổng dự án</strong><span class="pill">${allProjects.length}</span></div>`;
+    }
+
+    async function renderSystem() {
+      document.getElementById('system-status').innerHTML = `<div class="row"><strong>Frontend</strong><span class="pill ok">Đang chạy</span></div><div class="row"><strong>Route manager</strong><span class="pill ok">/manager</span></div><div class="row"><strong>Quyền truy cập</strong><span class="pill">manager / admin</span></div>`;
+    }
+
+    async function renderManager() {
+      await loadManagedUsers();
+      renderOverview();
+      renderUsers();
+      renderData();
+      renderSystem();
+    }
+
+    function showPage(hash) {
+      const id = hash || '#overview';
+      const pageMap = { '#overview': 'page-overview', '#users': 'page-users', '#data': 'page-data', '#system': 'page-system' };
+      document.querySelectorAll('.manager-page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageMap[id] || 'page-overview').classList.add('active');
+      document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+    }
+
+    loginForm.addEventListener('submit', async event => {
+      event.preventDefault();
+      loginMessage.classList.remove('show');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: username === 'quanli' ? 'quanli@tasktracker.local' : username, password })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Đăng nhập thất bại');
+        const me = await getSessionUser();
+        if (!canAccessManager(me)) throw new Error('Tài khoản chưa có quyền vào trang quản lí');
+        currentManager = me;
+        showApp();
+      } catch (_) {
+        loginMessage.classList.add('show');
+      }
+    });
+
+    document.querySelectorAll('.nav a').forEach(link => link.addEventListener('click', event => {
+      event.preventDefault();
+      showPage(link.getAttribute('href'));
+    }));
+
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+      try { await fetch('/api/auth/logout', { method: 'POST' }); } catch (_) {}
+      currentManager = null;
+      showLogin();
+    });
+    document.getElementById('refresh-btn').addEventListener('click', renderManager);
+    document.getElementById('user-filter').addEventListener('input', renderUsers);
+    document.getElementById('export-users').addEventListener('click', () => downloadExcel('tasktracker-users.xls', [{ name: 'Người dùng', rows: userRows(managedUsers) }]));
+    document.getElementById('export-data').addEventListener('click', () => downloadExcel('tasktracker-data.xls', [{ name: 'Người dùng', rows: userRows(managedUsers) }, { name: 'Công việc', rows: taskRows(managedUsers.flatMap(u => u.tasks)) }, { name: 'Dự án', rows: projectRows(managedUsers.flatMap(u => u.projects)) }]));
+    document.getElementById('check-health').addEventListener('click', async () => {
+      try {
+        const res = await fetch('/api/health');
+        alert(res.ok ? 'Backend/API đang phản hồi.' : 'Backend phản hồi lỗi.');
+      } catch (_) {
+        alert('Không kết nối được backend/API.');
+      }
+    });
+    document.getElementById('copy-routes').addEventListener('click', async () => {
+      const text = ['/manager','/dashboard','/projects','/tasks','/kanban','/calendar','/workspace','/team','/reports'].join('\n');
+      await navigator.clipboard.writeText(text);
+      alert('Đã sao chép route quan trọng.');
+    });
+
+    (async () => {
+      const me = await getSessionUser();
+      if (canAccessManager(me)) {
+        currentManager = me;
+        showApp();
+      } else {
+        showLogin();
+      }
+    })();
+  </script>
+</body>
+</html>

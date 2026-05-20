@@ -208,7 +208,7 @@ import { api } from '../../src/services/api.js';
     if (!row) return;
     if (target.closest('input[type="checkbox"]')) return;
     const id = row.getAttribute('data-task-id');
-    if (id) window.location.href = './TaskDetailPage.html?id=' + id;
+    if (id) window.location.href = '/tasks?id=' + id;
   });
 
   closeBtn?.addEventListener('click', () => {
