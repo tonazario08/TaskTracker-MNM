@@ -188,7 +188,7 @@ function renderTaskRows(rows) {
 }
 
 function renderProjectCards(rows) {
-  if (!rows.length) return '<div class="empty">Chua co du an nao.</div>';
+  if (!rows.length) return '<div class="empty">Chưa có dự án nào.</div>';
   return rows.map((project) => '\n    <article class="card">\n      <div class="card-top">\n        <span class="pill">' + escapeHtml(project.status || 'Dang hoat dong') + '</span>\n        <button class="icon-button danger" data-del-project="' + escapeHtml(project.name) + '" aria-label="Xóa du an">' + icon('delete') + '</button>\n      </div>\n      <h3>' + escapeHtml(project.name) + '</h3>\n      <p class="subtle">' + (project.tasks || 0) + ' cong viec dang lien ket.</p>\n      <div class="progress"><span style="width:' + (project.progress || 0) + '%"></span></div>\n      <p class="meta">Hoàn thành ' + (project.progress || 0) + '%</p>\n      <div class="toolbar" style="margin-top:12px">\n        <button class="btn" data-project-task="' + escapeHtml(project.name) + '">' + icon('add_task') + 'Them cong viec</button>\n      </div>\n    </article>').join('');
 }
 
@@ -198,7 +198,7 @@ function pomodoroCard() {
 
 function dashboardPage() {
   const activeTasks = tasks.filter((task) => normalizeStatus(task.status) !== 'Hoàn thành');
-  return pageHero('dashboard', 'Khong gian lam viec ca nhan cho nhung viec ban dang quan tam.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo cong viec</button>') +
+  return pageHero('dashboard', 'Không gian làm việc cá nhân cho những việc bạn đang quan tâm.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button>') +
     '<section class="grid stats">' +
       statCard('Tổng công việc', tasks.length, 'list_alt') +
       statCard('Hoàn thành', tasks.filter((task) => normalizeStatus(task.status) === 'Hoàn thành').length, 'task_alt') +
@@ -216,13 +216,13 @@ function dashboardPage() {
 }
 
 function projectsPage() {
-  return pageHero('projects', 'Tạo du an rieng de nhom cong viec theo hoc tap, cong viec, gia dinh hoac muc tieu.', '<button class="btn primary" data-new-project>' + icon('add') + 'Tạo du an</button>') +
+  return pageHero('projects', 'Tạo dự án rieng de nhom cong viec theo hoc tap, cong viec, gia dinh hoac muc tieu.', '<button class="btn primary" data-new-project>' + icon('add') + 'Tạo dự án</button>') +
     '<div class="toolbar"><input id="project-filter" placeholder="Lọc dự án"></div>' +
     '<section class="grid three" id="project-grid">' + renderProjectCards(projects) + '</section>';
 }
 
 function tasksPage() {
-  return pageHero('tasks', 'Quan ly cong viec, loc nhanh va xuat du lieu ca nhan cua ban.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo cong viec</button><a class="btn" href="/kanban">' + icon('view_kanban') + 'Bảng</a><a class="btn" href="/calendar">' + icon('calendar_month') + 'Lịch</a>') +
+  return pageHero('tasks', 'Quản lý công việc, lọc nhanh và xuất dữ liệu cá nhân của bạn.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button><a class="btn" href="/kanban">' + icon('view_kanban') + 'Bảng</a><a class="btn" href="/calendar">' + icon('calendar_month') + 'Lịch</a>') +
     '<div class="toolbar">' +
       '<input id="task-filter" placeholder="Tim theo ten, du an, nhan">' +
       '<select id="task-status-filter"><option value="">Tat ca trang thai</option><option value="Cần làm">Cần làm</option><option value="Đang làm">Đang làm</option><option value="Đang duyệt">Đang duyệt</option><option value="Hoàn thành">Hoàn thành</option></select>' +
@@ -239,16 +239,16 @@ function tasksPage() {
 
 function kanbanPage() {
   const columns = ['Cần làm', 'Đang làm', 'Đang duyệt', 'Hoàn thành'];
-  return pageHero('kanban', 'Keo tha cong viec giua cac cot trang thai de theo doi tien do.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo cong viec</button>') +
+  return pageHero('kanban', 'Keo tha cong viec giua cac cot trang thai de theo doi tien do.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button>') +
     '<section class="board">' + columns.map((column) => {
       const items = tasks.filter((task) => normalizeStatus(task.status) === column);
-      return '<div class="column"><h3>' + column + ' <span class="pill">' + items.length + '</span></h3><div class="kanban-list" data-column="' + column + '">' + (items.map(taskRow).join('') || '<div class="empty">Chua co cong viec.</div>') + '</div></div>';
+      return '<div class="column"><h3>' + column + ' <span class="pill">' + items.length + '</span></h3><div class="kanban-list" data-column="' + column + '">' + (items.map(taskRow).join('') || '<div class="empty">Chưa có công việc.</div>') + '</div></div>';
     }).join('') + '</section>';
 }
 
 function calendarPage() {
   const now = new Date();
-  return pageHero('calendar', 'Xem cong viec theo ngay, tuan hoac thang voi lich thoi gian thuc.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo cong viec</button>') +
+  return pageHero('calendar', 'Xem cong viec theo ngay, tuan hoac thang voi lich thoi gian thuc.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button>') +
     '<div class="card" style="margin-bottom:16px"><strong>Hôm nay:</strong> ' + now.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }) + ' <span class="pill">' + now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '</span></div>' +
     '<section class="card calendar-card"><div id="calendar-view"></div></section>';
 }
@@ -262,29 +262,29 @@ function scheduleTable() {
 function workspacePage() {
   return pageHero('workspace', 'Bo tien ich ca nhan: ve diagram, thiet ke thoi khoa bieu va dem ngay.', '<button class="btn primary" data-download-diagram>' + icon('download') + 'Tải diagram</button>') +
     '<section class="grid two utility-grid">' +
-      '<div class="card utility-card"><h2>Vẽ diagram</h2><p class="subtle">Phac thao so do tu duy hoac luong cong viec roi tai ve PNG.</p><div class="toolbar"><input id="diagram-color" type="color" value="#0f766e"><button class="btn" data-clear-diagram>' + icon('delete') + 'Xóa</button></div><canvas id="diagram-canvas" width="900" height="460" class="draw-canvas"></canvas></div>' +
-      '<div class="card utility-card"><h2>Thiết kế thời khóa biểu</h2><p class="subtle">Dien nhanh mon hoc hoac cong viec vao tung buoi va tai ve.</p><div class="toolbar"><input id="schedule-title" value="Thoi khoa bieu cua toi"><button class="btn" data-download-schedule>' + icon('download') + 'Tải ảnh</button></div><div id="schedule-board" class="schedule-board">' + scheduleTable() + '</div></div>' +
+      '<div class="card utility-card"><h2>Vẽ diagram</h2><p class="subtle">Phác thảo sơ đồ tư duy hoặc luồng công việc rồi tải về PNG.</p><div class="toolbar"><input id="diagram-color" type="color" value="#0f766e"><button class="btn" data-clear-diagram>' + icon('delete') + 'Xóa</button></div><canvas id="diagram-canvas" width="900" height="460" class="draw-canvas"></canvas></div>' +
+      '<div class="card utility-card"><h2>Thiết kế thời khóa biểu</h2><p class="subtle">Điền nhanh môn học hoặc công việc vào từng buổi và tải về.</p><div class="toolbar"><input id="schedule-title" value="Thời khóa biểu của tôi"><button class="btn" data-download-schedule>' + icon('download') + 'Tải ảnh</button></div><div id="schedule-board" class="schedule-board">' + scheduleTable() + '</div></div>' +
     '</section>' +
-    '<section class="card countdown-card"><h2>Đếm ngày</h2><div class="form-grid"><div class="field"><label>Tiêu đề</label><input id="count-title"></div><div class="field"><label>Ngày cần đếm</label><input id="count-date" type="date"></div><div class="field"><label>Ảnh trang trí</label><input id="count-image" type="file" accept="image/*"></div></div><div id="count-preview" class="count-preview theme-mint"><div class="count-overlay"><h3>Chọn ngày để bắt đầu</h3><strong>0 ngày</strong><p>Khoang cach se hien thi o day.</p></div></div><div class="actions"><button class="btn primary" data-update-count>' + icon('auto_awesome') + 'Cập nhật</button><button class="btn" data-download-count>' + icon('download') + 'Tải ảnh</button></div></section>';
+    '<section class="card countdown-card"><h2>Đếm ngày</h2><div class="form-grid"><div class="field"><label>Tiêu đề</label><input id="count-title"></div><div class="field"><label>Ngày cần đếm</label><input id="count-date" type="date"></div><div class="field"><label>Ảnh trang trí</label><input id="count-image" type="file" accept="image/*"></div></div><div id="count-preview" class="count-preview theme-mint"><div class="count-overlay"><h3>Chọn ngày để bắt đầu</h3><strong>0 ngày</strong><p>Khoảng cách sẽ hiển thị ở đây.</p></div></div><div class="actions"><button class="btn primary" data-update-count>' + icon('auto_awesome') + 'Cập nhật</button><button class="btn" data-download-count>' + icon('download') + 'Tải ảnh</button></div></section>';
 }
 
 function teamPage() {
-  const rows = team.length ? team.map((member) => '<article class="card row"><div><strong>' + escapeHtml(member.person) + '</strong><div class="meta">' + escapeHtml(member.group) + ' Â· ' + escapeHtml(member.task) + (member.due ? ' Â· ' + escapeHtml(member.due) : '') + '</div></div><button class="icon-button danger" data-del-member="' + escapeHtml(member.person) + '">' + icon('delete') + '</button></article>').join('') : '<div class="empty">Chua co thanh vien nao.</div>';
-  return pageHero('team', 'Quan ly nhom, nguoi phu trach, cong viec va ngay han.', '<button class="btn primary" data-new-member>' + icon('group_add') + 'Thêm nhóm</button>') + '<section class="list">' + rows + '</section>';
+  const rows = team.length ? team.map((member) => '<article class="card row"><div><strong>' + escapeHtml(member.person) + '</strong><div class="meta">' + escapeHtml(member.group) + ' Â· ' + escapeHtml(member.task) + (member.due ? ' Â· ' + escapeHtml(member.due) : '') + '</div></div><button class="icon-button danger" data-del-member="' + escapeHtml(member.person) + '">' + icon('delete') + '</button></article>').join('') : '<div class="empty">Chưa có thành viên nào.</div>';
+  return pageHero('team', 'Quản lý nhóm, người phụ trách, công việc và ngày hạn.', '<button class="btn primary" data-new-member>' + icon('group_add') + 'Thêm nhóm</button>') + '<section class="list">' + rows + '</section>';
 }
 
 function searchPage() {
-  return pageHero('search', 'Tìm kiếm trong cong viec, du an, thanh vien va cac khu vuc chinh.', '') + '<section class="card"><div class="toolbar"><input id="search-input" placeholder="Tim moi thu"></div><div id="search-results" class="list"></div></section>';
+  return pageHero('search', 'Tìm kiếm trong công việc, dự án, thành viên và các khu vực chính.', '') + '<section class="card"><div class="toolbar"><input id="search-input" placeholder="Tìm mọi thứ"></div><div id="search-results" class="list"></div></section>';
 }
 
 function notificationsPage() {
-  const rows = notifications.length ? notifications.map((item) => '<article class="card notice ' + item[0] + '"><h3>' + escapeHtml(item[1]) + '</h3><p>' + escapeHtml(item[2]) + '</p><p class="meta">' + escapeHtml(item[3]) + '</p></article>').join('') : '<div class="empty">Ban chua co thong bao nao.</div>';
+  const rows = notifications.length ? notifications.map((item) => '<article class="card notice ' + item[0] + '"><h3>' + escapeHtml(item[1]) + '</h3><p>' + escapeHtml(item[2]) + '</p><p class="meta">' + escapeHtml(item[3]) + '</p></article>').join('') : '<div class="empty">Bạn chưa có thông báo nào.</div>';
   return pageHero('notifications', 'Xem cap nhat chua doc, nhac han va hoat dong moi.', '<button class="btn" data-read-all>' + icon('done_all') + 'Đánh dấu đã đọc</button>') + '<section class="list">' + rows + '</section>';
 }
 
 function reportsPage() {
   const overdue = tasks.filter((task) => task.date && new Date(task.date) < new Date(new Date().toDateString()) && normalizeStatus(task.status) !== 'Hoàn thành').length;
-  return pageHero('reports', 'Theo doi tien do cong viec va hieu suat trong tai khoan hien tai.', '') +
+  return pageHero('reports', 'Theo dõi tiến độ công việc và hiệu suất trong tài khoản hiện tại.', '') +
     '<section class="grid stats">' +
       statCard('Tổng công việc', tasks.length, 'list_alt') +
       statCard('Hoàn thành', tasks.filter((task) => normalizeStatus(task.status) === 'Hoàn thành').length, 'task_alt') +
@@ -294,7 +294,7 @@ function reportsPage() {
 }
 
 function profilePage() {
-  return pageHero('profile', 'Quan ly thong tin tai khoan va du lieu ca nhan co ban.', '<button class="btn" id="logout-btn">' + icon('logout') + 'Đăng xuất</button>') +
+  return pageHero('profile', 'Quản lý thông tin tài khoản và dữ liệu cá nhân cơ bản.', '<button class="btn" id="logout-btn">' + icon('logout') + 'Đăng xuất</button>') +
     '<section class="grid two">' +
       '<div class="card"><h2>Tài khoản</h2><div class="list"><div class="row"><strong>Họ tên</strong><span>' + escapeHtml(currentUser?.name || 'Chưa cập nhật') + '</span></div><div class="row"><strong>Email</strong><span>' + escapeHtml(currentUser?.email || '') + '</span></div><div class="row"><strong>Vai trò</strong><span>' + escapeHtml(currentUser?.role || 'user') + '</span></div></div></div>' +
       '<div class="card"><h2>Thống kê cá nhân</h2><div class="list"><div class="row"><strong>Công việc</strong><span>' + tasks.length + '</span></div><div class="row"><strong>Dự án</strong><span>' + projects.length + '</span></div><div class="row"><strong>Thông báo</strong><span>' + notifications.length + '</span></div></div></div>' +
@@ -302,7 +302,7 @@ function profilePage() {
 }
 
 function settingsPage() {
-  return pageHero('settings', 'Tuy chinh giao dien va khong gian lam viec ca nhan.', '<button class="btn primary" data-save-settings>' + icon('save') + 'Lưu cai dat</button>') +
+  return pageHero('settings', 'Tùy chỉnh giao diện và không gian làm việc cá nhân.', '<button class="btn primary" data-save-settings>' + icon('save') + 'Lưu cài đặt</button>') +
     '<section class="grid two">' +
       '<div class="card"><h2>Giao diện</h2><div class="list"><label class="switch-row"><strong>Chế độ tối</strong><input id="settings-theme" type="checkbox" ' + (preferences.theme === 'dark' ? 'checked' : '') + '></label><div class="field"><label>Tên không gian</label><input id="settings-workspace-name" value="' + escapeHtml(workspace.name || 'Không gian của tôi') + '"></div></div></div>' +
       '<div class="card"><h2>Mặc định</h2><div class="list"><div class="row"><strong>Pomodoro</strong><span>25 phut</span></div><div class="row"><strong>Định dạng lịch</strong><span>Tháng hiện tại</span></div></div></div>' +
@@ -312,7 +312,7 @@ function settingsPage() {
 function helpPage() {
   return pageHero('help', 'Hướng dẫn nhanh de dung cac khu vuc chinh trong he thong.', '') +
     '<section class="grid two">' +
-      '<div class="card"><h2>Hướng dẫn nhanh</h2><div class="list"><div class="row"><strong>Tạo cong viec</strong><span>Dung nut xanh o moi trang</span></div><div class="row"><strong>Quan ly du an</strong><span>Vao trang Dự án de tao va loc</span></div><div class="row"><strong>Lịch</strong><span>Xem han cong viec theo ngay thuc</span></div><div class="row"><strong>Tiện ích</strong><span>Vẽ diagram, thoi khoa bieu, dem ngay</span></div></div></div>' +
+      '<div class="card"><h2>Hướng dẫn nhanh</h2><div class="list"><div class="row"><strong>Tạo công việc</strong><span>Dung nut xanh o moi trang</span></div><div class="row"><strong>Quan ly du an</strong><span>Vao trang Dự án de tao va loc</span></div><div class="row"><strong>Lịch</strong><span>Xem han cong viec theo ngay thuc</span></div><div class="row"><strong>Tiện ích</strong><span>Vẽ diagram, thoi khoa bieu, dem ngay</span></div></div></div>' +
       '<div class="card"><h2>Mẹo sử dụng</h2><div class="list"><div class="row"><strong>Tìm kiếm</strong><span>Go ten cong viec, du an hoac thanh vien</span></div><div class="row"><strong>Kanban</strong><span>Keo tha task qua cac cot trang thai</span></div><div class="row"><strong>Xuat du lieu</strong><span>Dung Excel hoac ICS o trang Công việc</span></div></div></div>' +
     '</section>';
 }
@@ -400,7 +400,7 @@ async function requestAiPlan(goal, category, dueDate) {
     });
     const data = await response.json();
     if (!response.ok) {
-      showToast(data.error || 'Khong the tao goi y AI.');
+      showToast(data.error || 'Không thể tạo gợi ý AI.');
       return null;
     }
     return data;
@@ -441,7 +441,7 @@ function openAiPlannerModal(projectName = '') {
   let latestPlan = null;
   document.querySelector('.modal-backdrop')?.remove();
   const projectSuggestions = [...new Set(projects.map((project) => project.name).filter(Boolean))].slice(0, 6);
-  document.body.insertAdjacentHTML('beforeend', '<div class="modal-backdrop"><div class="modal ai-planner-modal"><div class="modal-header"><div><h2>AI Planner</h2><p class="subtle">Biến mục tiêu lớn thành kế hoạch rõ ràng, có checklist và task con.</p></div><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="ai-planner-shell"><section class="ai-planner-intro"><h3>Tạo ke hoach thong minh</h3><p class="subtle">Nhap muc tieu theo cach tu nhien de AI goi y ke hoach day du.</p><div class="ai-planner-hint">Vi du: "On thi tieng Anh 7 ngay", "Hoàn thành bai thuyet trinh marketing", "Tang can trong 30 ngày".</div>' + (projectSuggestions.length ? '<div class="ai-planner-projects" style="margin-top:12px">' + projectSuggestions.map((name) => '<span class="ai-planner-chip">' + escapeHtml(name) + '</span>').join('') + '</div>' : '') + '</section><div class="field"><label>Mục tiêu</label><input id="ai-planner-goal" value="' + escapeHtml(projectName || '') + '" placeholder="Vi du: On thi tieng Anh 7 ngay"></div><div class="form-grid"><div class="field"><label>Nhóm việc</label><select id="ai-planner-category"><option value="hoc_tap">Hoc tap</option><option value="cong_viec">Công việc</option><option value="ca_nhan">Ca nhan</option><option value="suc_khoe">Suc khoe</option></select></div><div class="field"><label>Hạn chót</label><input id="ai-planner-due-date" type="date"></div></div><label class="switch-row"><strong>Thêm thẳng vào lịch</strong><input id="ai-planner-calendar" type="checkbox" checked></label><div class="ai-planner-actions"><button class="btn primary" type="button" id="ai-planner-generate">' + icon('auto_awesome') + 'Tạo ke hoach</button><button class="btn" type="button" id="ai-planner-apply">' + icon('assignment_turned_in') + 'Dùng cho công việc hiện tại</button><button class="btn" type="button" id="ai-planner-create-task">' + icon('add_task') + 'Tạo cong viec moi tu AI</button></div><div id="ai-planner-preview">' + renderAiPreview(null) + '</div></div></div>');
+  document.body.insertAdjacentHTML('beforeend', '<div class="modal-backdrop"><div class="modal ai-planner-modal"><div class="modal-header"><div><h2>AI Planner</h2><p class="subtle">Biến mục tiêu lớn thành kế hoạch rõ ràng, có checklist và task con.</p></div><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="ai-planner-shell"><section class="ai-planner-intro"><h3>Tạo ke hoach thong minh</h3><p class="subtle">Nhap muc tieu theo cach tu nhien de AI goi y ke hoach day du.</p><div class="ai-planner-hint">Vi du: "On thi tieng Anh 7 ngay", "Hoàn thành bai thuyet trinh marketing", "Tang can trong 30 ngày".</div>' + (projectSuggestions.length ? '<div class="ai-planner-projects" style="margin-top:12px">' + projectSuggestions.map((name) => '<span class="ai-planner-chip">' + escapeHtml(name) + '</span>').join('') + '</div>' : '') + '</section><div class="field"><label>Mục tiêu</label><input id="ai-planner-goal" value="' + escapeHtml(projectName || '') + '" placeholder="Vi du: On thi tieng Anh 7 ngay"></div><div class="form-grid"><div class="field"><label>Nhóm việc</label><select id="ai-planner-category"><option value="hoc_tap">Hoc tap</option><option value="cong_viec">Công việc</option><option value="ca_nhan">Ca nhan</option><option value="suc_khoe">Suc khoe</option></select></div><div class="field"><label>Hạn chót</label><input id="ai-planner-due-date" type="date"></div></div><label class="switch-row"><strong>Thêm thẳng vào lịch</strong><input id="ai-planner-calendar" type="checkbox" checked></label><div class="ai-planner-actions"><button class="btn primary" type="button" id="ai-planner-generate">' + icon('auto_awesome') + 'Tạo ke hoach</button><button class="btn" type="button" id="ai-planner-apply">' + icon('assignment_turned_in') + 'Dùng cho công việc hiện tại</button><button class="btn" type="button" id="ai-planner-create-task">' + icon('add_task') + 'Tạo công việc moi tu AI</button></div><div id="ai-planner-preview">' + renderAiPreview(null) + '</div></div></div>');
 
   $$('[data-close]').forEach((button) => {
     button.onclick = () => document.querySelector('.modal-backdrop')?.remove();
@@ -489,7 +489,7 @@ function openAiPlannerModal(projectName = '') {
 }
 
 function openTaskModal(projectName = '') {
-  openModal('<div class="modal-header"><h2>Tạo cong viec</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div>' +
+  openModal('<div class="modal-header"><h2>Tạo công việc</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div>' +
     '<div class="toolbar" style="margin-bottom:12px"><button class="btn ai-planner-launch" type="button" id="ai-planner-fill">' + icon('auto_awesome') + 'Lập kế hoạch với AI Planner</button></div>' +
     '<div class="field"><label>Tên công việc</label><input name="title" required></div>' +
     '<p class="meta" style="margin-top:-6px;margin-bottom:12px">Vi du: "On thi tieng Anh 7 ngay" hoac "Tang can trong 30 ngày".</p>' +
@@ -516,7 +516,7 @@ function openTaskModal(projectName = '') {
         activity: []
       };
       tasks.unshift(task);
-      addTaskActivity(task, 'Tạo cong viec', 'Công việc duoc tao moi.');
+      addTaskActivity(task, 'Tạo công việc', 'Công việc duoc tao moi.');
       createNotification('unread', projectName ? 'Da them cong viec cho du an' : 'Da tao cong viec', task.title);
     });
 
@@ -526,7 +526,7 @@ function openTaskModal(projectName = '') {
   }
 }
 function openProjectModal() {
-  openModal('<div class="modal-header"><h2>Tạo du an</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="field"><label>Tên du an</label><input name="name" required></div><div class="field"><label>Trang thai</label><select name="status"><option>Dang hoat dong</option><option>Tam dung</option><option>Hoàn thành</option></select></div><div class="modal-actions"><button class="btn" type="button" data-close>Hủy</button><button class="btn primary">Tạo</button></div>', (form) => {
+  openModal('<div class="modal-header"><h2>Tạo dự án</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="field"><label>Tên du an</label><input name="name" required></div><div class="field"><label>Trang thai</label><select name="status"><option>Dang hoat dong</option><option>Tam dung</option><option>Hoàn thành</option></select></div><div class="modal-actions"><button class="btn" type="button" data-close>Hủy</button><button class="btn primary">Tạo</button></div>', (form) => {
     projects.unshift({ name: form.get('name'), progress: 0, status: form.get('status'), tasks: 0 });
   });
 }
@@ -637,7 +637,7 @@ function updateCountdown() {
   const overlay = $('#count-preview .count-overlay');
   if (!overlay) return;
   if (!dateValue) {
-    overlay.innerHTML = '<h3>Chọn ngày để bắt đầu</h3><strong>0 ngày</strong><p>Khoang cach se hien thi o day.</p>';
+    overlay.innerHTML = '<h3>Chọn ngày để bắt đầu</h3><strong>0 ngày</strong><p>Khoảng cách sẽ hiển thị ở đây.</p>';
     return;
   }
   const today = new Date(new Date().toDateString());
@@ -933,6 +933,7 @@ async function boot() {
 }
 
 boot();
+
 
 
 
