@@ -41,10 +41,10 @@ import { api } from '../../src/services/api.js';
     if (!terms?.checked) return alert('Ban can dong y dieu khoan.');
 
     try {
-      await api.register({ name: fullName, email, password: pwd });
-      window.location.href = '/tasks';
-    } catch (_err) {
-      alert('Dang ky that bai. Vui long thu lai.');
+      await api.register({ name: fullName, email, password: pwd, confirm_password: confirm });
+      window.location.href = '/login';
+    } catch (err) {
+      alert(err.message || 'Dang ky that bai. Vui long thu lai.');
     }
   });
 

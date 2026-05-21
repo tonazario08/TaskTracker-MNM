@@ -23,8 +23,8 @@ import { api } from '../../src/services/api.js';
     try {
       await api.login({ email, password: pwd });
       window.location.href = '/tasks';
-    } catch (_err) {
-      alert('Dang nhap that bai. Vui long kiem tra thong tin.');
+    } catch (err) {
+      alert(err.message || 'Dang nhap that bai. Vui long kiem tra thong tin.');
     }
   });
 })();
