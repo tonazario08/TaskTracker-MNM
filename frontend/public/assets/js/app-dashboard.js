@@ -1,18 +1,18 @@
-
+﻿
 const LABELS = {
-  dashboard: 'Tổng quan',
-  projects: 'Dự án',
-  tasks: 'Công việc',
+  dashboard: 'Tong quan',
+  projects: 'Du an',
+  tasks: 'Cong viec',
   kanban: 'Kanban',
-  calendar: 'Lịch',
-  workspace: 'Tiện ích',
-  team: 'Đội nhóm',
-  notifications: 'Thông báo',
-  search: 'Tìm kiếm',
-  reports: 'Báo cáo',
-  profile: 'Hồ sơ',
-  settings: 'Cài đặt',
-  help: 'Trợ giúp'
+  calendar: 'Lich',
+  workspace: 'Tien ich',
+  team: 'Doi nhom',
+  notifications: 'Thong bao',
+  search: 'Tim kiem',
+  reports: 'Bao cao',
+  profile: 'Ho so',
+  settings: 'Cai dat',
+  help: 'Tro giup'
 };
 
 const PRIMARY_NAV = [
@@ -41,7 +41,7 @@ let tasks = [];
 let projects = [];
 let team = [];
 let notifications = [];
-let workspace = { name: 'Không gian của tôi' };
+let workspace = { name: 'Khong gian cua toi' };
 let preferences = { theme: 'light' };
 let pomodoroTime = 1500;
 let pomodoroTimer = null;
@@ -71,18 +71,18 @@ function getStorageKey(name) {
 
 function normalizeStatus(status) {
   const value = String(status || '').trim().toLowerCase();
-  if (value.includes('duy')) return 'Đang duyệt';
-  if (value.includes('hoàn') || value.includes('hoan') || value.includes('done')) return 'Hoàn thành';
-  if ((value.includes('đang') || value.includes('dang')) && value.includes('làm')) return 'Đang làm';
-  if (value.includes('progress')) return 'Đang làm';
-  return 'Cần làm';
+  if (value.includes('duy')) return 'Dang duyet';
+  if (value.includes('hoan') || value.includes('done')) return 'Hoan thanh';
+  if (value.includes('dang') && value.includes('lam')) return 'Dang lam';
+  if (value.includes('progress')) return 'Dang lam';
+  return 'Can lam';
 }
 
 function statusClass(status) {
   const value = normalizeStatus(status);
-  if (value === 'Hoàn thành') return 'done';
-  if (value === 'Đang làm') return 'progress';
-  if (value === 'Đang duyệt') return 'review';
+  if (value === 'Hoan thanh') return 'done';
+  if (value === 'Dang lam') return 'progress';
+  if (value === 'Dang duyet') return 'review';
   return 'todo';
 }
 
@@ -102,7 +102,7 @@ function routeLabel(route) {
 function syncProjectMetrics() {
   projects = projects.map((project) => {
     const linkedTasks = tasks.filter((task) => String(task.project || '') === String(project.name || ''));
-    const done = linkedTasks.filter((task) => normalizeStatus(task.status) === 'Hoàn thành').length;
+    const done = linkedTasks.filter((task) => normalizeStatus(task.status) === 'Hoan thanh').length;
     return {
       ...project,
       tasks: linkedTasks.length,
@@ -150,7 +150,7 @@ function showToast(message) {
 }
 
 function formatDate(value) {
-  if (!value) return 'Chưa đặt hạn';
+  if (!value) return 'Chua dat han';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleDateString('vi-VN');
@@ -161,7 +161,7 @@ function renderNavigation() {
   $('#primary-nav').innerHTML = PRIMARY_NAV.map(buildLink).join('');
   $('#secondary-nav').innerHTML = SECONDARY_NAV.map(buildLink).join('');
   $('#breadcrumb-current').textContent = routeLabel(currentRoute);
-  $('.brand small').textContent = workspace.name || 'Không gian chính';
+  $('.brand small').textContent = workspace.name || 'Khong gian chinh';
   $('.avatar').textContent = (currentUser?.name || currentUser?.email || 'TT').slice(0, 2).toUpperCase();
   document.documentElement.dataset.theme = preferences.theme || 'light';
 }
@@ -177,143 +177,143 @@ function statCard(label, value, symbol) {
 function taskRow(task) {
   const checklist = Array.isArray(task.checklist) ? task.checklist : [];
   const doneCount = checklist.filter((item) => item.done).length;
-  const project = escapeHtml(task.project || 'Việc cá nhân');
-  const priority = escapeHtml(task.priority || 'Trung bình');
-  return '\n    <div class="row task-row">\n      <button class="row-main" data-open-task="' + task.id + '">\n        <div>\n          <strong>' + escapeHtml(task.title) + '</strong>\n          <div class="meta">' + project + ' · ' + formatDate(task.date || task.due) + (checklist.length ? ' · Checklist ' + doneCount + '/' + checklist.length : '') + '</div>\n        </div>\n        <div class="row-badges">\n          <span class="pill ' + statusClass(task.status) + '">' + normalizeStatus(task.status) + '</span>\n          <span class="pill">' + priority + '</span>\n        </div>\n      </button>\n      <button class="icon-button danger" data-del-task="' + task.id + '" aria-label="Xóa công việc">' + icon('delete') + '</button>\n    </div>';
+  const project = escapeHtml(task.project || 'Viec ca nhan');
+  const priority = escapeHtml(task.priority || 'Trung binh');
+  return '\n    <div class="row task-row">\n      <button class="row-main" data-open-task="' + task.id + '">\n        <div>\n          <strong>' + escapeHtml(task.title) + '</strong>\n          <div class="meta">' + project + ' Â· ' + formatDate(task.date || task.due) + (checklist.length ? ' Â· Checklist ' + doneCount + '/' + checklist.length : '') + '</div>\n        </div>\n        <div class="row-badges">\n          <span class="pill ' + statusClass(task.status) + '">' + normalizeStatus(task.status) + '</span>\n          <span class="pill">' + priority + '</span>\n        </div>\n      </button>\n      <button class="icon-button danger" data-del-task="' + task.id + '" aria-label="Xoa cong viec">' + icon('delete') + '</button>\n    </div>';
 }
 
 function renderTaskRows(rows) {
-  if (!rows.length) return '<div class="empty">Chưa có công việc nào.</div>';
+  if (!rows.length) return '<div class="empty">Chua co cong viec nao.</div>';
   return rows.map(taskRow).join('');
 }
 
 function renderProjectCards(rows) {
-  if (!rows.length) return '<div class="empty">Chưa có dự án nào.</div>';
-  return rows.map((project) => '\n    <article class="card">\n      <div class="card-top">\n        <span class="pill">' + escapeHtml(project.status || 'Đang hoạt động') + '</span>\n        <button class="icon-button danger" data-del-project="' + escapeHtml(project.name) + '" aria-label="Xóa dự án">' + icon('delete') + '</button>\n      </div>\n      <h3>' + escapeHtml(project.name) + '</h3>\n      <p class="subtle">' + (project.tasks || 0) + ' công việc đang liên kết.</p>\n      <div class="progress"><span style="width:' + (project.progress || 0) + '%"></span></div>\n      <p class="meta">Hoàn thành ' + (project.progress || 0) + '%</p>\n      <div class="toolbar" style="margin-top:12px">\n        <button class="btn" data-project-task="' + escapeHtml(project.name) + '">' + icon('add_task') + 'Thêm công việc</button>\n      </div>\n    </article>').join('');
+  if (!rows.length) return '<div class="empty">Chua co du an nao.</div>';
+  return rows.map((project) => '\n    <article class="card">\n      <div class="card-top">\n        <span class="pill">' + escapeHtml(project.status || 'Dang hoat dong') + '</span>\n        <button class="icon-button danger" data-del-project="' + escapeHtml(project.name) + '" aria-label="Xoa du an">' + icon('delete') + '</button>\n      </div>\n      <h3>' + escapeHtml(project.name) + '</h3>\n      <p class="subtle">' + (project.tasks || 0) + ' cong viec dang lien ket.</p>\n      <div class="progress"><span style="width:' + (project.progress || 0) + '%"></span></div>\n      <p class="meta">Hoan thanh ' + (project.progress || 0) + '%</p>\n      <div class="toolbar" style="margin-top:12px">\n        <button class="btn" data-project-task="' + escapeHtml(project.name) + '">' + icon('add_task') + 'Them cong viec</button>\n      </div>\n    </article>').join('');
 }
 
 function pomodoroCard() {
-  return '\n    <aside class="card pomodoro">\n      <h2>Pomodoro</h2>\n      <p class="subtle">25 phút tập trung, nghỉ ngắn rồi tiếp tục.</p>\n      <div id="pomodoro-time" class="timer">25:00</div>\n      <div class="actions">\n        <button class="btn primary" id="pomodoro-start">' + icon('play_arrow') + 'Bắt đầu</button>\n        <button class="btn" id="pomodoro-reset">' + icon('restart_alt') + 'Đặt lại</button>\n      </div>\n    </aside>';
+  return '\n    <aside class="card pomodoro">\n      <h2>Pomodoro</h2>\n      <p class="subtle">25 phut tap trung, nghi ngan roi tiep tuc.</p>\n      <div id="pomodoro-time" class="timer">25:00</div>\n      <div class="actions">\n        <button class="btn primary" id="pomodoro-start">' + icon('play_arrow') + 'Bat dau</button>\n        <button class="btn" id="pomodoro-reset">' + icon('restart_alt') + 'Dat lai</button>\n      </div>\n    </aside>';
 }
 
 function dashboardPage() {
-  const activeTasks = tasks.filter((task) => normalizeStatus(task.status) !== 'Hoàn thành');
-  return pageHero('dashboard', 'Không gian làm việc cá nhân cho những việc bạn đang quan tâm.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button>') +
+  const activeTasks = tasks.filter((task) => normalizeStatus(task.status) !== 'Hoan thanh');
+  return pageHero('dashboard', 'Khong gian lam viec ca nhan cho nhung viec ban dang quan tam.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tao cong viec</button>') +
     '<section class="grid stats">' +
-      statCard('Tổng công việc', tasks.length, 'list_alt') +
-      statCard('Hoàn thành', tasks.filter((task) => normalizeStatus(task.status) === 'Hoàn thành').length, 'task_alt') +
-      statCard('Dự án', projects.length, 'folder') +
-      statCard('Thông báo', notifications.filter((item) => item[0] === 'unread').length, 'notifications') +
+      statCard('Tong cong viec', tasks.length, 'list_alt') +
+      statCard('Hoan thanh', tasks.filter((task) => normalizeStatus(task.status) === 'Hoan thanh').length, 'task_alt') +
+      statCard('Du an', projects.length, 'folder') +
+      statCard('Thong bao', notifications.filter((item) => item[0] === 'unread').length, 'notifications') +
     '</section>' +
     '<section class="grid two">' +
-      '<div class="card"><h2>Sắp đến hạn</h2><div class="list">' + renderTaskRows(activeTasks.slice(0, 5)) + '</div></div>' +
+      '<div class="card"><h2>Sap den han</h2><div class="list">' + renderTaskRows(activeTasks.slice(0, 5)) + '</div></div>' +
       '<div class="card"><h2>Nhanh</h2><div class="list">' +
-        '<a class="row" href="/projects"><strong>Dự án</strong><span>' + projects.length + '</span></a>' +
-        '<a class="row" href="/tasks"><strong>Công việc</strong><span>' + tasks.length + '</span></a>' +
-        '<a class="row" href="/notifications"><strong>Thông báo</strong><span>' + notifications.length + '</span></a>' +
+        '<a class="row" href="/projects"><strong>Du an</strong><span>' + projects.length + '</span></a>' +
+        '<a class="row" href="/tasks"><strong>Cong viec</strong><span>' + tasks.length + '</span></a>' +
+        '<a class="row" href="/notifications"><strong>Thong bao</strong><span>' + notifications.length + '</span></a>' +
       '</div></div>' +
     '</section>';
 }
 
 function projectsPage() {
-  return pageHero('projects', 'Tạo dự án riêng để nhóm công việc theo học tập, công việc, gia đình hoặc mục tiêu.', '<button class="btn primary" data-new-project>' + icon('add') + 'Tạo dự án</button>') +
-    '<div class="toolbar"><input id="project-filter" placeholder="Lọc dự án"></div>' +
+  return pageHero('projects', 'Tao du an rieng de nhom cong viec theo hoc tap, cong viec, gia dinh hoac muc tieu.', '<button class="btn primary" data-new-project>' + icon('add') + 'Tao du an</button>') +
+    '<div class="toolbar"><input id="project-filter" placeholder="Loc du an"></div>' +
     '<section class="grid three" id="project-grid">' + renderProjectCards(projects) + '</section>';
 }
 
 function tasksPage() {
-  return pageHero('tasks', 'Quản lý công việc, lọc nhanh và xuất dữ liệu cá nhân của bạn.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button><a class="btn" href="/kanban">' + icon('view_kanban') + 'Bảng</a><a class="btn" href="/calendar">' + icon('calendar_month') + 'Lịch</a>') +
+  return pageHero('tasks', 'Quan ly cong viec, loc nhanh va xuat du lieu ca nhan cua ban.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tao cong viec</button><a class="btn" href="/kanban">' + icon('view_kanban') + 'Bang</a><a class="btn" href="/calendar">' + icon('calendar_month') + 'Lich</a>') +
     '<div class="toolbar">' +
-      '<input id="task-filter" placeholder="Tìm theo tên, dự án, nhãn">' +
-      '<select id="task-status-filter"><option value="">Tất cả trạng thái</option><option value="Cần làm">Cần làm</option><option value="Đang làm">Đang làm</option><option value="Đang duyệt">Đang duyệt</option><option value="Hoàn thành">Hoàn thành</option></select>' +
-      '<select id="task-priority-filter"><option value="">Tất cả ưu tiên</option><option value="Thấp">Thấp</option><option value="Trung bình">Trung bình</option><option value="Cao">Cao</option></select>' +
-      '<button class="btn" data-export-xls>' + icon('download') + 'Xuất Excel</button>' +
-      '<button class="btn" data-export-ics>' + icon('event') + 'Xuất ICS</button>' +
-      '<label class="btn"><input id="import-csv" type="file" accept=".csv" hidden>Nhập CSV</label>' +
+      '<input id="task-filter" placeholder="Tim theo ten, du an, nhan">' +
+      '<select id="task-status-filter"><option value="">Tat ca trang thai</option><option value="Can lam">Can lam</option><option value="Dang lam">Dang lam</option><option value="Dang duyet">Dang duyet</option><option value="Hoan thanh">Hoan thanh</option></select>' +
+      '<select id="task-priority-filter"><option value="">Tat ca uu tien</option><option value="Thap">Thap</option><option value="Trung binh">Trung binh</option><option value="Cao">Cao</option></select>' +
+      '<button class="btn" data-export-xls>' + icon('download') + 'Xuat Excel</button>' +
+      '<button class="btn" data-export-ics>' + icon('event') + 'Xuat ICS</button>' +
+      '<label class="btn"><input id="import-csv" type="file" accept=".csv" hidden>Nhap CSV</label>' +
     '</div>' +
     '<section class="grid two productivity-grid">' +
-      '<div class="card"><h2>Danh sách công việc</h2><div id="task-list" class="list">' + renderTaskRows(tasks) + '</div></div>' +
+      '<div class="card"><h2>Danh sach cong viec</h2><div id="task-list" class="list">' + renderTaskRows(tasks) + '</div></div>' +
       pomodoroCard() +
     '</section>';
 }
 
 function kanbanPage() {
-  const columns = ['Cần làm', 'Đang làm', 'Đang duyệt', 'Hoàn thành'];
-  return pageHero('kanban', 'Kéo thả công việc giữa các cột trạng thái để theo dõi tiến độ.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button>') +
+  const columns = ['Can lam', 'Dang lam', 'Dang duyet', 'Hoan thanh'];
+  return pageHero('kanban', 'Keo tha cong viec giua cac cot trang thai de theo doi tien do.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tao cong viec</button>') +
     '<section class="board">' + columns.map((column) => {
       const items = tasks.filter((task) => normalizeStatus(task.status) === column);
-      return '<div class="column"><h3>' + column + ' <span class="pill">' + items.length + '</span></h3><div class="kanban-list" data-column="' + column + '">' + (items.map(taskRow).join('') || '<div class="empty">Chưa có công việc.</div>') + '</div></div>';
+      return '<div class="column"><h3>' + column + ' <span class="pill">' + items.length + '</span></h3><div class="kanban-list" data-column="' + column + '">' + (items.map(taskRow).join('') || '<div class="empty">Chua co cong viec.</div>') + '</div></div>';
     }).join('') + '</section>';
 }
 
 function calendarPage() {
   const now = new Date();
-  return pageHero('calendar', 'Xem công việc theo ngày, tuần hoặc tháng với lịch thời gian thực.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tạo công việc</button>') +
-    '<div class="card" style="margin-bottom:16px"><strong>Hôm nay:</strong> ' + now.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }) + ' <span class="pill">' + now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '</span></div>' +
+  return pageHero('calendar', 'Xem cong viec theo ngay, tuan hoac thang voi lich thoi gian thuc.', '<button class="btn primary" data-new-task>' + icon('add') + 'Tao cong viec</button>') +
+    '<div class="card" style="margin-bottom:16px"><strong>Hom nay:</strong> ' + now.toLocaleDateString('vi-VN', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' }) + ' <span class="pill">' + now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + '</span></div>' +
     '<section class="card calendar-card"><div id="calendar-view"></div></section>';
 }
 
 function scheduleTable() {
-  const days = ['Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7', 'CN'];
-  const slots = ['Sáng', 'Chiều', 'Tối'];
-  return '<table class="schedule-table"><thead><tr><th>Buổi</th>' + days.map((day) => '<th>' + day + '</th>').join('') + '</tr></thead><tbody>' + slots.map((slot) => '<tr><th>' + slot + '</th>' + days.map(() => '<td contenteditable="true"></td>').join('') + '</tr>').join('') + '</tbody></table>';
+  const days = ['Thu 2', 'Thu 3', 'Thu 4', 'Thu 5', 'Thu 6', 'Thu 7', 'CN'];
+  const slots = ['Sang', 'Chieu', 'Toi'];
+  return '<table class="schedule-table"><thead><tr><th>Buoi</th>' + days.map((day) => '<th>' + day + '</th>').join('') + '</tr></thead><tbody>' + slots.map((slot) => '<tr><th>' + slot + '</th>' + days.map(() => '<td contenteditable="true"></td>').join('') + '</tr>').join('') + '</tbody></table>';
 }
 
 function workspacePage() {
-  return pageHero('workspace', 'Bộ tiện ích cá nhân: vẽ diagram, thiết kế thời khóa biểu và đếm ngày.', '<button class="btn primary" data-download-diagram>' + icon('download') + 'Tải diagram</button>') +
+  return pageHero('workspace', 'Bo tien ich ca nhan: ve diagram, thiet ke thoi khoa bieu va dem ngay.', '<button class="btn primary" data-download-diagram>' + icon('download') + 'Tai diagram</button>') +
     '<section class="grid two utility-grid">' +
-      '<div class="card utility-card"><h2>Vẽ diagram</h2><p class="subtle">Phác thảo sơ đồ tư duy hoặc luồng công việc rồi tải về PNG.</p><div class="toolbar"><input id="diagram-color" type="color" value="#0f766e"><button class="btn" data-clear-diagram>' + icon('delete') + 'Xóa</button></div><canvas id="diagram-canvas" width="900" height="460" class="draw-canvas"></canvas></div>' +
-      '<div class="card utility-card"><h2>Thiết kế thời khóa biểu</h2><p class="subtle">Điền nhanh môn học hoặc công việc vào từng buổi và tải về.</p><div class="toolbar"><input id="schedule-title" value="Thời khóa biểu của tôi"><button class="btn" data-download-schedule>' + icon('download') + 'Tải ảnh</button></div><div id="schedule-board" class="schedule-board">' + scheduleTable() + '</div></div>' +
+      '<div class="card utility-card"><h2>Ve diagram</h2><p class="subtle">Phac thao so do tu duy hoac luong cong viec roi tai ve PNG.</p><div class="toolbar"><input id="diagram-color" type="color" value="#0f766e"><button class="btn" data-clear-diagram>' + icon('delete') + 'Xoa</button></div><canvas id="diagram-canvas" width="900" height="460" class="draw-canvas"></canvas></div>' +
+      '<div class="card utility-card"><h2>Thiet ke thoi khoa bieu</h2><p class="subtle">Dien nhanh mon hoc hoac cong viec vao tung buoi va tai ve.</p><div class="toolbar"><input id="schedule-title" value="Thoi khoa bieu cua toi"><button class="btn" data-download-schedule>' + icon('download') + 'Tai anh</button></div><div id="schedule-board" class="schedule-board">' + scheduleTable() + '</div></div>' +
     '</section>' +
-    '<section class="card countdown-card"><h2>Đếm ngày</h2><div class="form-grid"><div class="field"><label>Tiêu đề</label><input id="count-title"></div><div class="field"><label>Ngày cần đếm</label><input id="count-date" type="date"></div><div class="field"><label>Ảnh trang trí</label><input id="count-image" type="file" accept="image/*"></div></div><div id="count-preview" class="count-preview theme-mint"><div class="count-overlay"><h3>Chọn ngày để bắt đầu</h3><strong>0 ngày</strong><p>Khoảng cách sẽ hiển thị ở đây.</p></div></div><div class="actions"><button class="btn primary" data-update-count>' + icon('auto_awesome') + 'Cập nhật</button><button class="btn" data-download-count>' + icon('download') + 'Tải ảnh</button></div></section>';
+    '<section class="card countdown-card"><h2>Dem ngay</h2><div class="form-grid"><div class="field"><label>Tieu de</label><input id="count-title"></div><div class="field"><label>Ngay can dem</label><input id="count-date" type="date"></div><div class="field"><label>Anh trang tri</label><input id="count-image" type="file" accept="image/*"></div></div><div id="count-preview" class="count-preview theme-mint"><div class="count-overlay"><h3>Chon ngay de bat dau</h3><strong>0 ngay</strong><p>Khoang cach se hien thi o day.</p></div></div><div class="actions"><button class="btn primary" data-update-count>' + icon('auto_awesome') + 'Cap nhat</button><button class="btn" data-download-count>' + icon('download') + 'Tai anh</button></div></section>';
 }
 
 function teamPage() {
-  const rows = team.length ? team.map((member) => '<article class="card row"><div><strong>' + escapeHtml(member.person) + '</strong><div class="meta">' + escapeHtml(member.group) + ' · ' + escapeHtml(member.task) + (member.due ? ' · ' + escapeHtml(member.due) : '') + '</div></div><button class="icon-button danger" data-del-member="' + escapeHtml(member.person) + '">' + icon('delete') + '</button></article>').join('') : '<div class="empty">Chưa có thành viên nào.</div>';
-  return pageHero('team', 'Quản lý nhóm, người phụ trách, công việc và ngày hạn.', '<button class="btn primary" data-new-member>' + icon('group_add') + 'Thêm nhóm</button>') + '<section class="list">' + rows + '</section>';
+  const rows = team.length ? team.map((member) => '<article class="card row"><div><strong>' + escapeHtml(member.person) + '</strong><div class="meta">' + escapeHtml(member.group) + ' Â· ' + escapeHtml(member.task) + (member.due ? ' Â· ' + escapeHtml(member.due) : '') + '</div></div><button class="icon-button danger" data-del-member="' + escapeHtml(member.person) + '">' + icon('delete') + '</button></article>').join('') : '<div class="empty">Chua co thanh vien nao.</div>';
+  return pageHero('team', 'Quan ly nhom, nguoi phu trach, cong viec va ngay han.', '<button class="btn primary" data-new-member>' + icon('group_add') + 'Them nhom</button>') + '<section class="list">' + rows + '</section>';
 }
 
 function searchPage() {
-  return pageHero('search', 'Tìm kiếm trong công việc, dự án, thành viên và các khu vực chính.', '') + '<section class="card"><div class="toolbar"><input id="search-input" placeholder="Tìm mọi thứ"></div><div id="search-results" class="list"></div></section>';
+  return pageHero('search', 'Tim kiem trong cong viec, du an, thanh vien va cac khu vuc chinh.', '') + '<section class="card"><div class="toolbar"><input id="search-input" placeholder="Tim moi thu"></div><div id="search-results" class="list"></div></section>';
 }
 
 function notificationsPage() {
-  const rows = notifications.length ? notifications.map((item) => '<article class="card notice ' + item[0] + '"><h3>' + escapeHtml(item[1]) + '</h3><p>' + escapeHtml(item[2]) + '</p><p class="meta">' + escapeHtml(item[3]) + '</p></article>').join('') : '<div class="empty">Bạn chưa có thông báo nào.</div>';
-  return pageHero('notifications', 'Xem cập nhật chưa đọc, nhắc hạn và hoạt động mới.', '<button class="btn" data-read-all>' + icon('done_all') + 'Đánh dấu đã đọc</button>') + '<section class="list">' + rows + '</section>';
+  const rows = notifications.length ? notifications.map((item) => '<article class="card notice ' + item[0] + '"><h3>' + escapeHtml(item[1]) + '</h3><p>' + escapeHtml(item[2]) + '</p><p class="meta">' + escapeHtml(item[3]) + '</p></article>').join('') : '<div class="empty">Ban chua co thong bao nao.</div>';
+  return pageHero('notifications', 'Xem cap nhat chua doc, nhac han va hoat dong moi.', '<button class="btn" data-read-all>' + icon('done_all') + 'Danh dau da doc</button>') + '<section class="list">' + rows + '</section>';
 }
 
 function reportsPage() {
-  const overdue = tasks.filter((task) => task.date && new Date(task.date) < new Date(new Date().toDateString()) && normalizeStatus(task.status) !== 'Hoàn thành').length;
-  return pageHero('reports', 'Theo dõi tiến độ công việc và hiệu suất trong tài khoản hiện tại.', '') +
+  const overdue = tasks.filter((task) => task.date && new Date(task.date) < new Date(new Date().toDateString()) && normalizeStatus(task.status) !== 'Hoan thanh').length;
+  return pageHero('reports', 'Theo doi tien do cong viec va hieu suat trong tai khoan hien tai.', '') +
     '<section class="grid stats">' +
-      statCard('Tổng công việc', tasks.length, 'list_alt') +
-      statCard('Hoàn thành', tasks.filter((task) => normalizeStatus(task.status) === 'Hoàn thành').length, 'task_alt') +
-      statCard('Quá hạn', overdue, 'warning') +
-      statCard('Dự án', projects.length, 'folder') +
+      statCard('Tong cong viec', tasks.length, 'list_alt') +
+      statCard('Hoan thanh', tasks.filter((task) => normalizeStatus(task.status) === 'Hoan thanh').length, 'task_alt') +
+      statCard('Qua han', overdue, 'warning') +
+      statCard('Du an', projects.length, 'folder') +
     '</section>';
 }
 
 function profilePage() {
-  return pageHero('profile', 'Quản lý thông tin tài khoản và dữ liệu cá nhân cơ bản.', '<button class="btn" id="logout-btn">' + icon('logout') + 'Đăng xuất</button>') +
+  return pageHero('profile', 'Quan ly thong tin tai khoan va du lieu ca nhan co ban.', '<button class="btn" id="logout-btn">' + icon('logout') + 'Dang xuat</button>') +
     '<section class="grid two">' +
-      '<div class="card"><h2>Tài khoản</h2><div class="list"><div class="row"><strong>Họ tên</strong><span>' + escapeHtml(currentUser?.name || 'Chưa cập nhật') + '</span></div><div class="row"><strong>Email</strong><span>' + escapeHtml(currentUser?.email || '') + '</span></div><div class="row"><strong>Vai trò</strong><span>' + escapeHtml(currentUser?.role || 'user') + '</span></div></div></div>' +
-      '<div class="card"><h2>Thống kê cá nhân</h2><div class="list"><div class="row"><strong>Công việc</strong><span>' + tasks.length + '</span></div><div class="row"><strong>Dự án</strong><span>' + projects.length + '</span></div><div class="row"><strong>Thông báo</strong><span>' + notifications.length + '</span></div></div></div>' +
+      '<div class="card"><h2>Tai khoan</h2><div class="list"><div class="row"><strong>Ho ten</strong><span>' + escapeHtml(currentUser?.name || 'Chua cap nhat') + '</span></div><div class="row"><strong>Email</strong><span>' + escapeHtml(currentUser?.email || '') + '</span></div><div class="row"><strong>Vai tro</strong><span>' + escapeHtml(currentUser?.role || 'user') + '</span></div></div></div>' +
+      '<div class="card"><h2>Thong ke ca nhan</h2><div class="list"><div class="row"><strong>Cong viec</strong><span>' + tasks.length + '</span></div><div class="row"><strong>Du an</strong><span>' + projects.length + '</span></div><div class="row"><strong>Thong bao</strong><span>' + notifications.length + '</span></div></div></div>' +
     '</section>';
 }
 
 function settingsPage() {
-  return pageHero('settings', 'Tùy chỉnh giao diện và không gian làm việc cá nhân.', '<button class="btn primary" data-save-settings>' + icon('save') + 'Lưu cài đặt</button>') +
+  return pageHero('settings', 'Tuy chinh giao dien va khong gian lam viec ca nhan.', '<button class="btn primary" data-save-settings>' + icon('save') + 'Luu cai dat</button>') +
     '<section class="grid two">' +
-      '<div class="card"><h2>Giao diện</h2><div class="list"><label class="switch-row"><strong>Chế độ tối</strong><input id="settings-theme" type="checkbox" ' + (preferences.theme === 'dark' ? 'checked' : '') + '></label><div class="field"><label>Tên không gian</label><input id="settings-workspace-name" value="' + escapeHtml(workspace.name || 'Không gian của tôi') + '"></div></div></div>' +
-      '<div class="card"><h2>Mặc định</h2><div class="list"><div class="row"><strong>Pomodoro</strong><span>25 phút</span></div><div class="row"><strong>Định dạng lịch</strong><span>Tháng hiện tại</span></div></div></div>' +
+      '<div class="card"><h2>Giao dien</h2><div class="list"><label class="switch-row"><strong>Che do toi</strong><input id="settings-theme" type="checkbox" ' + (preferences.theme === 'dark' ? 'checked' : '') + '></label><div class="field"><label>Ten khong gian</label><input id="settings-workspace-name" value="' + escapeHtml(workspace.name || 'Khong gian cua toi') + '"></div></div></div>' +
+      '<div class="card"><h2>Mac dinh</h2><div class="list"><div class="row"><strong>Pomodoro</strong><span>25 phut</span></div><div class="row"><strong>Dinh dang lich</strong><span>Thang hien tai</span></div></div></div>' +
     '</section>';
 }
 
 function helpPage() {
-  return pageHero('help', 'Hướng dẫn nhanh để dùng các khu vực chính trong hệ thống.', '') +
+  return pageHero('help', 'Huong dan nhanh de dung cac khu vuc chinh trong he thong.', '') +
     '<section class="grid two">' +
-      '<div class="card"><h2>Hướng dẫn nhanh</h2><div class="list"><div class="row"><strong>Tạo công việc</strong><span>Dùng nút xanh ở mỗi trang</span></div><div class="row"><strong>Quản lý dự án</strong><span>Vào trang Dự án để tạo và lọc</span></div><div class="row"><strong>Lịch</strong><span>Xem hạn công việc theo ngày thực</span></div><div class="row"><strong>Tiện ích</strong><span>Vẽ diagram, thời khóa biểu, đếm ngày</span></div></div></div>' +
-      '<div class="card"><h2>Mẹo sử dụng</h2><div class="list"><div class="row"><strong>Tìm kiếm</strong><span>Gõ tên công việc, dự án hoặc thành viên</span></div><div class="row"><strong>Kanban</strong><span>Kéo thả task qua các cột trạng thái</span></div><div class="row"><strong>Xuất dữ liệu</strong><span>Dùng Excel hoặc ICS ở trang Công việc</span></div></div></div>' +
+      '<div class="card"><h2>Huong dan nhanh</h2><div class="list"><div class="row"><strong>Tao cong viec</strong><span>Dung nut xanh o moi trang</span></div><div class="row"><strong>Quan ly du an</strong><span>Vao trang Du an de tao va loc</span></div><div class="row"><strong>Lich</strong><span>Xem han cong viec theo ngay thuc</span></div><div class="row"><strong>Tien ich</strong><span>Ve diagram, thoi khoa bieu, dem ngay</span></div></div></div>' +
+      '<div class="card"><h2>Meo su dung</h2><div class="list"><div class="row"><strong>Tim kiem</strong><span>Go ten cong viec, du an hoac thanh vien</span></div><div class="row"><strong>Kanban</strong><span>Keo tha task qua cac cot trang thai</span></div><div class="row"><strong>Xuat du lieu</strong><span>Dung Excel hoac ICS o trang Cong viec</span></div></div></div>' +
     '</section>';
 }
 
@@ -356,7 +356,6 @@ function addTaskActivity(task, action, detail) {
 
 function downloadFile(name, content, type) {
   const blob = new Blob([content], { type });
-
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
@@ -383,18 +382,122 @@ function exportIcs() {
 }
 
 function buildProjectOptions(selected = '') {
-  const names = ['Việc cá nhân', 'Học tập', 'Công việc', 'Gia đình', ...projects.map((project) => project.name)];
+  const names = ['Viec ca nhan', 'Hoc tap', 'Cong viec', 'Gia dinh', ...projects.map((project) => project.name)];
   return [...new Set(names)].map((name) => '<option ' + (name === selected ? 'selected' : '') + '>' + escapeHtml(name) + '</option>').join('');
 }
 
+async function requestAiPlan(goal, category, dueDate) {
+  try {
+    const response = await fetch('/api/ai/plan-task', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        goal: goal.trim(),
+        category: category.trim(),
+        dueDate: (dueDate || '').trim(),
+        existingProjects: projects.map((project) => project.name)
+      })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      showToast(data.error || 'Khong the tao goi y AI.');
+      return null;
+    }
+    return data;
+  } catch {
+    showToast('Khong ket noi duoc AI Planner.');
+    return null;
+  }
+}
+
+function renderAiPreview(plan) {
+  if (!plan) return '<div class="empty">Chua co goi y nao. Hay nhap muc tieu roi bam tao ke hoach.</div>';
+  return '<section class="ai-preview">' +
+    '<div class="ai-preview-head"><div><h4>' + escapeHtml(plan.title || 'Ke hoach AI') + '</h4><p class="subtle">' + escapeHtml(plan.description || '') + '</p></div><div class="ai-preview-meta"><span class="pill">' + escapeHtml(plan.project || 'Viec ca nhan') + '</span><span class="pill">' + escapeHtml(plan.priority || 'Trung binh') + '</span><span class="pill">' + escapeHtml(plan.status || 'Can lam') + '</span></div></div>' +
+    '<div><strong>Checklist de xuat</strong><ol class="ai-preview-list">' + (Array.isArray(plan.checklist) ? plan.checklist.map((item) => '<li>' + escapeHtml(item) + '</li>').join('') : '') + '</ol></div>' +
+    '<div><strong>Task con tu chia</strong><ol class="ai-preview-list">' + (Array.isArray(plan.subtasks) ? plan.subtasks.map((item) => '<li>' + escapeHtml(item.title) + '</li>').join('') : '') + '</ol></div>' +
+    '<p class="meta">' + escapeHtml(plan.notes || '') + '</p>' +
+  '</section>';
+}
+
+function applyAiPlanToTaskForm(plan, options = {}) {
+  const form = document.getElementById('modal-form');
+  if (!form || !plan) return;
+  form.elements.title.value = plan.title || '';
+  form.elements.description.value = plan.description || '';
+  if (form.elements.project) form.elements.project.value = plan.project || 'Viec ca nhan';
+  if (form.elements.status) form.elements.status.value = plan.status || 'Can lam';
+  if (form.elements.priority) form.elements.priority.value = plan.priority || 'Trung binh';
+  if (form.elements.checklist) form.elements.checklist.value = Array.isArray(plan.checklist) ? plan.checklist.join('\n') : '';
+  if (form.elements.notes) form.elements.notes.value = plan.notes || '';
+  if (options.addToCalendar && form.elements.date && !form.elements.date.value && document.getElementById('ai-planner-due-date')) {
+    form.elements.date.value = document.getElementById('ai-planner-due-date').value || '';
+  }
+  form.dataset.aiSubtasks = JSON.stringify(Array.isArray(plan.subtasks) ? plan.subtasks : []);
+  showToast('AI Planner da dien goi y vao bieu mau.');
+}
+
+function openAiPlannerModal(projectName = '') {
+  let latestPlan = null;
+  document.querySelector('.modal-backdrop')?.remove();
+  const projectSuggestions = [...new Set(projects.map((project) => project.name).filter(Boolean))].slice(0, 6);
+  document.body.insertAdjacentHTML('beforeend', '<div class="modal-backdrop"><div class="modal ai-planner-modal"><div class="modal-header"><div><h2>AI Planner</h2><p class="subtle">Bien muc tieu lon thanh ke hoach ro rang, co checklist va task con.</p></div><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="ai-planner-shell"><section class="ai-planner-intro"><h3>Tao ke hoach thong minh</h3><p class="subtle">Nhap muc tieu theo cach tu nhien de AI goi y ke hoach day du.</p><div class="ai-planner-hint">Vi du: "On thi tieng Anh 7 ngay", "Hoan thanh bai thuyet trinh marketing", "Tang can trong 30 ngay".</div>' + (projectSuggestions.length ? '<div class="ai-planner-projects" style="margin-top:12px">' + projectSuggestions.map((name) => '<span class="ai-planner-chip">' + escapeHtml(name) + '</span>').join('') + '</div>' : '') + '</section><div class="field"><label>Muc tieu</label><input id="ai-planner-goal" value="' + escapeHtml(projectName || '') + '" placeholder="Vi du: On thi tieng Anh 7 ngay"></div><div class="form-grid"><div class="field"><label>Nhom viec</label><select id="ai-planner-category"><option value="hoc_tap">Hoc tap</option><option value="cong_viec">Cong viec</option><option value="ca_nhan">Ca nhan</option><option value="suc_khoe">Suc khoe</option></select></div><div class="field"><label>Han chot</label><input id="ai-planner-due-date" type="date"></div></div><label class="switch-row"><strong>Them thang vao lich</strong><input id="ai-planner-calendar" type="checkbox" checked></label><div class="ai-planner-actions"><button class="btn primary" type="button" id="ai-planner-generate">' + icon('auto_awesome') + 'Tao ke hoach</button><button class="btn" type="button" id="ai-planner-apply">' + icon('assignment_turned_in') + 'Dung cho cong viec hien tai</button><button class="btn" type="button" id="ai-planner-create-task">' + icon('add_task') + 'Tao cong viec moi tu AI</button></div><div id="ai-planner-preview">' + renderAiPreview(null) + '</div></div></div>');
+
+  $$('[data-close]').forEach((button) => {
+    button.onclick = () => document.querySelector('.modal-backdrop')?.remove();
+  });
+
+  const generate = async () => {
+    const goal = document.getElementById('ai-planner-goal')?.value || '';
+    const category = document.getElementById('ai-planner-category')?.value || 'ca_nhan';
+    const dueDate = document.getElementById('ai-planner-due-date')?.value || '';
+    if (!goal.trim()) {
+      showToast('Hay nhap muc tieu de AI lap ke hoach.');
+      return null;
+    }
+    const plan = await requestAiPlan(goal, category, dueDate);
+    if (!plan) return null;
+    latestPlan = plan;
+    const preview = document.getElementById('ai-planner-preview');
+    if (preview) preview.innerHTML = renderAiPreview(plan);
+    return plan;
+  };
+
+  const generateButton = document.getElementById('ai-planner-generate');
+  if (generateButton) generateButton.onclick = generate;
+
+  const applyButton = document.getElementById('ai-planner-apply');
+  if (applyButton) {
+    applyButton.onclick = async () => {
+      const plan = latestPlan || await generate();
+      if (!plan) return;
+      applyAiPlanToTaskForm(plan, { addToCalendar: document.getElementById('ai-planner-calendar')?.checked });
+      document.querySelector('.modal-backdrop')?.remove();
+    };
+  }
+
+  const createButton = document.getElementById('ai-planner-create-task');
+  if (createButton) {
+    createButton.onclick = async () => {
+      const plan = latestPlan || await generate();
+      if (!plan) return;
+      document.querySelector('.modal-backdrop')?.remove();
+      openTaskModal(plan.project || projectName || '');
+      setTimeout(() => applyAiPlanToTaskForm(plan, { addToCalendar: document.getElementById('ai-planner-calendar')?.checked }), 0);
+    };
+  }
+}
+
 function openTaskModal(projectName = '') {
-  openModal('<div class="modal-header"><h2>Tạo công việc</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div>' +
-    '<div class="field"><label>Tên công việc</label><input name="title" required></div>' +
-    '<div class="field"><label>Mô tả</label><textarea name="description"></textarea></div>' +
-    '<div class="form-grid"><div class="field"><label>Dự án</label><select name="project">' + buildProjectOptions(projectName) + '</select></div><div class="field"><label>Trạng thái</label><select name="status"><option>Cần làm</option><option>Đang làm</option><option>Đang duyệt</option><option>Hoàn thành</option></select></div><div class="field"><label>Ưu tiên</label><select name="priority"><option>Thấp</option><option selected>Trung bình</option><option>Cao</option></select></div><div class="field"><label>Ngày hạn</label><input name="date" type="date"></div></div>' +
-    '<div class="field"><label>Checklist (mỗi dòng là một mục)</label><textarea name="checklist"></textarea></div>' +
-    '<div class="field"><label>Ghi chú</label><textarea name="notes"></textarea></div>' +
-    '<div class="modal-actions"><button class="btn" type="button" data-close>Hủy</button><button class="btn primary">Tạo</button></div>', (form) => {
+  openModal('<div class="modal-header"><h2>Tao cong viec</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div>' +
+    '<div class="toolbar" style="margin-bottom:12px"><button class="btn ai-planner-launch" type="button" id="ai-planner-fill">' + icon('auto_awesome') + 'Lap ke hoach voi AI Planner</button></div>' +
+    '<div class="field"><label>Ten cong viec</label><input name="title" required></div>' +
+    '<p class="meta" style="margin-top:-6px;margin-bottom:12px">Vi du: "On thi tieng Anh 7 ngay" hoac "Tang can trong 30 ngay".</p>' +
+    '<div class="field"><label>Mo ta</label><textarea name="description"></textarea></div>' +
+    '<div class="form-grid"><div class="field"><label>Du an</label><select name="project">' + buildProjectOptions(projectName) + '</select></div><div class="field"><label>Trang thai</label><select name="status"><option>Can lam</option><option>Dang lam</option><option>Dang duyet</option><option>Hoan thanh</option></select></div><div class="field"><label>Uu tien</label><select name="priority"><option>Thap</option><option selected>Trung binh</option><option>Cao</option></select></div><div class="field"><label>Ngay han</label><input name="date" type="date"></div></div>' +
+    '<div class="field"><label>Checklist (moi dong la mot muc)</label><textarea name="checklist"></textarea></div>' +
+    '<div class="field"><label>Ghi chu</label><textarea name="notes"></textarea></div>' +
+    '<div class="modal-actions"><button class="btn" type="button" data-close>Huy</button><button class="btn primary">Tao</button></div>', (form) => {
       const now = Date.now();
       const task = {
         id: now,
@@ -403,30 +506,35 @@ function openTaskModal(projectName = '') {
         project: form.get('project'),
         status: form.get('status'),
         priority: form.get('priority'),
-        label: 'Công việc',
+        label: 'Cong viec',
         date: form.get('date'),
-        due: form.get('date') || 'Chưa đặt hạn',
+        due: form.get('date') || 'Chua dat han',
         notes: form.get('notes'),
-        owner: 'Bạn',
+        owner: 'Ban',
         checklist: String(form.get('checklist') || '').split(/\r?\n/).filter(Boolean).map((line, index) => ({ id: now + '-' + index, label: line, done: false })),
+        subtasks: (() => { try { return JSON.parse(document.getElementById('modal-form')?.dataset.aiSubtasks || '[]'); } catch { return []; } })(),
         activity: []
       };
       tasks.unshift(task);
-      addTaskActivity(task, 'Tạo công việc', 'Công việc được tạo mới.');
-      createNotification('unread', projectName ? 'Đã thêm công việc cho dự án' : 'Đã tạo công việc', task.title);
+      addTaskActivity(task, 'Tao cong viec', 'Cong viec duoc tao moi.');
+      createNotification('unread', projectName ? 'Da them cong viec cho du an' : 'Da tao cong viec', task.title);
     });
-}
 
+  const aiButton = document.getElementById('ai-planner-fill');
+  if (aiButton) {
+    aiButton.onclick = () => openAiPlannerModal(projectName);
+  }
+}
 function openProjectModal() {
-  openModal('<div class="modal-header"><h2>Tạo dự án</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="field"><label>Tên dự án</label><input name="name" required></div><div class="field"><label>Trạng thái</label><select name="status"><option>Đang hoạt động</option><option>Tạm dừng</option><option>Hoàn thành</option></select></div><div class="modal-actions"><button class="btn" type="button" data-close>Hủy</button><button class="btn primary">Tạo</button></div>', (form) => {
+  openModal('<div class="modal-header"><h2>Tao du an</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="field"><label>Ten du an</label><input name="name" required></div><div class="field"><label>Trang thai</label><select name="status"><option>Dang hoat dong</option><option>Tam dung</option><option>Hoan thanh</option></select></div><div class="modal-actions"><button class="btn" type="button" data-close>Huy</button><button class="btn primary">Tao</button></div>', (form) => {
     projects.unshift({ name: form.get('name'), progress: 0, status: form.get('status'), tasks: 0 });
   });
 }
 
 function openMemberModal() {
-  openModal('<div class="modal-header"><h2>Thêm nhóm</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="field"><label>Tên người</label><input name="person" required></div><div class="field"><label>Nhóm</label><input name="group" required></div><div class="field"><label>Công việc</label><input name="task" required></div><div class="field"><label>Ngày hạn</label><input name="due" type="date"></div><div class="modal-actions"><button class="btn" type="button" data-close>Hủy</button><button class="btn primary">Thêm</button></div>', (form) => {
+  openModal('<div class="modal-header"><h2>Them nhom</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div><div class="field"><label>Ten nguoi</label><input name="person" required></div><div class="field"><label>Nhom</label><input name="group" required></div><div class="field"><label>Cong viec</label><input name="task" required></div><div class="field"><label>Ngay han</label><input name="due" type="date"></div><div class="modal-actions"><button class="btn" type="button" data-close>Huy</button><button class="btn primary">Them</button></div>', (form) => {
     team.unshift({ person: form.get('person'), group: form.get('group'), task: form.get('task'), due: form.get('due') });
-    createNotification('unread', 'Đã gán việc', form.get('person') + ' · ' + form.get('task'));
+    createNotification('unread', 'Da gan viec', form.get('person') + ' Â· ' + form.get('task'));
   });
 }
 
@@ -436,21 +544,21 @@ function openTaskDetail(taskId) {
   const checklist = Array.isArray(task.checklist) ? task.checklist : [];
   const history = (task.activity || []).length
     ? task.activity.slice().reverse().map((activity) => '<div class="row"><div><strong>' + escapeHtml(activity.action) + '</strong><div class="meta">' + escapeHtml(activity.detail || '') + '</div></div><span class="meta">' + escapeHtml(activity.at || '') + '</span></div>').join('')
-    : '<div class="empty">Chưa có lịch sử.</div>';
-  openModal('<div class="modal-header"><h2>Chi tiết công việc</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div>' +
-    '<div class="field"><label>Tên</label><input name="title" value="' + escapeHtml(task.title) + '"></div>' +
-    '<div class="field"><label>Mô tả</label><textarea name="description">' + escapeHtml(task.description || '') + '</textarea></div>' +
-    '<div class="form-grid"><div class="field"><label>Trạng thái</label><select name="status"><option ' + (normalizeStatus(task.status) === 'Cần làm' ? 'selected' : '') + '>Cần làm</option><option ' + (normalizeStatus(task.status) === 'Đang làm' ? 'selected' : '') + '>Đang làm</option><option ' + (normalizeStatus(task.status) === 'Đang duyệt' ? 'selected' : '') + '>Đang duyệt</option><option ' + (normalizeStatus(task.status) === 'Hoàn thành' ? 'selected' : '') + '>Hoàn thành</option></select></div><div class="field"><label>Ngày hạn</label><input name="date" type="date" value="' + escapeHtml(task.date || '') + '"></div></div>' +
-    '<div class="field"><label>Checklist (mỗi dòng là một mục, thêm [x] đầu dòng để đánh dấu hoàn thành)</label><textarea name="checklist">' + escapeHtml(checklist.map((item) => (item.done ? '[x] ' : '') + item.label).join('\n')) + '</textarea></div>' +
-    '<div class="card" style="padding:12px;margin-top:12px"><h3 style="margin-top:0">Lịch sử hoạt động</h3><div class="list">' + history + '</div></div>' +
-    '<div class="modal-actions"><button class="btn" type="button" data-close>Hủy</button><button class="btn primary">Lưu</button></div>', (form) => {
+    : '<div class="empty">Chua co lich su.</div>';
+  openModal('<div class="modal-header"><h2>Chi tiet cong viec</h2><button class="icon-button" type="button" data-close>' + icon('close') + '</button></div>' +
+    '<div class="field"><label>Ten</label><input name="title" value="' + escapeHtml(task.title) + '"></div>' +
+    '<div class="field"><label>Mo ta</label><textarea name="description">' + escapeHtml(task.description || '') + '</textarea></div>' +
+    '<div class="form-grid"><div class="field"><label>Trang thai</label><select name="status"><option ' + (normalizeStatus(task.status) === 'Can lam' ? 'selected' : '') + '>Can lam</option><option ' + (normalizeStatus(task.status) === 'Dang lam' ? 'selected' : '') + '>Dang lam</option><option ' + (normalizeStatus(task.status) === 'Dang duyet' ? 'selected' : '') + '>Dang duyet</option><option ' + (normalizeStatus(task.status) === 'Hoan thanh' ? 'selected' : '') + '>Hoan thanh</option></select></div><div class="field"><label>Ngay han</label><input name="date" type="date" value="' + escapeHtml(task.date || '') + '"></div></div>' +
+    '<div class="field"><label>Checklist (moi dong la mot muc, them [x] dau dong de danh dau hoan thanh)</label><textarea name="checklist">' + escapeHtml(checklist.map((item) => (item.done ? '[x] ' : '') + item.label).join('\n')) + '</textarea></div>' +
+    '<div class="card" style="padding:12px;margin-top:12px"><h3 style="margin-top:0">Lich su hoat dong</h3><div class="list">' + history + '</div></div>' +
+    '<div class="modal-actions"><button class="btn" type="button" data-close>Huy</button><button class="btn primary">Luu</button></div>', (form) => {
       task.title = form.get('title');
       task.description = form.get('description');
       task.status = form.get('status');
       task.date = form.get('date');
-      task.due = task.date || 'Chưa đặt hạn';
+      task.due = task.date || 'Chua dat han';
       task.checklist = String(form.get('checklist') || '').split(/\r?\n/).filter(Boolean).map((line, index) => ({ id: task.id + '-' + index, label: line.replace(/^\s*\[x\]\s*/i, '').trim(), done: /^\s*\[x\]\s*/i.test(line) }));
-      addTaskActivity(task, 'Cập nhật', 'Đã lưu chi tiết công việc.');
+      addTaskActivity(task, 'Cap nhat', 'Da luu chi tiet cong viec.');
     });
 }
 
@@ -467,7 +575,7 @@ function setupKanban() {
         const task = tasks.find((item) => String(item.id) === String(button?.dataset.openTask));
         if (!task) return;
         task.status = event.to.dataset.column;
-        addTaskActivity(task, 'Đổi trạng thái', 'Chuyển sang ' + task.status);
+        addTaskActivity(task, 'Doi trang thai', 'Chuyen sang ' + task.status);
         saveState();
         render();
       }
@@ -524,18 +632,18 @@ function downloadCanvas(canvas, filename) {
 }
 
 function updateCountdown() {
-  const title = $('#count-title')?.value || 'Ngày đặc biệt';
+  const title = $('#count-title')?.value || 'Ngay dac biet';
   const dateValue = $('#count-date')?.value;
   const overlay = $('#count-preview .count-overlay');
   if (!overlay) return;
   if (!dateValue) {
-    overlay.innerHTML = '<h3>Chọn ngày để bắt đầu</h3><strong>0 ngày</strong><p>Khoảng cách sẽ hiển thị ở đây.</p>';
+    overlay.innerHTML = '<h3>Chon ngay de bat dau</h3><strong>0 ngay</strong><p>Khoang cach se hien thi o day.</p>';
     return;
   }
   const today = new Date(new Date().toDateString());
   const target = new Date(dateValue);
   const diff = Math.round((target - today) / 86400000);
-  const text = diff < 0 ? 'Đã được ' + Math.abs(diff) + ' ngày' : diff > 0 ? 'Còn ' + diff + ' ngày' : 'Chính là hôm nay';
+  const text = diff < 0 ? 'Da duoc ' + Math.abs(diff) + ' ngay' : diff > 0 ? 'Con ' + diff + ' ngay' : 'Chinh la hom nay';
   overlay.innerHTML = '<h3>' + escapeHtml(title) + '</h3><strong>' + text + '</strong><p>' + target.toLocaleDateString('vi-VN') + '</p>';
 }
 
@@ -545,7 +653,7 @@ function importCsv(file) {
     String(reader.result || '').split(/\r?\n/).slice(1).filter(Boolean).forEach((line) => {
       const cols = line.split(',').map((item) => item.trim());
       if (!cols[0]) return;
-      tasks.unshift({ id: Date.now() + Math.random(), title: cols[0], project: cols[1] || 'Việc cá nhân', status: cols[2] || 'Cần làm', priority: cols[3] || 'Trung bình', label: cols[4] || 'Công việc', date: cols[5] || '', due: cols[5] || 'Chưa đặt hạn', notes: cols[6] || '', owner: 'Bạn', checklist: [], activity: [] });
+      tasks.unshift({ id: Date.now() + Math.random(), title: cols[0], project: cols[1] || 'Viec ca nhan', status: cols[2] || 'Can lam', priority: cols[3] || 'Trung binh', label: cols[4] || 'Cong viec', date: cols[5] || '', due: cols[5] || 'Chua dat han', notes: cols[6] || '', owner: 'Ban', checklist: [], activity: [] });
     });
     saveState();
     render();
@@ -587,16 +695,15 @@ function runGlobalSearch() {
     if (!results.length) {
       const local = [
         ...tasks.map((task) => ({ label: task.title, meta: normalizeStatus(task.status), route: '/tasks', id: task.id, type: 'task' })),
-        ...projects.map((project) => ({ label: project.name, meta: project.status || 'Đang hoạt động', route: '/projects', type: 'project' })),
-        ...team.map((member) => ({ label: member.person, meta: member.group + ' · ' + member.task, route: '/team', type: 'team' })),
-        ...PRIMARY_NAV.concat(SECONDARY_NAV).map((item) => ({ label: item[2], meta: 'Điều hướng', route: '/' + item[0], type: 'page' }))
+        ...projects.map((project) => ({ label: project.name, meta: project.status || 'Dang hoat dong', route: '/projects', type: 'project' })),
+        ...team.map((member) => ({ label: member.person, meta: member.group + ' Â· ' + member.task, route: '/team', type: 'team' })),
+        ...PRIMARY_NAV.concat(SECONDARY_NAV).map((item) => ({ label: item[2], meta: 'Dieu huong', route: '/' + item[0], type: 'page' }))
       ];
       results = local.filter((item) => (item.label + ' ' + item.meta).toLowerCase().includes(query));
     }
-    resultBox.innerHTML = results.length ? results.map((item) => '<button class="row search-result" ' + (item.id ? 'data-open-task="' + item.id + '"' : '') + ' data-route="' + item.route + '"><div><strong>' + escapeHtml(item.label) + '</strong><div class="meta">' + escapeHtml(item.type) + ' · ' + escapeHtml(item.meta) + '</div></div>' + icon('arrow_forward') + '</button>').join('') : '<div class="empty">Không tìm thấy kết quả.</div>';
+    resultBox.innerHTML = results.length ? results.map((item) => '<button class="row search-result" ' + (item.id ? 'data-open-task="' + item.id + '"' : '') + ' data-route="' + item.route + '"><div><strong>' + escapeHtml(item.label) + '</strong><div class="meta">' + escapeHtml(item.type) + ' Â· ' + escapeHtml(item.meta) + '</div></div>' + icon('arrow_forward') + '</button>').join('') : '<div class="empty">Khong tim thay ket qua.</div>';
     $$('.search-result').forEach((button) => {
       button.onclick = () => {
-
         if (button.dataset.openTask) {
           openTaskDetail(button.dataset.openTask);
           return;
@@ -687,6 +794,7 @@ function wirePage() {
   const diagramDownload = $('[data-download-diagram]');
   if (diagramDownload) diagramDownload.onclick = () => downloadCanvas($('#diagram-canvas'), 'diagram.png');
 
+
   const clearDiagram = $('[data-clear-diagram]');
   if (clearDiagram) {
     clearDiagram.onclick = () => {
@@ -736,7 +844,7 @@ function wirePage() {
       if (workspaceName) workspace.name = workspaceName.value || workspace.name;
       saveState();
       renderNavigation();
-      showToast('Đã lưu cài đặt');
+      showToast('Da luu cai dat');
       render();
     };
   }
@@ -825,3 +933,6 @@ async function boot() {
 }
 
 boot();
+
+
+
