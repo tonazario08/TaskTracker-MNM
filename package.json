@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "start:frontend": "node frontend/server.js",
+    "start:all": "concurrently --names \"backend,frontend\" --prefix-colors \"cyan,magenta\" \"npm run start\" \"npm run start:frontend\"",
     "test": "node --test"
   },
   "keywords": [],

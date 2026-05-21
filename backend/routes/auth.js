@@ -29,9 +29,9 @@ router.post('/register', async (req, res) => {
       return res.status(409).json({ error: 'Email da duoc su dung' });
     }
 
-    // Insert user as verified since we are skipping email verification per user request
+    // Insert user (email verification skipped)
     await pool.query(
-      'INSERT INTO users (name, email, password_hash, is_verified) VALUES ($1, $2, $3, TRUE)',
+      'INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3)',
       [name, email, hashedPassword]
     );
 

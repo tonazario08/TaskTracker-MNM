@@ -46,7 +46,26 @@ app.use('/public', express.static(publicDir));
 app.use('/assets', express.static(path.join(publicDir, 'assets')));
 app.use('/src', express.static(path.join(rootDir, 'src')));
 
-app.get(['/manager', '/manager.html'], (_req, res) => res.sendFile(managerPage));
+// Helper to send HTML with correct charset
+function sendHtml(res, filePath) {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.sendFile(filePath);
+}
+
+app.get(['/manager', '/manager.html'], (_req, res) => sendHtml(res, managerPage));
+
+// Map app routes to actual HTML files
+const appPageFiles = new Map([
+  ['dashboard',      'dashboard.html'],
+  ['projects',       'projects.html'],
+  ['tasks',          'tasks.html'],
+  ['kanban',         'kanban.html'],
+  ['notifications',  'notifications.html'],
+  ['settings',       'SettingsPage.html'],
+]);
+
+// Fallback shell for routes without dedicated pages
+const shellRoutes = appRoutes.filter(r => !appPageFiles.has(r));
 
 
 app.get('/auth/google', (_req, res) => {
@@ -111,13 +130,24 @@ for (const [from, to] of legacyAliases) {
 }
 
 for (const [route, file] of documentRoutes) {
-  app.get(route, (_req, res) => res.sendFile(path.join(pagesDir, file)));
+  app.get(route, (_req, res) => sendHtml(res, path.join(pagesDir, file)));
 }
 
-for (const route of appRoutes) {
-  app.get(`/${route}`, (_req, res) => res.sendFile(appShell));
+// Serve dedicated pages
+for (const [route, file] of appPageFiles) {
+  app.get(`/${route}`, (_req, res) => sendHtml(res, path.join(pagesDir, file)));
   app.get(`/${route}.html`, (_req, res) => res.redirect(301, `/${route}`));
 }
+
+// Fallback to app shell for remaining routes
+for (const route of shellRoutes) {
+  app.get(`/${route}`, (_req, res) => sendHtml(res, appShell));
+  app.get(`/${route}.html`, (_req, res) => res.redirect(301, `/${route}`));
+}
+
+// tasks/:id and projects/:id
+app.get('/tasks/:id', (_req, res) => sendHtml(res, path.join(pagesDir, 'TaskDetailPage.html')));
+app.get('/projects/:id', (_req, res) => sendHtml(res, path.join(pagesDir, 'ProjectPage.html')));
 
 app.get('/health', (_req, res) => res.json({ ok: true, frontend: true }));
 
@@ -126,6 +156,7 @@ app.use((req, res) => {
     res.status(404).json({ error: 'Not found' });
     return;
   }
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.status(404).sendFile(appShell);
 });
 
